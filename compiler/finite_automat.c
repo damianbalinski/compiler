@@ -72,6 +72,7 @@ void print_transition_function(int** matrix, int x, int y)
 void transition_function(char* pattern, int length)
 {
 
+
 }
 
 void finite_automat(FILE* file, char* pattern)
