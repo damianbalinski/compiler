@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
- * Algorytm Knuta-Morrisa-Prata wyszukiwania wzorca w tekscie.
+ * Algorytm Knutha-Morrisa-Pratta wyszukiwania wzorca w tekscie.
  */
 
 void init_prefix_function(int** arr, char* pattern, int length)
@@ -28,31 +29,28 @@ void compute_prefix_function(int* arr, char* pattern, int length)
 	 */
 	for (q = 1; q < length; q++)
 	{
-		printf("   NEW\n");
+		//printf("   NEW\n");
 
 		// szukamy najdluzszego pasujacego sufiksu
 		while (k > 0 && pattern[k] != pattern[q])
 		{
-			printf("DECR k\n");
-			k = arr[k - 1];
+			//printf("DECR k\n");
+			k = arr[k-1];
 		}
 			
 
 		if (pattern[k] == pattern[q])
 		{
-			printf("INCD k");
+			//printf("INCD k");
 			++k;
 		}
 
-		// TEST
-		printf("q = %d\n", q);
-		printf("k = %d\n", k);
-		printf("arr[%d] = %d\n", q, arr[q]);
-
 		arr[q] = k;
-		printf("q = %d\n", q);
-		printf("k = %d\n", k);
-		printf("arr[%d] = %d\n\n", q, arr[q]);
+
+		// TEST
+		//printf("q = %d\n", q);
+		//printf("k = %d\n", k);
+		//printf("arr[%d] = %d\n\n", q, arr[q]);
 	}
 }
 
@@ -63,8 +61,49 @@ void print_prefix_function(int* arr, int length)
 	putchar('\n');
 }
 
-//int main(void)
-//{
-//	printf("hello world\n");
-//	return 0;
-//}
+void knuth_morris_pratt(FILE* file, char* pattern)
+{
+	int* arr;
+	int length;
+	int q;
+	int i;
+	char c;
+	int counter;
+
+	// init variables
+	counter = 0;
+	length = strlen(pattern);
+
+	init_prefix_function(&arr, pattern, length);
+	compute_prefix_function(arr, pattern, length);
+	print_prefix_function(arr, length);
+
+	q = 0;
+	while ((c = getc(file)) != EOF)
+	{
+		//printf("    NEW\n");
+		while (q > 0 && pattern[q + 1] != c)
+		{
+			//printf("DECR\n");
+			q = arr[q-1];
+		}
+
+		if (pattern[q + 1] == c)
+		{
+			//printf("INCR\n");
+			++q;
+		}
+
+		printf("%c   ", c);
+		if (q == length-1)
+		{
+			// or q == length-1
+			q = arr[q-1];
+			printf("PATTERN %d | q = %d\n", counter, q);
+		}
+		else
+			printf("%d\n", q);
+		
+		++counter;
+	}
+}
