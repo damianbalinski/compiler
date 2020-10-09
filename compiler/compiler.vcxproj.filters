@@ -24,9 +24,15 @@
     <ClCompile Include="finite_automat.c">
       <Filter>Pliki źródłowe\listy\lista0</Filter>
     </ClCompile>
+    <ClCompile Include="fa_test.c">
+      <Filter>Pliki źródłowe\listy\lista0</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="test1.txt">
+      <Filter>Pliki źródłowe\listy\lista0</Filter>
+    </Text>
+    <Text Include="test2.txt">
       <Filter>Pliki źródłowe\listy\lista0</Filter>
     </Text>
   </ItemGroup>
