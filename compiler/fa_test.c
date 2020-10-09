@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include "finite_automat.c"
+#include "fa.c"
 #define RES(V) printf("%d\n", V)
 
 void test_suffix();

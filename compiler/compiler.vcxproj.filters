@@ -21,10 +21,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="finite_automat.c">
+    <ClCompile Include="fa_test.c">
       <Filter>Pliki źródłowe\listy\lista0</Filter>
     </ClCompile>
-    <ClCompile Include="fa_test.c">
+    <ClCompile Include="kmp.c">
+      <Filter>Pliki źródłowe\listy\lista0</Filter>
+    </ClCompile>
+    <ClCompile Include="fa.c">
+      <Filter>Pliki źródłowe\listy\lista0</Filter>
+    </ClCompile>
+    <ClCompile Include="kmp_test.c">
       <Filter>Pliki źródłowe\listy\lista0</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,9 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
 #define MAX 3
 const char* DICT = "abc";
+
+/**
+ * Automat skonczony do wyszukiwania wzorca w teksie.
+ */
 
 //TODO delete
 int pos(char c) {
