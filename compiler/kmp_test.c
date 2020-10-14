@@ -7,14 +7,14 @@ void test_knuth_morris_pratt();
 
 int main(void)
 {
-	//test_prefix_function();
+	// test_prefix_function();
 	test_knuth_morris_pratt();
 }
 
 void test_prefix_function()
 {
-	char* pattern = "aaabbaa";
-	int length = 7;
+	char* pattern = "AABA";
+	int length = 4;
 	int* arr;
 
 	init_prefix_function(&arr, pattern, length);

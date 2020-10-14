@@ -19,6 +19,9 @@
     <Filter Include="Pliki źródłowe\listy\lista0">
       <UniqueIdentifier>{a75d029f-e179-4ab6-9b0c-d9b08541d279}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki źródłowe\listy\lista0_src">
+      <UniqueIdentifier>{a89959c3-7384-47fd-965c-bc3822bd56d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fa_test.c">
@@ -32,6 +35,9 @@
     </ClCompile>
     <ClCompile Include="kmp_test.c">
       <Filter>Pliki źródłowe\listy\lista0</Filter>
+    </ClCompile>
+    <ClCompile Include="kmp2.c">
+      <Filter>Pliki źródłowe\listy\lista0_src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
