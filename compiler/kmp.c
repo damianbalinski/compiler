@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,6 +54,9 @@ void compute_prefix_function(int* arr, char* pattern, int length)
 	}
 }
 
+/**
+ * Drukowanie funkcji prefiksowej, do testow.
+ */
 void print_prefix_function(int* arr, int length)
 {
 	for (int i = 0; i < length; i++)
@@ -60,95 +64,77 @@ void print_prefix_function(int* arr, int length)
 	putchar('\n');
 }
 
-//void knuth_morris_pratt(FILE* file, char* pattern)
-//{
-//	int* arr;
-//	int length;
-//	int q;
-//	int i;
-//	char c;
-//	int counter;
-//
-//	// init variables
-//	counter = 0;
-//	length = strlen(pattern);
-//
-//	init_prefix_function(&arr, pattern, length);
-//	compute_prefix_function(arr, pattern, length);
-//	print_prefix_function(arr, length);
-//
-//	q = 0;
-//	while ((c = getc(file)) != EOF)
-//	{
-//		//printf("    NEW\n");
-//		while (q > 0 && pattern[q + 1] != c)
-//		{
-//			//printf("DECR\n");
-//			q = arr[q-1];
-//		}
-//
-//		if (pattern[q + 1] == c)
-//		{
-//			//printf("INCR\n");
-//			++q;
-//		}
-//
-//		printf("%c   ", c);
-//		if (q == length-1)
-//		{
-//			// or q == length-1
-//			q = arr[q-1];
-//			printf("PATTERN %d | q = %d\n", counter, q);
-//		}
-//		else
-//			printf("%d\n", q);
-//		
-//		++counter;
-//	}
-//}
-
-void kmp(char* str, char* pat)
+/**
+ * Algorytm Knutha-Morrisa-Pratta
+ * file - plik zrodlowy
+ * pat - wzorzec do porownania
+ * arr - funkcja prefiksowa
+ * byte - aktualnie przetwarzany znak
+ * q - aktualny stan, zaczynamy od -1, czyli stanu poczatkowego
+ * c - licznik przetworzonych znakow ze zrodla
+ * m - dlugosc wzorca
+ */
+void kmp(FILE* file, char* pat)
 {
-	// data
+	// dane
 	int* arr;
-	int n;
+	char byte;
 	int m;
 	int q;
+	int c;
 
-	// init data
-	n = strlen(str);
-	m = strlen(pat);
+	// inicjalizacja danych
 	q = -1;
+	c = 0;
+	m = strlen(pat);
 	init_prefix_function(&arr, m);
 	compute_prefix_function(arr, pat, m);
 
-	// TEST
-	print_prefix_function(arr, m);
-
-	for(int i = 0; i < n; i++)
+	// przetwarzamy wszystkie znaki w pliku
+	while ((byte = getc(file)) != EOF)
 	{
-		printf("i = %d\n", i);
-		while (q > -1 && pat[q + 1] != str[i])
+		// cofamy sie do stanu, dla ktorego nastepny znak pasuje do wzorca
+		while (q > -1 && pat[q + 1] != byte)
 			q = arr[q]-1;
-		if (pat[q + 1] == str[i])
+
+		// jesli nastepny znak stanu pasuje do wzorca, przechodzimy dalej
+		if (pat[q + 1] == byte)
 			q++;
+
+		// indeksujemy zworzec od 0, wiec m-1 oznacza ze znalezlismy pelny
+		// wzorzec, drukujemy przesuniecie i wracamy do nastepnego pasujacego
+		// stanu
 		if (q == m-1)
 		{
-			printf("wzorzec %d\n", i - m+1);
+			printf("%d\n", c - m+1);
 			q = arr[q]-1;
 		}
+
+		// licznik do drukowania pozycji w pliku
+		c++;
 	}
 }
 
-int main(void)
+/**
+ * Otwieramy plik w trybie binarnym, dzieki czemu
+ * mozemy przetwarzac znaki inne niz ASCII,
+ */
+int main(int argc, char** argv)
 {
-	// TEST
-	char* str = "AAABBAABBAABBAABBAABB";
-	char* pat = "AABBA";
-
+	// DANE
+	char* str;
+	char* pat;
+	char* filepath;
+	FILE* file;
 	
+	// TEST
+	filepath = "test.txt";
+	pat = "¹œæ";
+	file = fopen(filepath, "rb");
 
-	kmp(str, pat);
+	kmp(file, pat);
+
+	fclose(file);
 	
 	return 0;
 }

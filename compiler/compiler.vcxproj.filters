@@ -33,18 +33,12 @@
     <ClCompile Include="fa.c">
       <Filter>Pliki źródłowe\listy\lista0</Filter>
     </ClCompile>
-    <ClCompile Include="kmp_test.c">
-      <Filter>Pliki źródłowe\listy\lista0</Filter>
-    </ClCompile>
     <ClCompile Include="kmp2.c">
       <Filter>Pliki źródłowe\listy\lista0_src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="test1.txt">
-      <Filter>Pliki źródłowe\listy\lista0</Filter>
-    </Text>
-    <Text Include="test2.txt">
+    <Text Include="test.txt">
       <Filter>Pliki źródłowe\listy\lista0</Filter>
     </Text>
   </ItemGroup>
