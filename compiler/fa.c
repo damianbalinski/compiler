@@ -3,17 +3,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#define MAX 3
-const char* DICT = "abc";
+
+// liczba bajtow
+#define MAX 256
+#define min(a,b) (((a) < (b)) ? (a) : (b))
 
 /**
  * Automat skonczony do wyszukiwania wzorca w teksie.
  */
-
-//TODO delete
-int pos(char c) {
-	return strchr(DICT, c) - DICT;
-}
 
 /**
  * Sprawdzmy, czy str2 jest sufiksem str1, porownujemy
@@ -33,8 +30,6 @@ void init_transition_function(int*** matrix, int x, int y)
 
 	for (int i = 0; i < y; i++)
 		(*matrix)[i] = (int*)malloc(x * sizeof(int));
-
-	return matrix;
 }
 
 /**
@@ -68,7 +63,7 @@ void compute_transition_function(int** matrix, int x, int y, char* pattern)
 		for (c = 0; c < MAX; c++)
 		{
 			// ustawiamy nastepny znak w buforze
-			buff[q] = DICT[c];
+			buff[q] = c;
 
 			// obliczamy maksymalna sensowna wartosc k
 			k = min(y, q + 1);
@@ -89,6 +84,9 @@ void compute_transition_function(int** matrix, int x, int y, char* pattern)
 	}
 }
 
+/**
+ * Drukowanie macierzy przejsc, do testow.
+ */
 void print_transition_function(int** matrix, int x, int y)
 {
 	for (int i = 0; i < y; i++)
@@ -99,7 +97,7 @@ void print_transition_function(int** matrix, int x, int y)
 	}
 }
 
-void finite_automat(FILE* file, char* pattern)
+void fa(FILE* file, char* pattern)
 {
 	int length;
 	int** matrix;
@@ -125,55 +123,45 @@ void finite_automat(FILE* file, char* pattern)
 	q = 0;
 	counter = 0;
 
-	// TEST
-	//printf("len: %d\n", length);
-	//printf("x: %d\n", x);
-	//printf("y: %d\n", y);
-	//printf("q: %d\n", q);
-	//printf("couter: %d\n", counter);
-
-
 	while ((c = getc(file)) != EOF)
 	{
-		//printf("c: %c\n", c);
-		//printf("pos: %d\n", pos(c));
-		//printf("q: %d\n", q);
-		//printf("matrix: %d\n", matrix[q][pos(c)]);
-		//printf("mat2\n");
-
-		printf("%c   ", c);
-		q = matrix[q][pos(c)];
+		q = matrix[q][c];
 		if (q == length)
-			printf("PATTERN %d\n", counter);
-		else
-			printf("%d\n", q);
+			printf("%d\n", counter-length+1);
 
 		++counter;
 	}
 }
 
-//int main(int argc, char* args[])
-//{
-//	// data
-//	FILE* input = NULL;
-//	FILE* output = NULL;
-//	char* input_path = NULL;
-//	char* output_path = NULL;
-//	char* pattern;
-//
-//	////TODO TEST
-//	//input_path = "test1.txt";
-//	//pattern = "abc";
-//
-//	//// open file
-//	//input = fopen(input_path, "rb");
-//
-//	//// perform pattern searching
-//	//finite_automat(input, pattern);
-//
-//	//// close file
-//	//fclose(input);
-//
-//	return 0;
-//}
+/**
+ * Otwieramy plik w trybie binarnym, dzieki czemu
+ * mozemy przetwarzac znaki inne niz ASCII,
+ */
+int main(int argc, char** argv)
+{
+	// dane
+	char* pat;
+	char* filepath;
+	FILE* file;
 
+	if (argc != 3)
+	{
+		printf("nieprawidlowe uzycie, sproboj:\n");
+		printf("%s <file> <pattern>\n", argv[0]);
+		return EXIT_FAILURE;
+	}
+
+	filepath = argv[1];
+	pat = argv[2];
+
+	if ((file = fopen(filepath, "rb")) == NULL)
+	{
+		printf("plik \"%s\" nie istnieje\n", filepath);
+		return EXIT_FAILURE;
+	}
+
+	fa(file, pat);
+	fclose(file);
+
+	return EXIT_SUCCESS;
+}

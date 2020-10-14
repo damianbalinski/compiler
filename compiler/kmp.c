@@ -29,28 +29,18 @@ void compute_prefix_function(int* arr, char* pattern, int length)
 	 */
 	for (q = 1; q < length; q++)
 	{
-		//printf("   NEW\n");
-
 		// szukamy najdluzszego pasujacego sufiksu
 		while (k > 0 && pattern[k] != pattern[q])
 		{
-			//printf("DECR k\n");
 			k = arr[k-1];
 		}
 			
-
 		if (pattern[k] == pattern[q])
 		{
-			//printf("INCD k");
 			++k;
 		}
 
 		arr[q] = k;
-
-		// TEST
-		//printf("q = %d\n", q);
-		//printf("k = %d\n", k);
-		//printf("arr[%d] = %d\n\n", q, arr[q]);
 	}
 }
 
@@ -121,20 +111,29 @@ void kmp(FILE* file, char* pat)
  */
 int main(int argc, char** argv)
 {
-	// DANE
-	char* str;
+	// dane
 	char* pat;
 	char* filepath;
 	FILE* file;
+
+	if (argc != 3)
+	{
+		printf("nieprawidlowe uzycie, sproboj:\n");
+		printf("%s <file> <pattern>\n", argv[0]);
+		return EXIT_FAILURE;
+	}
+
+	filepath = argv[1];
+	pat = argv[2];
 	
-	// TEST
-	filepath = "test.txt";
-	pat = "¹œæ";
-	file = fopen(filepath, "rb");
+	if((file = fopen(filepath, "rb")) == NULL)
+	{
+		printf("plik \"%s\" nie istnieje\n", filepath);
+		return EXIT_FAILURE;
+	}
 
 	kmp(file, pat);
-
 	fclose(file);
 	
-	return 0;
+	return EXIT_SUCCESS;
 }
