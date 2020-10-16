@@ -39,6 +39,12 @@
     <ClCompile Include="command_line_test.c">
       <Filter>Pliki źródłowe\inne</Filter>
     </ClCompile>
+    <ClCompile Include="file_test.c">
+      <Filter>Pliki źródłowe\inne</Filter>
+    </ClCompile>
+    <ClCompile Include="string_test.c">
+      <Filter>Pliki źródłowe\inne</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">

@@ -3,12 +3,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+// korekcja UTF8
+#define MASK 0b11000000
+#define RES 0b10000000
+
 /**
  * Algorytm Knutha-Morrisa-Pratta wyszukiwania wzorca w tekscie.
  */
 void init_prefix_function(int** arr, int length)
 {
 	*arr = (int*)malloc(length * sizeof(int));
+}
+
+int real_length(char* str, int len)
+{
+	int counter = 0;
+	for (int i = 0; i < len; i++)
+		if ((str[i] & MASK) != RES)
+			counter++;
+	return counter;
 }
 
 /**
@@ -72,11 +85,14 @@ void kmp(FILE* file, char* pat)
 	int m;
 	int q;
 	int c;
+	int rlength;
 
 	// inicjalizacja danych
 	q = -1;
 	c = 0;
 	m = strlen(pat);
+	rlength = real_length(pat, m);
+	
 	init_prefix_function(&arr, m);
 	compute_prefix_function(arr, pat, m);
 
@@ -96,12 +112,13 @@ void kmp(FILE* file, char* pat)
 		// stanu
 		if (q == m-1)
 		{
-			printf("%d\n", c - m+1);
+			printf("%d\n", c - rlength);
 			q = arr[q]-1;
 		}
 
 		// licznik do drukowania pozycji w pliku
-		c++;
+		if ((byte & MASK) != RES)
+			c++;
 	}
 }
 

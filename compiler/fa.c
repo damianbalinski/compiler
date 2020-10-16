@@ -8,6 +8,10 @@
 #define MAX 256
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 
+// korekcja UTF8
+#define MASK 0b11000000
+#define RES 0b10000000
+
 /**
  * Automat skonczony do wyszukiwania wzorca w teksie.
  */
@@ -19,6 +23,15 @@
 bool is_suffix(char* str1, int len1, char* str2, int len2)
 {
 	return strncmp(str2, str1 + len1 - len2, len2) == 0;
+}
+
+int real_length(char* str, int len)
+{
+	int counter = 0;
+	for (int i = 0; i < len; i++)
+		if ((str[i] & MASK) != RES)
+			counter++;
+	return counter;
 }
 
 /**
@@ -103,6 +116,7 @@ void print_transition_function(int** matrix, int x, int y)
 void fa(FILE* file, char* pattern)
 {
 	int length;
+	int rlength;
 	int** matrix;
 	int x, y;
 	int c;
@@ -115,6 +129,7 @@ void fa(FILE* file, char* pattern)
 	 * y = length+1 = liczba stanow (lacznie ze stanem zerowym)
 	 */
 	length = strlen(pattern);
+	rlength = real_length(pattern, length);
 	x = MAX;
 	y = length + 1;
 	init_transition_function(&matrix, x, y);
@@ -131,8 +146,9 @@ void fa(FILE* file, char* pattern)
 	{
 		q = matrix[q][c];
 		if (q == length)
-			printf("%d\n", counter-length+1);
-		++counter;
+			printf("%d\n", counter-rlength);
+		if ((c & MASK) != RES)
+			counter++;
 	}
 }
 
