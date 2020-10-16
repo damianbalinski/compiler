@@ -59,19 +59,6 @@ void test_transition_function()
 	print_transition_function(matrix, x, y);
 }
 
-void test_finite_automat()
-{
-	FILE* file = fopen("test2.txt", "rb");
-	char* pattern = "abba";
-
-	if (file == NULL)
-		printf("error\n");
-
-	finite_automat(file, pattern);
-
-	fclose(file);
-}
-
 void test_pos()
 {
 	printf("%d\n", pos('a'));

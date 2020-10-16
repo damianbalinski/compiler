@@ -106,8 +106,8 @@ void kmp(FILE* file, char* pat)
 }
 
 /**
- * Otwieramy plik w trybie binarnym, dzieki czemu
- * mozemy przetwarzac znaki inne niz ASCII,
+ * Otwieramy plik w trybie binarnym, przetwarzamy znaki z
+ * przedzialu [0,256], w tym znaki polskie [143-243].
  */
 int main(int argc, char** argv)
 {
@@ -119,12 +119,12 @@ int main(int argc, char** argv)
 	if (argc != 3)
 	{
 		printf("nieprawidlowe uzycie, sproboj:\n");
-		printf("%s <file> <pattern>\n", argv[0]);
+		printf("%s <pattern> <file>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
-	filepath = argv[1];
-	pat = argv[2];
+	filepath = argv[2];
+	pat = argv[1];
 	
 	if((file = fopen(filepath, "rb")) == NULL)
 	{

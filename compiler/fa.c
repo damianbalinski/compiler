@@ -97,6 +97,9 @@ void print_transition_function(int** matrix, int x, int y)
 	}
 }
 
+/**
+ * Automat skonczony.
+ */
 void fa(FILE* file, char* pattern)
 {
 	int length;
@@ -118,7 +121,8 @@ void fa(FILE* file, char* pattern)
 	compute_transition_function(matrix, x, y, pattern);
 
 	/**
-	 * Zaczynamy w stanie q = 0, przeszukujemy caly plik
+	 * Zaczynamy w stanie q = 0, przeszukujemy caly plik bajt
+	 * po bajcie.
 	 */
 	q = 0;
 	counter = 0;
@@ -128,14 +132,13 @@ void fa(FILE* file, char* pattern)
 		q = matrix[q][c];
 		if (q == length)
 			printf("%d\n", counter-length+1);
-
 		++counter;
 	}
 }
 
 /**
- * Otwieramy plik w trybie binarnym, dzieki czemu
- * mozemy przetwarzac znaki inne niz ASCII,
+ * Otwieramy plik w trybie binarnym, przetwarzamy znaki z
+ * przedzialu [0,256], w tym znaki polskie [143-243].
  */
 int main(int argc, char** argv)
 {
@@ -147,12 +150,12 @@ int main(int argc, char** argv)
 	if (argc != 3)
 	{
 		printf("nieprawidlowe uzycie, sproboj:\n");
-		printf("%s <file> <pattern>\n", argv[0]);
+		printf("%s <pattern> <file>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
-	filepath = argv[1];
-	pat = argv[2];
+	filepath = argv[2];
+	pat = argv[1];
 
 	if ((file = fopen(filepath, "rb")) == NULL)
 	{

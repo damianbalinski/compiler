@@ -16,30 +16,38 @@
     <Filter Include="Pliki źródłowe\listy">
       <UniqueIdentifier>{83e8157f-5737-46dc-a3af-fd05503f24fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki źródłowe\listy\lista0">
-      <UniqueIdentifier>{a75d029f-e179-4ab6-9b0c-d9b08541d279}</UniqueIdentifier>
+    <Filter Include="Pliki źródłowe\inne">
+      <UniqueIdentifier>{bbe0ec8e-d55c-43a5-9267-c5aa4a8ed0ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki źródłowe\listy\lista0_src">
-      <UniqueIdentifier>{a89959c3-7384-47fd-965c-bc3822bd56d3}</UniqueIdentifier>
+    <Filter Include="Pliki źródłowe\listy\lista1">
+      <UniqueIdentifier>{a75d029f-e179-4ab6-9b0c-d9b08541d279}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fa_test.c">
-      <Filter>Pliki źródłowe\listy\lista0</Filter>
+      <Filter>Pliki źródłowe\listy\lista1</Filter>
     </ClCompile>
     <ClCompile Include="kmp.c">
-      <Filter>Pliki źródłowe\listy\lista0</Filter>
+      <Filter>Pliki źródłowe\listy\lista1</Filter>
     </ClCompile>
     <ClCompile Include="fa.c">
-      <Filter>Pliki źródłowe\listy\lista0</Filter>
+      <Filter>Pliki źródłowe\listy\lista1</Filter>
     </ClCompile>
-    <ClCompile Include="kmp2.c">
-      <Filter>Pliki źródłowe\listy\lista0_src</Filter>
+    <ClCompile Include="makefile">
+      <Filter>Pliki źródłowe\listy\lista1</Filter>
+    </ClCompile>
+    <ClCompile Include="command_line_test.c">
+      <Filter>Pliki źródłowe\inne</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md">
+      <Filter>Pliki źródłowe\listy\lista1</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Text Include="test.txt">
-      <Filter>Pliki źródłowe\listy\lista0</Filter>
+      <Filter>Pliki źródłowe\listy\lista1</Filter>
     </Text>
   </ItemGroup>
 </Project>
