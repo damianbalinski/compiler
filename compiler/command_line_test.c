@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 	int byte;
 	FILE* file;
 
-	str = "平";
+	str = "ąść";
 	file = fopen("test.txt", "r");
 	
 	// FILE
