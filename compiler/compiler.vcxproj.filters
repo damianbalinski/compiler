@@ -22,6 +22,9 @@
     <Filter Include="Pliki źródłowe\listy\lista1">
       <UniqueIdentifier>{a75d029f-e179-4ab6-9b0c-d9b08541d279}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki źródłowe\flex">
+      <UniqueIdentifier>{0fd4de68-0669-4427-ae46-7dfc5da03ce9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fa_test.c">
@@ -44,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="string_test.c">
       <Filter>Pliki źródłowe\inne</Filter>
+    </ClCompile>
+    <ClCompile Include="test.c">
+      <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
