@@ -8,10 +8,16 @@
 a*      printf("(%s:%d)", yytext, yyleng);
 %%
 int yywrap() { return 1; }
-int main() { return yylex(); }
+int main() {
+    printf("YYLMAX: %d\n", YYLMAX);
+    return yylex();
+    }
 
 /**
- * VARIABLES
+ * ZMIENNE
  * yytext - wskaznik na leksem (napis dopasowany do wzorca)
  * yyleng - dlugosc dopasowania
+ * 
+ * STALE
+ * YYLMAX - maksymalna dlugosc tokena
  */
