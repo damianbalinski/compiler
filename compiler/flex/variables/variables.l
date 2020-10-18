@@ -17,7 +17,9 @@ int main() {
  * ZMIENNE
  * yytext - wskaznik na leksem (napis dopasowany do wzorca)
  * yyleng - dlugosc dopasowania
- * 
+ * yyin   - strumien wejsciowy
+ * yyout  - strumien wyjsciowy
+ *
  * STALE
  * YYLMAX - maksymalna dlugosc tokena
  */

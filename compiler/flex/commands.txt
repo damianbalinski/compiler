@@ -1,3 +1,6 @@
 flex -o file.c file.l
 gcc file.c -O3 -lfl -o test
 ./test < input.txt > output.txt
+
+OPCJIE
+-lfl - dodaje domyslne wersje funkcji, np. yywarp() zwracajaca -1
