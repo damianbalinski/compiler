@@ -1,0 +1,11 @@
+bbb /* aaa
+aaa
+aaa*/ bbb
+
+bbb /*** aaa
+aaa
+aaa****/ bbb
+
+bbb /*** aaa \
+aaa \
+aaa*** / ***/ bbb

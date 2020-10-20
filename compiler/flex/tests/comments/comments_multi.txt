@@ -1,0 +1,17 @@
+/*aaa*/
+/*  aaa*/
+/*aaa  */
+/*  aaa  */
+
+bbb /*aaa*/ bbb
+bbb /*  aaa*/ bbb
+bbb /*aaa  */ bbb
+bbb /*  aaa  */ bbb
+
+/*** *** aaa *** ***/
+bbb/*** *** aaa *** ***/
+bbb /*** *** aaa *** ***/
+/*** *** aaa *** ***/bbb
+/*** *** aaa *** ***/ bbb
+bbb/*** *** aaa *** ***/bbb
+bbb /*** *** aaa *** ***/ bbb
