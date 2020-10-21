@@ -112,43 +112,55 @@ void print_transition_function(int** matrix, int x, int y)
 
 /**
  * Automat skonczony.
+ * file - plik zrodlowy
+ * matrix - macierz przejsc
+ * byte - aktualnie przetwarzany znak
+ * q - aktualny stan
+ * c - licznik przetworzonych znakow ze zrodla
+ * length - dlugosc wzorca bajtach
+ * rlength - dlugosc wzorca w znakach
  */
-void fa(FILE* file, char* pattern)
+void fa(FILE* file, char* pat)
 {
-	int length;
-	int rlength;
 	int** matrix;
 	int x, y;
-	int c;
+	int byte;
 	int q;
-	int counter;
+	int c;
+	int length;
+	int rlength;
 
 	/**
 	 * Przygotowanie funkcji przejsc.
 	 * x = MAX = dlugosc alfabetu
 	 * y = length+1 = liczba stanow (lacznie ze stanem zerowym)
 	 */
-	length = strlen(pattern);
-	rlength = real_length(pattern, length);
+	length = strlen(pat);
+	rlength = real_length(pat, length);
 	x = MAX;
 	y = length + 1;
+
 	init_transition_function(&matrix, x, y);
-	compute_transition_function(matrix, x, y, pattern);
+	compute_transition_function(matrix, x, y, pat);
 
 	/**
 	 * Zaczynamy w stanie q = 0, przeszukujemy caly plik bajt
-	 * po bajcie.
+	 * po bajcie, licznik c obraca sie tylko jesli rozpoczynamy
+	 * nowy znak w UTF8.
 	 */
 	q = 0;
-	counter = 0;
+	c = 0;
 
-	while ((c = getc(file)) != EOF)
+	while ((byte = getc(file)) != EOF)
 	{
-		q = matrix[q][c];
-		if ((c & MASK) != RES)
-			counter++;
+		q = matrix[q][byte];
+
+		// korekcja UTF8, licznik do drukowania pozycji w pliku
+		if ((byte & MASK) != RES)
+			c++;
+		
 		if (q == length) {
-			printf("%d\n", counter-rlength);
+			printf("%d\n", c-rlength);
 		}
 
 	}
