@@ -141,10 +141,10 @@
   <ItemGroup>
     <ClCompile Include="listy\lista1\fa.c" />
     <ClCompile Include="listy\lista1\kmp.c" />
-    <ClCompile Include="listy\lista1\string_test.c" />
     <ClCompile Include="listy\tests\command_line_test.c" />
     <ClCompile Include="listy\tests\fa_test.c" />
     <ClCompile Include="listy\tests\file_test.c" />
+    <ClCompile Include="listy\tests\string_test.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="listy\lista1\makefile" />

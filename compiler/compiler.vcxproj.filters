@@ -30,9 +30,6 @@
     <ClCompile Include="listy\lista1\kmp.c">
       <Filter>Pliki źródłowe\listy\lista1</Filter>
     </ClCompile>
-    <ClCompile Include="listy\lista1\string_test.c">
-      <Filter>Pliki źródłowe\listy\lista1</Filter>
-    </ClCompile>
     <ClCompile Include="listy\tests\command_line_test.c">
       <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
@@ -40,6 +37,9 @@
       <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
     <ClCompile Include="listy\tests\file_test.c">
+      <Filter>Pliki źródłowe\listy\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="listy\tests\string_test.c">
       <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
   </ItemGroup>

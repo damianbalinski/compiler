@@ -107,6 +107,10 @@ void kmp(FILE* file, char* pat)
 		if (pat[q + 1] == byte)
 			q++;
 
+		// licznik do drukowania pozycji w pliku
+		if ((byte & MASK) != RES)
+			c++;
+			
 		// indeksujemy zworzec od 0, wiec m-1 oznacza ze znalezlismy pelny
 		// wzorzec, drukujemy przesuniecie i wracamy do nastepnego pasujacego
 		// stanu
@@ -115,10 +119,6 @@ void kmp(FILE* file, char* pat)
 			printf("%d\n", c - rlength);
 			q = arr[q]-1;
 		}
-
-		// licznik do drukowania pozycji w pliku
-		if ((byte & MASK) != RES)
-			c++;
 	}
 }
 

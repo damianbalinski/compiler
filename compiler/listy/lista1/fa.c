@@ -145,10 +145,12 @@ void fa(FILE* file, char* pattern)
 	while ((c = getc(file)) != EOF)
 	{
 		q = matrix[q][c];
-		if (q == length)
-			printf("%d\n", counter-rlength);
 		if ((c & MASK) != RES)
 			counter++;
+		if (q == length) {
+			printf("%d\n", counter-rlength);
+		}
+
 	}
 }
 
