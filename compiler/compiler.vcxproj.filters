@@ -16,49 +16,43 @@
     <Filter Include="Pliki źródłowe\listy">
       <UniqueIdentifier>{83e8157f-5737-46dc-a3af-fd05503f24fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki źródłowe\inne">
-      <UniqueIdentifier>{bbe0ec8e-d55c-43a5-9267-c5aa4a8ed0ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Pliki źródłowe\listy\lista1">
       <UniqueIdentifier>{a75d029f-e179-4ab6-9b0c-d9b08541d279}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki źródłowe\flex">
-      <UniqueIdentifier>{0fd4de68-0669-4427-ae46-7dfc5da03ce9}</UniqueIdentifier>
+    <Filter Include="Pliki źródłowe\listy\tests">
+      <UniqueIdentifier>{51709430-e633-444c-97d5-547555d73c90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="fa_test.c">
+    <ClCompile Include="listy\lista1\fa.c">
       <Filter>Pliki źródłowe\listy\lista1</Filter>
     </ClCompile>
-    <ClCompile Include="kmp.c">
+    <ClCompile Include="listy\lista1\kmp.c">
       <Filter>Pliki źródłowe\listy\lista1</Filter>
     </ClCompile>
-    <ClCompile Include="fa.c">
+    <ClCompile Include="listy\lista1\string_test.c">
       <Filter>Pliki źródłowe\listy\lista1</Filter>
     </ClCompile>
-    <ClCompile Include="makefile">
-      <Filter>Pliki źródłowe\listy\lista1</Filter>
+    <ClCompile Include="listy\tests\command_line_test.c">
+      <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
-    <ClCompile Include="command_line_test.c">
-      <Filter>Pliki źródłowe\inne</Filter>
+    <ClCompile Include="listy\tests\fa_test.c">
+      <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
-    <ClCompile Include="file_test.c">
-      <Filter>Pliki źródłowe\inne</Filter>
-    </ClCompile>
-    <ClCompile Include="string_test.c">
-      <Filter>Pliki źródłowe\inne</Filter>
-    </ClCompile>
-    <ClCompile Include="test.c">
-      <Filter>Pliki źródłowe</Filter>
+    <ClCompile Include="listy\tests\file_test.c">
+      <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md">
+    <None Include="listy\lista1\makefile">
+      <Filter>Pliki źródłowe\listy\lista1</Filter>
+    </None>
+    <None Include="listy\lista1\README.md">
       <Filter>Pliki źródłowe\listy\lista1</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="test.txt">
+    <Text Include="listy\lista1\test.txt">
       <Filter>Pliki źródłowe\listy\lista1</Filter>
     </Text>
   </ItemGroup>

@@ -136,33 +136,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="fa_test.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="fa.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="file_test.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="kmp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="makefile">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="command_line_test.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="string_test.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="test.txt" />
-    <ClCompile Include="test.c" />
     <Content Include="flex\flex_2.l" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="listy\lista1\fa.c" />
+    <ClCompile Include="listy\lista1\kmp.c" />
+    <ClCompile Include="listy\lista1\string_test.c" />
+    <ClCompile Include="listy\tests\command_line_test.c" />
+    <ClCompile Include="listy\tests\fa_test.c" />
+    <ClCompile Include="listy\tests\file_test.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="listy\lista1\makefile" />
+    <None Include="listy\lista1\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="listy\lista1\test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
