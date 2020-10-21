@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
+/**
  * KOREKCJA UTF8
  * Kody UTF8 maja postac:
  * 0xxxxxxx
@@ -32,7 +32,8 @@ void init_prefix_function(int** arr, int length)
 	*arr = (int*)malloc(length * sizeof(int));
 }
 
-/* Oblicza dlugosc wzorca jako liczbe znakow, nie zlicza bajtow
+/**
+ * Oblicza dlugosc wzorca jako liczbe znakow, nie zlicza bajtow
  * postaci 10xxxxxx
  */
 int real_length(char* str, int len)
@@ -45,7 +46,7 @@ int real_length(char* str, int len)
 }
 
 /**
- * Obliczanie funkcji prefiksow.
+ * Oblicza funkcje prefiksow.
  * arr - funkcja prefiksow
  * pat - wzorzec
  * length - dlugosc wzorca (w bajtach)
@@ -65,21 +66,17 @@ void compute_prefix_function(int* arr, char* pat, int length)
 	{
 		// szukamy najdluzszego pasujacego sufiksu
 		while (k > 0 && pat[k] != pat[q])
-		{
 			k = arr[k-1];
-		}
 			
 		if (pat[k] == pat[q])
-		{
 			++k;
-		}
 
 		arr[q] = k;
 	}
 }
 
 /**
- * Drukowanie funkcji prefiksowej, do testow.
+ * Drukuje funkcje prefiksowa, do testow.
  */
 void print_prefix_function(int* arr, int length)
 {

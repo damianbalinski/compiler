@@ -8,16 +8,29 @@
 #define MAX 256
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 
-// korekcja UTF8
+/**
+ * KOREKCJA UTF8
+ * Kody UTF8 maja postac:
+ * 0xxxxxxx
+ * 110xxxxx 10xxxxxx
+ * 1110xxxx 10xxxxxx 10xxxxxx
+ * 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+ * ...
+ * Zauwazmy, ze jezeli przetwarzany bajt ma postac 10xxxxxx,
+ * nie jest to pierwszy bajt przetwarzanego znaku. W naszej
+ * korekcji bedziemy obraca licznik znakow tylko jesli warunek
+ * ten nie jest spelniony, tzn (byte & MASK) != RES
+ * 
+ * Uwaga! Pomimo ze przetwarzamy plik zawierajacy kody UTF-8
+ * zakladamy, ze plik nie zawiera na poczatku znacznika BOM,
+ * tzn bajtow EF BB BF, jesli jednak, wzorce beda wyszukiwane
+ * z przesunieciem +1.
+ */
 #define MASK 0b11000000
 #define RES 0b10000000
 
 /**
- * Automat skonczony do wyszukiwania wzorca w teksie.
- */
-
-/**
- * Sprawdzmy, czy str2 jest sufiksem str1, porownujemy
+ * Sprawdzamy, czy str2 jest sufiksem str1, porownujemy
  * ostatnie len2 znakow w obydwu lancuchach.
  */
 bool is_suffix(char* str1, int len1, char* str2, int len2)
@@ -25,6 +38,10 @@ bool is_suffix(char* str1, int len1, char* str2, int len2)
 	return strncmp(str2, str1 + len1 - len2, len2) == 0;
 }
 
+/**
+ * Oblicza dlugosc wzorca jako liczbe znakow, nie zlicza bajtow
+ * postaci 10xxxxxx
+ */
 int real_length(char* str, int len)
 {
 	int counter = 0;
@@ -98,7 +115,7 @@ void compute_transition_function(int** matrix, int x, int y, char* pattern)
 }
 
 /**
- * Drukowanie macierzy przejsc, do testow.
+ * Drukuje macierz przejsc, do testow.
  */
 void print_transition_function(int** matrix, int x, int y)
 {
@@ -113,6 +130,7 @@ void print_transition_function(int** matrix, int x, int y)
 /**
  * Automat skonczony.
  * file - plik zrodlowy
+ * pat - wzorzec do porownania
  * matrix - macierz przejsc
  * byte - aktualnie przetwarzany znak
  * q - aktualny stan
@@ -159,16 +177,14 @@ void fa(FILE* file, char* pat)
 		if ((byte & MASK) != RES)
 			c++;
 		
-		if (q == length) {
+		if (q == length)
 			printf("%d\n", c-rlength);
-		}
-
 	}
 }
 
 /**
- * Otwieramy plik w trybie binarnym, przetwarzamy znaki z
- * przedzialu [0,256], w tym znaki polskie [143-243].
+ * Otwieramy plik w trybie binarnym.
+ * Uwaga! Plik nie powinien zawierac znacznika BOM.
  */
 int main(int argc, char** argv)
 {
