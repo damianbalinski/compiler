@@ -1,0 +1,7 @@
+# komentarz
+aaaa  # komentarz
+"aaaaaaaaaa"
+"aaaa#aaaaaa" # komentarz
+"aaaa\"aa#aaa" #komentarz
+#komentarz
+"aaaa\"aa# aaa" # komentarz

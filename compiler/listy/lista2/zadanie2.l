@@ -3,11 +3,12 @@
     int yywrap();
     int yylex();
 %}
-%s QSTRING
+%s STR
 %%
-<QSTRING>\"         { printf( "%s", yytext ); BEGIN INITIAL; }  /* konczy cudzyslow */
-\"                  { printf( "%s", yytext ); BEGIN QSTRING; }  /* rozpoczyna cudzyslow cudzyslow */
-<INITIAL>#.*        { printf( "COM" ); }                        /* usuwamy jesli nie jestesmy w cudzyslowie */
+<STR>\\\"           { ECHO; }                                   /* ignorowanie sekwencji \" */
+<STR>\"             { printf( "%s", yytext ); BEGIN INITIAL; }  /* konczy cudzyslow */
+\"                  { printf( "%s", yytext ); BEGIN STR; }      /* rozpoczyna cudzyslow cudzyslow */
+<INITIAL>#.*        { ; }                                       /* usuwamy jesli nie jestesmy w cudzyslowie */
 %%
 
 int yywrap() { return 1; }

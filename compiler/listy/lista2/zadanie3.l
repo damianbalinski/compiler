@@ -69,4 +69,11 @@ void comment(const char* str)
         printf( str );
 }
 int yywrap() { return 1; }
-int main() { return yylex(); }
+int main(int argc, char** argv)
+{ 
+    if (argc > 1 && strcmp(argv[1], "--doc") == 0) {
+        DOC_MODE = true;
+        printf("<<DOC MODE>>\n");
+    }
+    return yylex();
+}
