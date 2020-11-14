@@ -42,8 +42,8 @@
 
     /* KOMENTARZE JEDNOLINIJKOWE */
 <INITIAL>"//"   { TYPE( NDOC_TYPE ); comment( yytext ); BEGIN( LCOM ); }   /* poczatek komentarza jednolinijkowego */
-<INITIAL>"///"  { TYPE( DOC_TYPE ); comment( yytext ); BEGIN( LCOM ); }    /* poczatek komentarza jednolinijkowego */
-<INITIAL>"//!"  { TYPE( DOC_TYPE ); comment( yytext ); BEGIN( LCOM ); }    /* poczatek komentarza jednolinijkowego */
+<INITIAL>"///"  { TYPE( DOC_TYPE );  comment( yytext ); BEGIN( LCOM ); }   /* poczatek komentarza jednolinijkowego */
+<INITIAL>"//!"  { TYPE( DOC_TYPE );  comment( yytext ); BEGIN( LCOM ); }   /* poczatek komentarza jednolinijkowego */
 <LCOM>\\\n      { comment( yytext ); }                                     /* znak ucieczki, zostajemy w komentarzu */
 <LCOM>\n        { ECHO; BEGIN(INITIAL); }                                  /* koniec linii, konczymy komentarz jednolinijkowy */
 <LCOM>.         { comment( yytext ); }                                     /* jestesmy w komentarzu */

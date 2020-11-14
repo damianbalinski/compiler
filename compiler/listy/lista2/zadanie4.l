@@ -23,7 +23,7 @@
 	int V = 0;			// wartosc wyrazenia
 	int a, b;			// operandy
 	int STACK[MAX];		// stos
-	bool EMPTY = false;	// stan stosu (czy ostatnia operacja pop sie posiadla)
+	bool EMPTY = false;	// stan stosu (czy ostatnia operacja pop sie powiodla)
 
 %}
 INT				[-]?[0-9]+

@@ -16,7 +16,7 @@
 
 int yywrap()
 {
-    ++LINES;                                            /* ostatnia linia*/
+    ++LINES;                                            /* ostatnia linia */
     printf("\nLINES: %d", LINES);
     printf("\nWORDS: %d\n", WORDS);
     return 1;
