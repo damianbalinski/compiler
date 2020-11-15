@@ -73,6 +73,16 @@ symrec *getsym (char const *name)
     return NULL;
 }
 
+/* Put functions in table. */
+static void init_table (void)
+{
+    for (int i = 0; funs[i].name; i++)
+    {
+        symrec *ptr = putsym (funs[i].name, FUN);
+        ptr->value.fun = funs[i].fun;
+    }
+}
+
 ///////////////////////////////////
 // LEXER
 int yylex (void)
@@ -142,8 +152,11 @@ void yyerror(char const *s)
 int main (int argc, char const* argv[])
 {
     /* Enable parse traces on option -p. */
-    if (argc == 2 && strcmp(argv[1], "-p") == 0)
-    yydebug = 1;
+    if (argc == 2 && strcmp(argv[1], "-p") == 0) {
+        extern int yydebug;
+        yydebug = 1;
+    }
+
     init_table ();
     return yyparse ();
 }

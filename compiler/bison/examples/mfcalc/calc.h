@@ -43,13 +43,3 @@ struct init const funs[] =
 
 /* The symbol table: a chain of ’struct symrec’. */
 symrec *sym_table;
-
-/* Put functions in table. */
-static void init_table (void)
-{
-    for (int i = 0; funs[i].name; i++)
-    {
-        symrec *ptr = putsym (funs[i].name, FUN);
-        ptr->value.fun = funs[i].fun;
-    }
-}
