@@ -54,6 +54,8 @@ exp:
 %%
 
 int main (void){
+    yylloc.first_line = yylloc.last_line = 1;
+    yylloc.first_column = yylloc.last_column = 1;
     return yyparse();
 }
 
@@ -65,25 +67,41 @@ void yyerror(char const *s)
 
 int yylex (void)
 {
-   int c = getchar ();
+    int c;
   
-   /* Skip white space. */
-   while (c == ' ' || c == '\t')
-      c = getchar ();
+    /* Skip white space. */
+    while ((c = getchar ()) == ' ' || c == '\t')
+        ++yylloc.last_column;
    
-   /* Process numbers. */
-   if (c == '.' || isdigit (c))
-   {
-      ungetc (c, stdin);
-      if (scanf ("%d", &yylval) != 1)
-         abort ();
-      return NUM;
-   }
+    /* Step. */
+    yylloc.first_line = yylloc.last_line;
+    yylloc.first_column = yylloc.last_column;
+
+    /* Process numbers. */
+    if (isdigit (c))
+    {
+        yylval = c - '0';
+        ++yylloc.last_column;
+        while (isdigit (c = getchar ()))
+        {
+            ++yylloc.last_column;
+            yylval = yylval * 10 + c - '0';
+        }
+        ungetc (c, stdin);
+        return NUM;
+    }
    
-   /* Return end-of-input. */
-   else if (c == EOF)
-      return YYEOF;
-   /* Return a single char. */
-   else
-      return c;
+    /* Return end-of-input. */
+    if (c == EOF)
+        return YYEOF;
+
+    /* Return a single char, and update location. */
+    if (c == '\n')
+    {
+        ++yylloc.last_line;
+        yylloc.last_column = 0;
+    }
+    else
+        ++yylloc.last_column;
+    return c;
 }
