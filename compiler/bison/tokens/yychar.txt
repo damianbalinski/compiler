@@ -1,0 +1,3 @@
+yychar - typ nastepnego tokena
+yylval - wartosc semantyczna nastepnego tokena (jesli istnieje)
+yylloc - lokacja nastepnego tokena (jesli istnieje)

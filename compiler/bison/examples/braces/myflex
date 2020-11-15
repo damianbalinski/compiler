@@ -1,0 +1,10 @@
+#!/bin/bash
+
+file="/mnt/c/Users/gumis/source/repos/compiler/compiler/flex/test.txt"
+cat "$file"
+echo ""
+echo "----------------------"
+flex -o test.c "$1"
+gcc test.c -O3 -lfl -o test
+./test < "$file" "${@:2}"
+rm test.c test

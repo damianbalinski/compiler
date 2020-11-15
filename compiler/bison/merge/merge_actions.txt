@@ -1,0 +1,23 @@
+Wskazujemy funkcje do zmergowania niejednoznacznych produkcji.
+Wszystkie niejednoznaczne produkcje musza miec identyczna
+klauzule %merge
+
+// prototyp funkcji
+%{
+#define YYSTYPE char const *
+static YYSTYPE stmtMerge (YYSTYPE x0, YYSTYPE x1);
+%}
+
+// mergowanie
+stmt:
+    expr ’;’    %merge <stmtMerge>
+|   decl        %merge <stmtMerge>
+;
+
+// definicja funkcji
+static YYSTYPE
+stmtMerge (YYSTYPE x0, YYSTYPE x1)
+{
+printf ("<OR> ");
+return "";
+}

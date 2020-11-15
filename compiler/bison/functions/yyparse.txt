@@ -1,0 +1,2 @@
+yyparse()  - wyjscie z analizatora skladniowego, mozliwosc podpiecia
+             do aplikacji zewnetrznej

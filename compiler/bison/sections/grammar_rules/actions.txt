@@ -1,0 +1,4 @@
+numer odnosi sie do pozycji w regule, numerujemy od 1
+$$ - wartosc semantyczna grupowanego wyrazenia
+$1 - wartosc semantyczna lewego operandu
+$2 - wartosc semantyczna prawego operandu

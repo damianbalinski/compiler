@@ -1,0 +1,13 @@
+bison gram.y -d -o gram.c
+flex -oscan.c scan.l
+gcc scan.c gram.c -O3 -lfl -o parse
+parse < dane.txt
+
+FLAGI gcc
+-lfl    linkowanie z biblioteka flex
+-O3     ustawienie optymalizacji na poziom 3
+
+FLAGI bison
+-d      denerowanie pliku naglowkowego
+
+FLAGI flex

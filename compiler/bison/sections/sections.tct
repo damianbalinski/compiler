@@ -1,0 +1,16 @@
+%{
+    Prologue
+    // biblioteki, deklaracje preprocesora, zmienne globalne
+    // musi zawierac deklaracje yyerror oraz yylec
+%}
+
+Bison declarations
+// terminale, nieterminale
+%%
+
+Grammar rules
+// reguly konstruowania nieterminali
+%%
+
+Epilogue
+// definicje funkcji zadeklarowanych w prologu
