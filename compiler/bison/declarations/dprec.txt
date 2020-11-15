@@ -1,7 +1,0 @@
-W przypadku niejednoznacznosci expr oraz decl, pierwszenstwo
-ma decl.
-
-stmt:
-    expr ’;’    %dprec 1
-|   decl        %dprec 2
-;

@@ -1,0 +1,2 @@
+yyerror() - wywolywana w momencie pojawienia sie bledu,
+            domyslnie konczy dzialanie parsera

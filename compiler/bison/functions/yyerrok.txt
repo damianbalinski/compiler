@@ -1,0 +1,1 @@
+yyerrok - makro, informuje bisona ze problem zostal rozwiazany

@@ -1,7 +1,7 @@
 bison gram.y -d -o gram.c
 flex -oscan.c scan.l
 gcc scan.c gram.c -O3 -lfl -o parse
-parse < dane.txt
+./parse < dane.txt
 
 FLAGI gcc
 -lfl    linkowanie z biblioteka flex

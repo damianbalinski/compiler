@@ -1,3 +1,13 @@
+    /* KONFIGURACJA */
+Zamiast parser LR, tworzy GLR, w przypadku niejednoznacznosci
+tworzy równolegle wiele oddzielny parser dla kazdego przypadku.
+Jesli nowo powstala galaz nie bedzie potem pasowala, zostaje
+ona cicho usuwana.
+%glr-parser   <BISON-GRAMMAR>
+%expect-rr 1  <BISON-GRAMMAR>
+
+
+    /* TOKENY */
 %token NUM FLOAT    /* tokeny bez okreslonej lacznosci ani priorytetu. */
 
 %left '+' '-'       /* tokeny o lacznosci lewostronnej, im nizej */
