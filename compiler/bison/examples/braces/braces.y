@@ -2,24 +2,34 @@
     #include <string.h>
     #include <stdlib.h>
     #include <stdio.h>
-    void yyerror (char const *s);
+    void yyerror (char const* str);
     int yylex();
-    int NAWIASY = 0;
+    int BRACES = 0;
 %}
-%token LEWY
-%token PRAWY
-%token NL
+%token LEFT
+%token RIGHT
+
 %%
-S: E           { printf( "nawiasy: %d\n", NAWIASY); }
- ;
-E: '(' E ')'   { ++NAWIASY; }
- |
+input:
+  %empty
+| input line
+;
+
+line:
+ '\n'
+| braces '\n'       { printf ("braces: %d\n", BRACES); BRACES=0; }
+| error '\n'        { yyerrok; }
+;
+
+braces:
+  LEFT braces RIGHT { ++BRACES; }
+| LEFT RIGHT        { ++BRACES; }
 ;
 %%
 
-void yyerror (char const *s)
+void yyerror (char const* str)
 {
-    fprintf (stderr, "new_error: %s\n", s);
+    fprintf (stderr, "%s\n", str);
 }
 
 int main()

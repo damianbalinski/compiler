@@ -1,9 +1,12 @@
 %{
-    #include "y.tab.h"
+    #include "braces.tab.h"
     int yylex();
 %}
 %%
-"("     { printf( "L" ); return yytext[0]; }
-\)      { printf( "R" ); return yytext[0]; }
-.       { printf("lexer_error"); }
+\(      { return LEFT; }
+\)      { return RIGHT; }
+\n      { return '\n'; }
+.       { printf("lexical error"); }
 %%
+
+int yywrap() { return 1; }
