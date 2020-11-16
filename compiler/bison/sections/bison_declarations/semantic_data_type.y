@@ -1,7 +1,6 @@
 // TODO
 %define api.token.prefix {TOK_}
 
-
 // JEDNAKOWY TYP DLA WSZYSTKICH REGUL
 %define api.value.type {double}
 #define YYSTYPE double
@@ -10,9 +9,14 @@
 %union      // bison sam okresla unie dostepnych typow
 -----------------------------
 // zmienna specjalna unia informuje bisona, ze taki typow
-// podczas  deklaracji tokenow sa prawdziwymy typami 
-%define variableapi.value.type union
+// nazwy tokenow nazwanych (a nie tagi typow) sa skladowymi unii
+// dostep do tokenow nienazwanych uzyskujemy poprzez rzutowanie
+%define api.value.type union
 -----------------------------
+// tagi typow sa skladowymi unii
+%define api.value.type {union MyUnion}
+-----------------------------
+// tagi typow sa skladowymi unii
 #define YYSTYPE union
 
 // TAKI TYPOW

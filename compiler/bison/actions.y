@@ -1,9 +1,6 @@
 $n - wartosc semantyczna n-tego komponentu w regule, numerowanie od 1
-
 $$ - wartosc semantyczna grupowanego wyrazenia
-$1 - wartosc semantyczna lewego operandu
-$3 - wartosc semantyczna prawego operandu
-$2 - wartosc semantyczna operandu dla operatora unarnego
+$<itype>n - wartosc unii dla podanego typu
 
 @n - pozycja n-tego komponentu w regule, numerowanie od 1
      parser automatcznie przypisuje @$, biorac poczatek @1
@@ -14,3 +11,6 @@ $2 - wartosc semantyczna operandu dla operatora unarnego
 @3.first_column - poczatek bledu (kolumna)
 @3.last_line    - koniec bledu   (wiersz)
 @3.last_column  - koniec bledu   (kolumna)
+
+// AKCJA DOMYSLNA (jesli nie podano)
+$$ = $1

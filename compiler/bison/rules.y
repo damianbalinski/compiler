@@ -1,31 +1,8 @@
 // regula przetwarzania sklada sie z produkcji oraz operacji
 // produkcja - notacja YACC
-// operacja - instrukcja C, wykonywana w momencie dokonywania redukcji
-              zgodnej z podana produkcja, kazda produkcja powinna miec
-              akcje, jesli jej nie podano stosowana jest akcja domyslna
-              $$ = $1
-
-expr: expr ’+’ expr { $$ = $1 + $3; } ;
-
-    // pojedyncza produkcja
-E : T
-  ;
-    // wiele produkcji
-E : E '+' T
-  | T
-  ;
-
-    // produkcja pusta
-E : E '+' T
-  |
-  ;
-
-////////////////////////////////////
-/*
- * results - nieterminal
- * components - terminale/nieterminale
- * action - wyrazenie w C wyliczajace wartosc semantyczna reguly
- */
+// akcja     - wyrazenie w C wyliczajace wartosc semantyczna reguly,
+//           - wykonywana w momencie przetwarzania produkcji,
+//           - jesli nie podano stosowana jest akcja domyslna $$ = $1
 
 // POJEDYNCZA REGULA
 result: compotents... {action}
