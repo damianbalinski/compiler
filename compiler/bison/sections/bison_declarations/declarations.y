@@ -28,5 +28,6 @@ ona cicho usuwana.
     /* NIETERMINALE */
 %nterm <double> exp /* deklaracja nieterminala, ktorego nie mozna */
                     /* zadeklarowac niejawnie za pomoca reguly */
+
 %%
 %%
