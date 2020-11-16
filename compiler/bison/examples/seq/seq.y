@@ -17,7 +17,7 @@ input:
 line:
   '\n'
 | sequence '\n'             { printf( "OK\n" ); }
-| error '\n'                { yyerrok; printf( "ERROR\n"); }
+| error '\n'                { yyerrok; }
 ;
 
 sequence: 
@@ -25,8 +25,8 @@ sequence:
 ;
 
 nums:
-  NUM
-| nums ',' NUM
+  NUM                       { printf("[%d]", $1); }
+| nums ',' NUM              { printf("[%d]", $3); }
 ;
 
 %%

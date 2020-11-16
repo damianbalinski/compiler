@@ -3,7 +3,7 @@
     int yylex ();
 %}
 %%
-[0-9]+      return NUM;
+[0-9]+      { yylval = atoi(yytext); return NUM; }
 \(          return '(';
 \)          return ')';
 \,          return ',';
