@@ -6,6 +6,8 @@ ona cicho usuwana.
 %glr-parser   <BISON-GRAMMAR>
 %expect-rr 1  <BISON-GRAMMAR>
 
+    /* UNIA */
+%union {long n;tree t;  /* treeis defined inptypes.h.*/}
 
     /* TOKENY */
 %token NUM FLOAT    /* tokeny bez okreslonej lacznosci ani priorytetu. */

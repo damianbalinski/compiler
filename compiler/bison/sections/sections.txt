@@ -5,11 +5,12 @@
 %}
 
 Bison declarations
-// terminale, nieterminale
+// terminale, nieterminale, priorytety, lacznosc
 %%
 
 Grammar rules
 // reguly konstruowania nieterminali
+// musi byc co najmniej jedna regula
 %%
 
 Epilogue

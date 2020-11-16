@@ -8,6 +8,9 @@ FLAGI gcc
 -O3     ustawienie optymalizacji na poziom 3
 
 FLAGI bison
--d      denerowanie pliku naglowkowego
+-d              bison generuje plik naglowkowy zawierajacy wartosci tokenow,
+                ktory moze byc nastepnie dolaczony do lexera
+-Wempty-rule    uznaje jako blad wszystkie reguly puste bez %empty
+-Wno-empty-rule 
 
 FLAGI flex

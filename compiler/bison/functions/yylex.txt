@@ -1,0 +1,3 @@
+Lexer, przetwarza plik znak po znaku, zwraca id bierzacego tokenu.
+
+yylex()
