@@ -42,6 +42,9 @@
     <ClCompile Include="listy\tests\string_test.c">
       <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
+    <ClCompile Include="arythmetic.c">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="listy\lista1\makefile">

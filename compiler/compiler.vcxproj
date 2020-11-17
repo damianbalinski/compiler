@@ -139,19 +139,38 @@
     <Content Include="flex\flex_2.l" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="listy\lista1\fa.c" />
-    <ClCompile Include="listy\lista1\kmp.c" />
-    <ClCompile Include="listy\tests\command_line_test.c" />
-    <ClCompile Include="listy\tests\fa_test.c" />
-    <ClCompile Include="listy\tests\file_test.c" />
-    <ClCompile Include="listy\tests\string_test.c" />
+    <ClCompile Include="arythmetic.c" />
+    <ClCompile Include="listy\lista1\fa.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="listy\lista1\kmp.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="listy\tests\command_line_test.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="listy\tests\fa_test.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="listy\tests\file_test.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="listy\tests\string_test.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="listy\lista1\makefile" />
-    <None Include="listy\lista1\README.md" />
+    <None Include="listy\lista1\makefile">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="listy\lista1\README.md">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="listy\lista1\test.txt" />
+    <Text Include="listy\lista1\test.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
