@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <limits.h>
+#include <stdbool.h>
 
 /*
  * UWAGA!
@@ -11,8 +11,9 @@
  */
 
 #define BASE 1234577						// podstawa systemu
+#define PHI  1234576						// funkcja Eulera phi(BASE)
 #define ZERO 0								// element neutralny dodawania
-#define ONE 1								// element neutralny mnozenia
+#define ONE  1								// element neutralny mnozenia
 
 #define ERR_DIV_ZERO "Dzielenie przez zero."
 #define ERR_REC_ZERO "Zero nie ma elementu odwrotnego."
@@ -28,8 +29,21 @@ inline int mul(int x, int y);				// mnozenie					TEST
 inline int div(int x, int y);				// dzielenie				TEST
 inline int pow(int x, int y);				// potega
 
+inline bool zero(int x);					// sprawdza czy jest zerem
+inline bool one(int x);						// sprawdza czy jest jedynka
+
 void reuklides(int a, int b, int* x, int* y);		// rozszerzony algorytm Euklidesa
 void fast_multiplication(int a, int b, int* res);	// szybkie mnozenie
+
+// sprawdza, czy x jest zerem
+inline bool zero(int x) {
+	return (x % BASE == ZERO);
+}
+
+// sprawdza czy x jest jedynka
+inline bool one(int x) {
+	return (norm(x) == ONE);
+}
 
 // zwraca liczbe znormalizowana w Zp
 inline int norm(long long x) {
@@ -37,10 +51,8 @@ inline int norm(long long x) {
 }
 
 // zwraca potege znormalizowana w Zp
-// poniewaz p-pierwsza, wiec phi(x) = x-1
 inline int norm_pow(long long x) {
-	int BASE2 = BASE - 1;
-	return (x % BASE2 + BASE2) % BASE2;
+	return (x % PHI + PHI) % PHI;
 }
 
 // zwraca liczbe przeciwna
@@ -86,10 +98,6 @@ inline int div(int x, int y) {
 // zwraca potege liczby
 inline int pow(int a, int b) {
 	int x = 1;
-	//if (b >= 0)
-	//	fast_multiplication(norm(a), b, &x);
-	//else
-	//	fast_multiplication(inv(a), -b, &x);
 	fast_multiplication(norm(a), norm_pow(b), &x);
 	return x;
 }
@@ -188,16 +196,28 @@ int main(void)
 	//	printf("3^%d = %d\n", i, pow(3, i));
 
 	// TESTY WYNIKOW
-	printf("%d\n", add(2, mul(3, sub(4, 5))));
-	printf("%d\n", pow(2, 100));
-	printf("%d\n", sub(sub(2,3),2));
-	printf("%d\n", div(269164, 123456));
-	printf("%d\n", sub(-2, -1));
-	printf("%d\n", div(1,-580978));
-	printf("%d\n", norm(123456789));
-	printf("%d\n", norm(-1234567));
-	printf("%d\n", pow(2,123));
-	printf("%d\n", pow(2,-2));
+	//printf("%d\n", add(2, mul(3, sub(4, 5))));
+	//printf("%d\n", pow(2, 100));
+	//printf("%d\n", sub(sub(2,3),2));
+	//printf("%d\n", div(269164, 123456));
+	//printf("%d\n", sub(-2, -1));
+	//printf("%d\n", div(1,-580978));
+	//printf("%d\n", norm(123456789));
+	//printf("%d\n", norm(-1234567));
+	//printf("%d\n", pow(2,123));
+	//printf("%d\n", pow(2,-2));
+
+	// ZERO TEST
+	//printf("%d\n", zero(0));
+	//printf("%d\n", zero(1));
+	//printf("%d\n", zero(BASE));
+	//printf("%d\n", zero(mul(BASE, BASE)));
+
+	// ONE TEST
+	//printf("%d\n", one(1));
+	//printf("%d\n", one(0));
+	//printf("%d\n", one(BASE+1));
+	//printf("%d\n", one(mul(BASE,BASE)+1));
 	return 0;
 }
 
