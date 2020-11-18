@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "arythmetic.h"
 
 /*
@@ -12,69 +13,69 @@
  */
 
 // sprawdza, czy x jest zerem
-inline int zero(int x) {
+inline int _zero(int x) {
 	return (x % BASE == ZERO);
 }
 
 // sprawdza czy x jest jedynka
-inline int one(int x) {
-	return (norm(x) == ONE);
+inline int _one(int x) {
+	return (_norm(x) == ONE);
 }
 
 // zwraca liczbe znormalizowana w Zp
-inline int norm(long long x) {
+inline int _norm(long long x) {
 	return (x % BASE + BASE) % BASE;
 }
 
 // zwraca potege znormalizowana w Zp
-inline int norm_pow(long long x) {
+inline int _norm_pow(long long x) {
 	return (x % PHI + PHI) % PHI;
 }
 
 // zwraca liczbe przeciwna
-inline int neg(int x) {
-	return norm((long long)BASE - x);
+inline int _neg(int x) {
+	return _norm((long long)BASE - x);
 }
 
 // zwraca liczbe odwrotna
-inline int inv(int x) {
+inline int _inv(int x) {
 	if (x % BASE == ZERO) {
 		fprintf(stderr, "Error %d: %s\n", x, ERR_REC_ZERO);
 		exit(-1);
 	}
 	int p = 1, q = 0;
-	reuklides(BASE, norm(x), &p, &q);
-	return norm(q);
+	reuklides(BASE, _norm(x), &p, &q);
+	return _norm(q);
 }
 
 // zwraca sume liczb
-inline int add(int x, int y) {
-	return norm((long long)x + y);
+inline int _add(int x, int y) {
+	return _norm((long long)x + y);
 }
 
 // zwraca roznice liczb
-inline int sub(int x, int y) {
-	return add(x, neg(y));
+inline int _sub(int x, int y) {
+	return _add(x, _neg(y));
 }
 
 // zwraca iloczyn liczb
-inline int mul(int x, int y) {
-	return norm((long long)norm(x) * norm(y));
+inline int _mul(int x, int y) {
+	return _norm((long long)_norm(x) * _norm(y));
 }
 
 // zwraca iloraz liczb
-inline int div(int x, int y) {
+inline int _div(int x, int y) {
 	if (y%BASE == ZERO) {
 		fprintf(stderr, "Error %d/%d: %s\n", x, y, ERR_DIV_ZERO);
 		exit(-1);
 	}
-	return mul(x, inv(y));
+	return _mul(x, _inv(y));
 }
 
 // zwraca potege liczby
-inline int pow(int a, int b) {
+inline int _pow(int a, int b) {
 	int x = 1;
-	fast_multiplication(norm(a), norm_pow(b), &x);
+	fast_multiplication(_norm(a), _norm_pow(b), &x);
 	return x;
 }
 
@@ -97,13 +98,13 @@ void fast_multiplication(int a, int b, int* res)
 {
 	if (b != 0)
 	{
-		if (b & 1)  *res = mul(*res, a);
-		fast_multiplication(mul(a,a), b >> 1, res);
+		if (b & 1)  *res = _mul(*res, a);
+		fast_multiplication(_mul(a,a), b >> 1, res);
 	}
 }
 
-int main(void)
-{
+// int main(void)
+// {
 	// NORM TEST
 	//for (int i = -23; i <= 23; i++)
 	//	printf("norm(% 3d) = %d\n", i, norm(i));
@@ -184,17 +185,15 @@ int main(void)
 	//printf("%d\n", pow(2,-2));
 
 	// ZERO TEST
-	printf("%d\n", zero(0));
-	printf("%d\n", zero(1));
-	printf("%d\n", zero(BASE));
-	printf("%d\n", zero(mul(BASE, BASE)));
+	// printf("%d\n", zero(0));
+	// printf("%d\n", zero(1));
+	// printf("%d\n", zero(BASE));
+	// printf("%d\n", zero(mul(BASE, BASE)));
 
 	// ONE TEST
 	//printf("%d\n", one(1));
 	//printf("%d\n", one(0));
 	//printf("%d\n", one(BASE+1));
 	//printf("%d\n", one(mul(BASE,BASE)+1));
-	return 0;
-}
-
-
+	// return 0;
+// }
