@@ -59,4 +59,9 @@
       <Filter>Pliki źródłowe\listy\lista1</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="arythmetic.h">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

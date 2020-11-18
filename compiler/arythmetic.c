@@ -1,47 +1,23 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include "arythmetic.h"
 
 /*
  * UWAGA!
  * 2^20 < BASE < 2^21
- * poniewaz istnieje ryzyko przepelnienia, podczas mnozenia
- * obliczenia posrednie wykonujemy na typie long long
+ * poniewaz istnieje ryzyko przepelnienia,
+ * obliczenia posrednie wykonujemy na typie
+ * long long
  * 
  * TODO potegowanie, dzielenie
  */
 
-#define BASE 1234577						// podstawa systemu
-#define PHI  1234576						// funkcja Eulera phi(BASE)
-#define ZERO 0								// element neutralny dodawania
-#define ONE  1								// element neutralny mnozenia
-
-#define ERR_DIV_ZERO "Dzielenie przez zero."
-#define ERR_REC_ZERO "Zero nie ma elementu odwrotnego."
-
-inline int norm(long long x);				// liczba znormalizowana	TEST
-inline int norm_pow(long long x);			// potega znormalizowana
-inline int neg(int x);						// liczba przeciwna			TEST
-inline int inv(int x);						// liczba odwrotna			TEST
-
-inline int add(int x, int y);				// dodawanie				TEST
-inline int sub(int x, int y);				// odejmowanie				TEST
-inline int mul(int x, int y);				// mnozenie					TEST
-inline int div(int x, int y);				// dzielenie				TEST
-inline int pow(int x, int y);				// potega
-
-inline bool zero(int x);					// sprawdza czy jest zerem
-inline bool one(int x);						// sprawdza czy jest jedynka
-
-void reuklides(int a, int b, int* x, int* y);		// rozszerzony algorytm Euklidesa
-void fast_multiplication(int a, int b, int* res);	// szybkie mnozenie
-
 // sprawdza, czy x jest zerem
-inline bool zero(int x) {
+inline int zero(int x) {
 	return (x % BASE == ZERO);
 }
 
 // sprawdza czy x jest jedynka
-inline bool one(int x) {
+inline int one(int x) {
 	return (norm(x) == ONE);
 }
 
@@ -208,10 +184,10 @@ int main(void)
 	//printf("%d\n", pow(2,-2));
 
 	// ZERO TEST
-	//printf("%d\n", zero(0));
-	//printf("%d\n", zero(1));
-	//printf("%d\n", zero(BASE));
-	//printf("%d\n", zero(mul(BASE, BASE)));
+	printf("%d\n", zero(0));
+	printf("%d\n", zero(1));
+	printf("%d\n", zero(BASE));
+	printf("%d\n", zero(mul(BASE, BASE)));
 
 	// ONE TEST
 	//printf("%d\n", one(1));
