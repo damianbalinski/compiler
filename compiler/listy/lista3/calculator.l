@@ -12,8 +12,11 @@
 \/          return '/';
 \^          return '^';
 \n          return '\n';
+\\\n        ;
 [ \t]       ;
+^#.*\n      ;
 .           { printf ("lexical error: %s\n", yytext); }
+
 %%
 
 int yywrap() { return 1; }
