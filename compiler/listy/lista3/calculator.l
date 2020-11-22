@@ -1,9 +1,11 @@
 %{
     #include "calculator.tab.h"
-    int yylex ();
+    int yylex();
 %}
+%option yylineno
+%x LEXERR
 %%
-[0-9]+      { yylval = atoi(yytext); return NUM; }
+[0-9]+      { yylval = atoi( yytext ); return NUM; }
 \(          return '(';
 \)          return ')';
 \+          return '+';
@@ -15,8 +17,9 @@
 \\\n        ;
 [ \t]       ;
 ^#.*\n      ;
-.           { printf ("lexical error: %s\n", yytext); }
-
+.           { BEGIN LEXERR; return LERROR; }  /* zjadamy bledna linijke */
+<LEXERR>.   ;                                 
+<LEXERR>\n  { BEGIN INITIAL;  return '\n'; }
 %%
 
 int yywrap() { return 1; }

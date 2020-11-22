@@ -103,8 +103,8 @@ void fast_multiplication(int a, int b, int* res)
 	}
 }
 
-// int main(void)
-// {
+//int main(void)
+//{
 	// NORM TEST
 	//for (int i = -23; i <= 23; i++)
 	//	printf("norm(% 3d) = %d\n", i, norm(i));
@@ -171,6 +171,12 @@ void fast_multiplication(int a, int b, int* res)
 	// TEST POWER
 	//for (int i = -22; i <= 22; i++)
 	//	printf("3^%d = %d\n", i, pow(3, i));
+	// printf("%d\n", _pow(2, 0));
+	// printf("%d\n", _pow(2, -1));
+	// printf("%d\n", _pow(2, -2));
+	// printf("\n");
+	// printf("%d\n", _div(1, 2));
+	// printf("%d\n", _div(1, 4));
 
 	// TESTY WYNIKOW
 	//printf("%d\n", add(2, mul(3, sub(4, 5))));
@@ -195,5 +201,5 @@ void fast_multiplication(int a, int b, int* res)
 	//printf("%d\n", one(0));
 	//printf("%d\n", one(BASE+1));
 	//printf("%d\n", one(mul(BASE,BASE)+1));
-	// return 0;
-// }
+	//return 0;
+//}

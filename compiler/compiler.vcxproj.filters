@@ -22,6 +22,9 @@
     <Filter Include="Pliki źródłowe\listy\tests">
       <UniqueIdentifier>{51709430-e633-444c-97d5-547555d73c90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki źródłowe\listy\lista3">
+      <UniqueIdentifier>{9be4a111-85e3-4f22-8d54-089052b917b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="listy\lista1\fa.c">
@@ -42,8 +45,8 @@
     <ClCompile Include="listy\tests\string_test.c">
       <Filter>Pliki źródłowe\listy\tests</Filter>
     </ClCompile>
-    <ClCompile Include="arythmetic.c">
-      <Filter>Pliki źródłowe</Filter>
+    <ClCompile Include="listy\lista3\arythmetic.c">
+      <Filter>Pliki źródłowe\listy\lista3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,8 +63,8 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="arythmetic.h">
-      <Filter>Pliki źródłowe</Filter>
+    <ClInclude Include="listy\lista3\arythmetic.h">
+      <Filter>Pliki źródłowe\listy\lista3</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

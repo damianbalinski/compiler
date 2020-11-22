@@ -1,0 +1,10 @@
+PARSER RESYNCHRONIZATION
+    - stworzenie podobnej reguly, dopasowywanej w
+      przypadku bledu, parser wyscietla komunikat
+      o bledzie oraz przechodzi dalej, nie przery-
+      wajac parsowania, token bezsposrednio za to-
+      kenem error jest tokenem synchronizacji
+
+PANIC MODE RECOVERY
+    - usuwa bledny ragment oraz ponownie uruchamia
+      parsowanie

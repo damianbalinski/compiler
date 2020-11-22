@@ -12,6 +12,7 @@
     int LIST_TYPE[MAX];
     int N = 0;
     
+    extern int yylineno;
     void yyerror (char const *s);
     int yylex ();
     void put(int type, int val);
@@ -19,11 +20,11 @@
     void print();
 %}
 
-%token NUM
+%token NUM LERROR
 %left '-' '+'
 %left '*' '/'
 %precedence NEG
-%right '^'
+%nonassoc '^'
 
 %%
 input:
@@ -42,17 +43,25 @@ exp:
 | exp '+' exp        { $$ = _add($1,$3); put(OPER, '+'); }
 | exp '-' exp        { $$ = _sub($1,$3); put(OPER, '-'); }
 | exp '*' exp        { $$ = _mul($1,$3); put(OPER, '*'); }
-| exp '/' exp        { $$ = _div($1,$3); put(OPER, '/'); }  // TODO dzielenie przez 0
-| '-' NUM %prec NEG  { $$ = _norm(-$2) ; put(NUMB, $$ ); }
-| exp '^' exp        { $$ = _pow($1,$3); put(OPER, '^'); }
-| '(' exp ')'        { $$ = $2;                          }
+| exp '/' exp        { 
+                        if (_zero($3)) {
+                            yyerror(ERR_DIV_ZERO);
+                            YYERROR;
+                        }
+                        else
+                            $$ = _div($1,$3); put(OPER, '/');
+                     }
+| '-' NUM %prec NEG  { $$ = _norm(-$2) ;  put(NUMB, $$ );                            }
+| exp '^' NUM        { $$ = _pow($1,$3);  put(NUMB, _norm_pow($3));  put(OPER, '^'); }
+| exp '^' '-' NUM    { $$ = _pow($1,-$3); put(NUMB, _norm_pow(-$3)); put(OPER, '^'); }
+| '(' exp ')'        { $$ = $2;                                                      }
 ;
 
 %%
 
 void yyerror (char const *s)
 {
-    fprintf(stderr, "%s\n", s);
+    fprintf(stderr, "Blad [linia %d] : %s\n", yylineno, s);
 }
 
 void put(int type, int val)
@@ -70,7 +79,7 @@ void clear()
 void print()
 {
     for(int i = 0; i < N; i++) {
-        if (LIST_TYPE[i] == NUMBER)
+        if (LIST_TYPE[i] == NUMB)
             printf("%d ", LIST[i]);
         else
             printf("%c ", LIST[i]);
@@ -79,5 +88,6 @@ void print()
 
 int main()
 {
+    yylineno = 0;
     return yyparse();
 }

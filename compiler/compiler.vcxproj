@@ -139,13 +139,13 @@
     <Content Include="flex\flex_2.l" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="arythmetic.c" />
     <ClCompile Include="listy\lista1\fa.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="listy\lista1\kmp.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="listy\lista3\arythmetic.c" />
     <ClCompile Include="listy\tests\command_line_test.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -173,7 +173,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="arythmetic.h" />
+    <ClInclude Include="listy\lista3\arythmetic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
