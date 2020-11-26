@@ -2,7 +2,7 @@
     #include <string.h>
     #include <stdlib.h>
     #include <stdio.h>
-    #include "arythmetic.h"
+    #include "arithmetic.h"
 
     #define MAX 1024
     #define NUMB 0
