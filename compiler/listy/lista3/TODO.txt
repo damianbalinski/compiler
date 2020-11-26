@@ -1,3 +1,0 @@
-%nonassoc dla operatora ^
-
-wlaczyc opcje automatycznie zliczajaca numery linii

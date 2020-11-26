@@ -4,7 +4,18 @@
         "**/.svn": true,
         "**/.hg": true,
         "**/CVS": true,
-        "**/.DS_Store": true
+        "**/.DS_Store": true,
+        ".vs": true,
+        ".vscode": true,
+        "compiler/Debug": true,
+        "compiler/compiler.vcxproj": true,
+        "compiler/compiler.vcxproj.filters": true,
+        "compiler/compiler.vcxproj.user": true,
+        "Debug": true,
+        "compiler.sln": true,
+        "compiler.sln.DotSettings.user": true,
+        ".gitignore": true,
+        ".gitattributes": true
     },
     "explorerExclude.backup": null
 }

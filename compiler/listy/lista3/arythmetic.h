@@ -22,4 +22,4 @@ int _zero(int x);					// sprawdza czy jest zerem
 int _one(int x);					// sprawdza czy jest jedynka
 
 void reuklides(int a, int b, int* x, int* y);		// rozszerzony algorytm Euklidesa
-void fast_multiplication(int a, int b, int* res);	// szybkie mnozenie
+void fast_exponent(int a, int b, int* res);	        // szybkie potegowanie

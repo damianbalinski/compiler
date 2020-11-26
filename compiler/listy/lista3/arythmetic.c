@@ -8,8 +8,6 @@
  * poniewaz istnieje ryzyko przepelnienia,
  * obliczenia posrednie wykonujemy na typie
  * long long
- * 
- * TODO potegowanie, dzielenie
  */
 
 // sprawdza, czy x jest zerem
@@ -75,7 +73,7 @@ inline int _div(int x, int y) {
 // zwraca potege liczby
 inline int _pow(int a, int b) {
 	int x = 1;
-	fast_multiplication(_norm(a), _norm_pow(b), &x);
+	fast_exponent(_norm(a), _norm_pow(b), &x);
 	return x;
 }
 
@@ -92,14 +90,14 @@ void reuklides(int a, int b, int* x, int* y)
 	}
 }
 
-// algorytm szybkiego mnozenia a^b = res
+// algorytm szybkiego potegowania a^b = res
 // w postaci rekurencji ogonowej
-void fast_multiplication(int a, int b, int* res)
+void fast_exponent(int a, int b, int* res)
 {
 	if (b != 0)
 	{
 		if (b & 1)  *res = _mul(*res, a);
-		fast_multiplication(_mul(a,a), b >> 1, res);
+		fast_exponent(_mul(a,a), b >> 1, res);
 	}
 }
 
