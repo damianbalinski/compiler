@@ -6,6 +6,9 @@ ona cicho usuwana.
 %glr-parser   <BISON-GRAMMAR>
 %expect-rr 1  <BISON-GRAMMAR>
 
+    /* START */
+%start program      /* okresla, ktora regula jest regula startowa programu. */
+   
     /* UNIA */
 %union {long n;tree t;  /* treeis defined inptypes.h.*/}
 

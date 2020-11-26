@@ -7,9 +7,9 @@
 %%
 %%
     /* po wywolaniu rozpoczyna przetwarzanie znakow od miejsca gdzie ostatnio
-    skonczyla w strumieniu yyin, przetwarza wejscie do napotkania konca pliku lub do napotkania
-    instrukcji return w ktorejkolwiek z akcji, zwraca 0 po napotkaniu konca
-    pliku */
-    /* yylex() */
+    skonczyla w strumieniu yyin, przetwarza wejscie do napotkania nastepnego
+    tokena lub konca pliku, zwraca wartosc numeryczna znalezionego tokena lub
+    0 po napotkaniu konca lub */
+
 int yywrap() { return 1; }
 int main() { return yylex(); }

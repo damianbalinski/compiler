@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ "$2" = "debug" ]; then
+    bison --debug -dv $1.y
+else
+    bison -dv $1.y
+fi
+
+flex $1.l
+
+gcc -o temp $1.tab.c lex.yy.c -lm
+
+if [ "$2" = "run" ]; then
+    ./temp "${@:3}"
+fi
+
+if [ "$2" != "out" ]; then
+    rm $1.output
+fi
+
+rm $1.tab.c 
+rm $1.tab.h
+rm lex.yy.c
+rm temp

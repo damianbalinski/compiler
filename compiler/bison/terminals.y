@@ -25,7 +25,7 @@
  *       - 0      - end of file
  *                - znak nowej linii
  * error - 256    - blacd, redukcja do tego nieterminala nastepuje
-                    gdy na stoaiw pojawia sie ciag tokenow nieposiadajacy
-                    odpowiedniego dopasowania w regulach, yylexer nigdy
-                    nie zwraca tej wartosci
+ *                  gdy na stoaiw pojawia sie ciag tokenow nieposiadajacy
+ *                  odpowiedniego dopasowania w regulach, yylexer nigdy
+ *                  nie zwraca tej wartosci
  */

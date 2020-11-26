@@ -1,1 +1,4 @@
 yacc - Yet Another Compiler Compiler
+
+parsowanie sie udalo, jesli caly program udalo sie
+zredukowac do symbolu startowego

@@ -10,6 +10,8 @@ FLAGI gcc
 FLAGI bison
 -d              bison generuje plik naglowkowy zawierajacy wartosci tokenow,
                 ktory moze byc nastepnie dolaczony do lexera
+-v              produkuje plik wyjsciowy zawierajacy opis 
+                gramatyki, terminali, nieterminali itp.
 -Wempty-rule    uznaje jako blad wszystkie reguly puste bez %empty
 -Wno-empty-rule 
 
