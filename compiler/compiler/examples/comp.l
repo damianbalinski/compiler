@@ -24,7 +24,7 @@ skip        { return(SKIP);    }
 then        { return(THEN);    }
 while       { return(WHILE);   }
 write       { return(WRITE);   }
-{ID}        { return(IDENTIFIER); }
+{ID}        { yylval.id = strdup( yytext); return(IDENTIFIER); }
 [ \t\n]+    /* blank, tab, new line: eat up whitespace */
 .           { return(yytext[0]); }
 %%
