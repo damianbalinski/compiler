@@ -1,12 +1,6 @@
 int data_offset = 0;
 int code_offset = 0;
 
-int data_location();
-int reserve_loc();
-int gen_label();
-void gen_code( enum code_ops operation, int arg );
-void back_patch( int addr,  enum code_ops operation, int arg );
-
 /* Rezerwacja miejsca w segmecie danych,
    zwraca adres zarezerwowanej pamieci */
 int data_location() {
@@ -34,4 +28,12 @@ void gen_code( enum code_ops operation, int arg ) {
 void back_patch( int addr,  enum code_ops operation, int arg ) {
     code[addr].op  = operation;
     code[addr].arg = arg;
+}
+
+void print_code() {
+    int i = 0;
+    while (i < code_offset) {
+        printf("%3ld: %-10s%4ld\n", i, op_name[(int) code[i].op], code[i].arg );
+        i++;
+    }
 }

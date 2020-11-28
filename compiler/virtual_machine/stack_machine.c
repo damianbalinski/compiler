@@ -71,6 +71,6 @@ void fetch_execute_cycle() {
     
 }
 
-int main(void) {
-    return 0;
-}
+// int main(void) {
+//     return 0;
+// }
