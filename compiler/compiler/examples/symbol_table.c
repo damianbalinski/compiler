@@ -3,8 +3,9 @@
 
 struct symrec
 {
-    char *name; /* name of symbol */
-    struct symrec *next; /* link field */
+    char *name;             /* name of symbol   */
+    int offset;             /* dataoffset       */
+    struct symrec *next;    /* link field       */
 };
 
 typedef struct symrec symrec;
@@ -19,6 +20,7 @@ symrec *putsym( char *symname )
     ptr = (symrec *) malloc (sizeof(symrec));
     ptr->name = (char *) malloc (strlen(symname)+1);
     strcpy (ptr->name, symname);
+    ptr->offset = data_location();
     ptr->next = (struct symrec *)symtable;
     symtable = ptr;
     return ptr;
