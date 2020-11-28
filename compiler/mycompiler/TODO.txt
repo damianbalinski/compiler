@@ -1,0 +1,6 @@
+1 - plik naglowkowy ze wszystkimi mozliwymi bledami
+    - zmienna x jest juz zadeklarowana
+    - zmienna x nie jest zakelarowana
+    - indekowanie poza zakresem
+
+2 - zrobic makefile

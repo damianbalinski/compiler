@@ -4,7 +4,7 @@
 struct symrec
 {
     char *name;             /* name of symbol   */
-    int offset;             /* dataoffset       */
+    int offset;             /* data offset       */
     struct symrec *next;    /* link field       */
 };
 
