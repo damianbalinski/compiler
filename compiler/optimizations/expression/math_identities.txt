@@ -1,0 +1,5 @@
+/* Przeksztalcajac wyrazenie redukujemy liczbe operacji
+   arytmetycznych */
+
+a*b + a*c --> a*(b+c)
+a - b --> a + ( - b )

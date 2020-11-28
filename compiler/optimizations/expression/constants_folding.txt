@@ -1,0 +1,4 @@
+/* Upraszczanie wyrazen arytmetycznych. */
+
+I := 4 + J - 5;      --> I := J - 1;
+I := 3; J := I + 2;  --> I := 3; J := 5;

@@ -1,0 +1,19 @@
+/* zamiast wyliczac to samo wyrazenie przy padzdym obrocie petli
+   mozna je wyliczyc przed pierwszym obrotem. */
+
+From:
+    while (count < limit) do
+        INPUT SALES;
+        VALUE := SALES * ( MARK_UP + TAX );
+        OUTPUT := VALUE;
+        COUNT := COUNT + 1;
+    end;
+
+to:
+    TEMP :=  MARK_UP + TAX;
+    while (COUNT < LIMIT) do
+        INPUT SALES;
+        VALUE := SALES * TEMP;
+        OUTPUT := VALUE;
+        COUNT := COUNT + 1;
+    end;

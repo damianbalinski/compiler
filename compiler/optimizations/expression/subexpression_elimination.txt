@@ -1,0 +1,14 @@
+/* Zamiast wielokrotnie wyliczac to samo wyrazenie, obliczenia
+   wykonujemy tylko raz. 
+   UWAGA! Zmienne nie moga byc zalezne od siebie. */
+
+From:
+    A := 6 * (B+C);
+    D := 3 + 7 * (B+C);
+    E := A * (B+C);
+
+to:
+    TEMP := B + C;
+    A    := 6 * TEMP;
+    D    := 3 * 7 * TEMP;
+    E    := A * TEMP;

@@ -1,0 +1,13 @@
+REJESTRY
+IR  (instruction rg.)       - zawiera instrukcje, ktora jest wykonywana
+T   (stack top rg.)         - szczyt stosu
+PC  (program counter rg.)   - adres nastepnej instrukcji
+AR  (activation record rg.) - adres bazowy rekordu bierzacej procedury
+
+INICJALIZACJA REJESTROW / PAMIECI
+P = 0;      {Program Counter}
+AR = 0;     {Activation Record}
+T = 2;      {Stack Top}
+S[0] := 0;  {Static Link}
+S[1] := 0;  {Static Dynamic Link}
+S[2] := 0;  {Return Address}

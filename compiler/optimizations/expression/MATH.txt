@@ -1,0 +1,16 @@
+MNOZENIE
+I * 0       -->     0
+0 * I       -->     0
+I * 1       -->     I
+1 * I       -->     I
+
+DZIELENIE
+
+
+DODAWANIE
+
+
+ODEJMOWANIE
+
+
+MODULO

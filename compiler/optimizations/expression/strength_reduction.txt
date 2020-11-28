@@ -1,0 +1,5 @@
+/* Zamiast mnozyc/dzielic przez potege 2, mozemy uzyc
+   przesuniecia bitowego */
+
+2*x;  --> x + x;
+2*x;  --> shift left x;
