@@ -2,8 +2,9 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "symbol_table.c"
-    #include "stack_machine.c"
     #include "code_generator.c"
+    #include "stack_machine.c"
+    #include "errors.h"
 
     #define YYDEBUG 1
 
@@ -15,8 +16,8 @@
 
     int yylex();
     void yyerror( char *s );
+    
     void install( char* symname );
-
     void contextcheck( enum code_ops operation, char *sym_name );
 
     struct lbs* newlblrec();
@@ -119,18 +120,18 @@ int main( int argc, char *argv[] )
 void yyerror (char* str) /* Called by yyparse on error */
 {
     errors++;
-    printf("%s\n", str);
+    fprintf(stderr, ERR_SYNTAX);
 }
 
-void install( char* symname )
+void install( char* id )
 {
     symrec *s;
-    s = getsym (symname);
+    s = getsym (id);
     if (s == 0)
-        s = putsym (symname);
+        s = putsym (id);
     else {
-        errors++;
-        printf( "%s is already defined\n", symname );
+        err_add();
+        fprintf( stderr,  ERR_ID_DECLARED(id) );
     }
 }
 
@@ -146,6 +147,7 @@ void contextcheck( enum code_ops operation, char *sym_name )
     else
         gen_code( operation, identifier->offset );
 }
+
 
 ////////////////////////////////////////////////////
 /* Allocate space for the labels */
