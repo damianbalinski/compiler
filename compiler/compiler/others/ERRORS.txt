@@ -1,2 +1,3 @@
 MOZLIWE BLEDY:
    nieprawidlowa kolejnosc tokenow
+   czy komentarz w kodzie moze byc wielolinijkowy

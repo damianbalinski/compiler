@@ -35,11 +35,11 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_COMPILER_TAB_H_INCLUDED
-# define YY_YY_COMPILER_TAB_H_INCLUDED
+#ifndef YY_YY_CALCULATOR_TAB_H_INCLUDED
+# define YY_YY_CALCULATOR_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -54,51 +54,16 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    NUMBER = 258,                  /* NUMBER  */
-    PIDENTIFIER = 259,             /* PIDENTIFIER  */
-    DECLARE = 260,                 /* DECLARE  */
-    T_BEGIN = 261,                 /* T_BEGIN  */
-    END = 262,                     /* END  */
-    IF = 263,                      /* IF  */
-    THEN = 264,                    /* THEN  */
-    ELSE = 265,                    /* ELSE  */
-    ENDIF = 266,                   /* ENDIF  */
-    DO = 267,                      /* DO  */
-    WHILE = 268,                   /* WHILE  */
-    ENDWHILE = 269,                /* ENDWHILE  */
-    REPEAT = 270,                  /* REPEAT  */
-    UNTIL = 271,                   /* UNTIL  */
-    FOR = 272,                     /* FOR  */
-    FROM = 273,                    /* FROM  */
-    TO = 274,                      /* TO  */
-    ENDFOR = 275,                  /* ENDFOR  */
-    DOWNTO = 276,                  /* DOWNTO  */
-    READ = 277,                    /* READ  */
-    WRITE = 278,                   /* WRITE  */
-    EQ = 279,                      /* EQ  */
-    NE = 280,                      /* NE  */
-    LT = 281,                      /* LT  */
-    LE = 282,                      /* LE  */
-    GT = 283,                      /* GT  */
-    GE = 284,                      /* GE  */
-    ASSIGN = 285                   /* ASSIGN  */
+    NUM = 258,                     /* NUM  */
+    LERROR = 259,                  /* LERROR  */
+    NEG = 260                      /* NEG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
-{
-#line 11 "compiler.y"
-
-    int val;             /* wartosc int */
-    char *id;            /* identyfikator */
-
-#line 99 "compiler.tab.h"
-
-};
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -108,4 +73,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_COMPILER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_CALCULATOR_TAB_H_INCLUDED  */
