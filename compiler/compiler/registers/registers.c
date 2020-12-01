@@ -6,7 +6,7 @@
 
 /* Inicjalizacja rejestrow. Poczatkowo wszystkie rejestry sa wolne
  * oraz maja niezdeterminowana wartosc. */
-register_t registers[6] = {
+register_type registers[6] = {
     {'a', 0, -1, true},
     {'b', 0, -1, true},
     {'c', 0, -1, true},

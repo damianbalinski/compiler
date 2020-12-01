@@ -16,7 +16,7 @@ ID    [_a-z]+
 %x      COMMENT
 
 %%
-{DIGIT}+    { PR_TOKEN("NUMBER");   yylval.val = atoi(yytext); return(NUMBER); }
+{DIGIT}+    { PR_TOKEN("NUMBER");   yylval.num.val = atoll(yytext); return(NUMBER); }
 ":="        { PR_TOKEN("ASSIGN");   return(ASSIGN);   }
 "="         { PR_TOKEN("EQ");       return(EQ);       }
 "!="        { PR_TOKEN("NE");       return(NE);       }

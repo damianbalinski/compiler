@@ -6,20 +6,28 @@
     #include "debugger/debugger.h"
     #include "errors/errors.h"
     #include "symbol_table/symbol_table.h"
+    #include "registers/registers.h"
+    #include "code_generator/code_generator.h"
 
     extern int yylineno;
     extern char* yytext;
     int yylex();
     void yyerror( char *str );
+
+
 %}
 
+%code requires {
+    #include "others/types.h"
+}
+
 %union{
-    long long val;       /* liczba */
+    num_type num;        /* wartosc i rejestr */
     char *id;            /* identyfikator */
 }
 
 %start program
-%token <val> NUMBER
+%token <num> NUMBER
 %token <id> PIDENTIFIER
 %token DECLARE T_BEGIN END
 %token IF THEN ELSE ENDIF
