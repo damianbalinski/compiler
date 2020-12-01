@@ -1,0 +1,2 @@
+MOZLIWE BLEDY:
+   nieprawidlowa kolejnosc tokenow

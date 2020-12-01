@@ -1,0 +1,31 @@
+%{
+    #include "compiler.tab.h" /* The tokens */
+
+    int yywrap();
+    int yylex();
+%}
+
+DIGIT [0-9]
+ID [a-z][a-z0-9]*
+
+%%
+":="        { return(ASSGNOP); }
+{DIGIT}+    { yylval.intval = atoi( yytext ); return(NUMBER);  }
+do          { return(DO);      }
+else        { return(ELSE);    }
+end         { return(END);     }
+fi          { return(FI);      }
+if          { return(IF);      }
+in          { return(IN);      }
+integer     { return(INTEGER); }
+let         { return(LET);     }
+read        { return(READ);    }
+skip        { return(SKIP);    }
+then        { return(THEN);    }
+while       { return(WHILE);   }
+write       { return(WRITE);   }
+{ID}        { yylval.id = strdup( yytext); return(IDENTIFIER); }
+[ \t\n]+    /* blank, tab, new line: eat up whitespace */
+.           { return(yytext[0]); }
+%%
+int yywrap() { return 1; }

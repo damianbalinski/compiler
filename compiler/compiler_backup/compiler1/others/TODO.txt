@@ -3,4 +3,6 @@
     - zmienna x nie jest zakelarowana
     - indekowanie poza zakresem
 
-2 - zrobic makefile
+2 - parser + deklaracje zmiennych
+
+99 - zrobic makefile
