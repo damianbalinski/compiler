@@ -13,58 +13,115 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Pliki źródłowe\listy">
-      <UniqueIdentifier>{83e8157f-5737-46dc-a3af-fd05503f24fd}</UniqueIdentifier>
+    <Filter Include="Pliki źródłowe\compiler">
+      <UniqueIdentifier>{34aa48be-e270-4b2c-bcc3-3f0316ad8ffa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki źródłowe\listy\lista1">
-      <UniqueIdentifier>{a75d029f-e179-4ab6-9b0c-d9b08541d279}</UniqueIdentifier>
+    <Filter Include="Pliki źródłowe\compiler\code_generator">
+      <UniqueIdentifier>{6188eb71-d28e-4036-9ee5-d1c0061a3d75}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki źródłowe\listy\tests">
-      <UniqueIdentifier>{51709430-e633-444c-97d5-547555d73c90}</UniqueIdentifier>
+    <Filter Include="Pliki źródłowe\compiler\tests">
+      <UniqueIdentifier>{3572f003-184e-487b-927d-b9adc7afe418}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki źródłowe\listy\lista3">
-      <UniqueIdentifier>{9be4a111-85e3-4f22-8d54-089052b917b3}</UniqueIdentifier>
+    <Filter Include="Pliki źródłowe\compiler\others">
+      <UniqueIdentifier>{8cca02a1-fb16-46e4-8fbb-75e752baf829}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\compiler\symbol_table">
+      <UniqueIdentifier>{f216426e-e5ac-45ea-bf31-cd98856a0d4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\compiler\errors">
+      <UniqueIdentifier>{48986ed4-f587-43d0-9a3a-327eb016b125}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="listy\lista1\fa.c">
-      <Filter>Pliki źródłowe\listy\lista1</Filter>
+    <ClCompile Include="compiler\code_generator.c">
+      <Filter>Pliki źródłowe\compiler\code_generator</Filter>
     </ClCompile>
-    <ClCompile Include="listy\lista1\kmp.c">
-      <Filter>Pliki źródłowe\listy\lista1</Filter>
-    </ClCompile>
-    <ClCompile Include="listy\tests\command_line_test.c">
-      <Filter>Pliki źródłowe\listy\tests</Filter>
-    </ClCompile>
-    <ClCompile Include="listy\tests\fa_test.c">
-      <Filter>Pliki źródłowe\listy\tests</Filter>
-    </ClCompile>
-    <ClCompile Include="listy\tests\file_test.c">
-      <Filter>Pliki źródłowe\listy\tests</Filter>
-    </ClCompile>
-    <ClCompile Include="listy\tests\string_test.c">
-      <Filter>Pliki źródłowe\listy\tests</Filter>
-    </ClCompile>
-    <ClCompile Include="listy\lista3\arythmetic.c">
-      <Filter>Pliki źródłowe\listy\lista3</Filter>
+    <ClCompile Include="compiler\symbol_table.c">
+      <Filter>Pliki źródłowe\compiler\symbol_table</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="listy\lista1\makefile">
-      <Filter>Pliki źródłowe\listy\lista1</Filter>
-    </None>
-    <None Include="listy\lista1\README.md">
-      <Filter>Pliki źródłowe\listy\lista1</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="listy\lista1\test.txt">
-      <Filter>Pliki źródłowe\listy\lista1</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="listy\lista3\arythmetic.h">
-      <Filter>Pliki źródłowe\listy\lista3</Filter>
+    <ClInclude Include="compiler\errors.h">
+      <Filter>Pliki źródłowe\compiler\errors</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="compiler\others\README.md">
+      <Filter>Pliki źródłowe\compiler\others</Filter>
+    </None>
+    <None Include="compiler\tests\error0.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error1.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error2.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error3.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error4.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error5.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error6.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error7.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\error8.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program0.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program0.mr">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program0ns.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program0ns.mr">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program0nsc.mr">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program0-opt.mr">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program1.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program1.mr">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\program2.imp">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\test1">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\tests\test2">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </None>
+    <None Include="compiler\compiler.l">
+      <Filter>Pliki źródłowe\compiler</Filter>
+    </None>
+    <None Include="compiler\compiler.y">
+      <Filter>Pliki źródłowe\compiler</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="compiler\others\TODO.txt">
+      <Filter>Pliki źródłowe\compiler\others</Filter>
+    </Text>
+    <Text Include="compiler\tests\gramatyka.txt">
+      <Filter>Pliki źródłowe\compiler\tests</Filter>
+    </Text>
   </ItemGroup>
 </Project>

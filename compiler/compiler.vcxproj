@@ -153,41 +153,40 @@
     <Content Include="flex\flex_2.l" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="listy\lista1\fa.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="listy\lista1\kmp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="listy\lista3\arythmetic.c" />
-    <ClCompile Include="listy\tests\command_line_test.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="listy\tests\fa_test.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="listy\tests\file_test.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="listy\tests\string_test.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="compiler\code_generator.c" />
+    <ClCompile Include="compiler\symbol_table.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="listy\lista1\makefile">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </None>
-    <None Include="listy\lista1\README.md">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </None>
+    <ClInclude Include="compiler\errors.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="listy\lista1\test.txt">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </Text>
+    <None Include="compiler\compiler.l" />
+    <None Include="compiler\compiler.y" />
+    <None Include="compiler\others\README.md" />
+    <None Include="compiler\tests\error0.imp" />
+    <None Include="compiler\tests\error1.imp" />
+    <None Include="compiler\tests\error2.imp" />
+    <None Include="compiler\tests\error3.imp" />
+    <None Include="compiler\tests\error4.imp" />
+    <None Include="compiler\tests\error5.imp" />
+    <None Include="compiler\tests\error6.imp" />
+    <None Include="compiler\tests\error7.imp" />
+    <None Include="compiler\tests\error8.imp" />
+    <None Include="compiler\tests\program0-opt.mr" />
+    <None Include="compiler\tests\program0.imp" />
+    <None Include="compiler\tests\program0.mr" />
+    <None Include="compiler\tests\program0ns.imp" />
+    <None Include="compiler\tests\program0ns.mr" />
+    <None Include="compiler\tests\program0nsc.mr" />
+    <None Include="compiler\tests\program1.imp" />
+    <None Include="compiler\tests\program1.mr" />
+    <None Include="compiler\tests\program2.imp" />
+    <None Include="compiler\tests\test1" />
+    <None Include="compiler\tests\test2" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="listy\lista3\arythmetic.h" />
+    <Text Include="compiler\others\TODO.txt" />
+    <Text Include="compiler\tests\gramatyka.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
