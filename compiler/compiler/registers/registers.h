@@ -1,3 +1,4 @@
+#pragma once
 
 #define A 0
 #define B 1
@@ -7,12 +8,12 @@
 #define F 5
 #define NON_REGISTER -1
 #define EMPTY -2
-
-const char* REGISTERS = "abcdef";
+#define NUM_REGS 6
 
 typedef struct {
+    char name;                /* nazwa rejestru */
     unsigned long long val;   /* wartosc rejestru */
-    bool is_determined;       /* czy wartosc rejestru jest okreslona */
     int var_id;               /* lokalizacje zmiennej, ktora przechowuje rejestr */
+    bool is_free;             /* czy wartosc rejestru nie jest juz potrzebna */
 
 } register_t;

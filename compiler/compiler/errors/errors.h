@@ -10,6 +10,9 @@
 // skladnia
 #define ERR_SYNTAX           RED "Blad linia %d: Blad skladniowy \'%s\'\n" DEF, yylineno, yytext
 
+// rejestry
+#define ERR_NO_FREE_REGISTER (RED "Brak wolnych rejestrow\n" DEF)
+
 // obsluga bledow
 int ERRORS;
 #define ERR_INIT (ERRORS = 0)

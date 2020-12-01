@@ -5,6 +5,7 @@
     #include <stdlib.h>
     #include "debugger/debugger.h"
     #include "errors/errors.h"
+    #include "symbol_table/symbol_table.h"
 
     extern int yylineno;
     extern char* yytext;
@@ -37,9 +38,9 @@ program: DECLARE declarations T_BEGIN commands END
 | T_BEGIN commands END
 ;
 
-declarations: declarations ',' PIDENTIFIER
+declarations: declarations ',' PIDENTIFIER                  { putsym($3); }
 |  declarations ',' PIDENTIFIER '(' NUMBER ':' NUMBER ')'
-|  PIDENTIFIER
+|  PIDENTIFIER                                              { putsym($1); }
 |  PIDENTIFIER '(' NUMBER ':' NUMBER ')'
 ;
 

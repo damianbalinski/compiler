@@ -1,5 +1,6 @@
 %{
     #include <stdio.h>
+    #include <string.h>
     #include "compiler.tab.h"
     #include "debugger/debugger.h"
 
@@ -15,7 +16,7 @@ ID    [_a-z]+
 %x      COMMENT
 
 %%
-{DIGIT}+    { PR_TOKEN("NUMBER");   return(NUMBER);   }
+{DIGIT}+    { PR_TOKEN("NUMBER");   yylval.val = atoi(yytext); return(NUMBER); }
 ":="        { PR_TOKEN("ASSIGN");   return(ASSIGN);   }
 "="         { PR_TOKEN("EQ");       return(EQ);       }
 "!="        { PR_TOKEN("NE");       return(NE);       }
@@ -42,7 +43,7 @@ TO          { PR_TOKEN("TO");       return(TO);       }
 UNTIL       { PR_TOKEN("UNTIL");    return(UNTIL);    }
 WHILE       { PR_TOKEN("WHILE");    return(WHILE);    }
 WRITE       { PR_TOKEN("WRITE");    return(WRITE);    }
-{ID}        { PR_TOKEN("PIDENTIFIER"); return(PIDENTIFIER); }
+{ID}        { PR_TOKEN("PIDENTIFIER"); yylval.id = strdup( yytext); return(PIDENTIFIER); }
 \[          { PR_TOKEN("COMMENT_IN");  BEGIN COMMENT;  }
 <COMMENT>\] { PR_TOKEN("COMMENT_OUT"); BEGIN INITIAL; }
 <COMMENT>.  ;
