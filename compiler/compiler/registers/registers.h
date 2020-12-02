@@ -10,7 +10,7 @@
 #define F 5
 #define NOTHING -1
 #define EMPTY -2
-#define NUM_REGS 6
+#define MAX_REGISTERS 6
 
 typedef struct {
     const char name;          /* nazwa rejestru */

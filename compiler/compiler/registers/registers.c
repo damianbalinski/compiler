@@ -19,14 +19,17 @@ register_type registers[6] = {
  * sa zajete, przerzuca zawartosc rejestru do pamieci, ktora zostanie
  * wszytana zaraz po zwolnieniu rejestru */
 int register_get() {
-    for(int i = 0; i < NUM_REGS; i++)
+    for(int i = 0; i < MAX_REGISTERS; i++)
         if (registers[i].is_free) {
             PR_REGISTER_GET_FREE(i);
             registers[i].is_free = false;
             return i;
         }
+
     // TODO przerzucic rejestr
+    ERR_ADD;
     fprintf(stderr, ERR_NO_FREE_REGISTER);
+    return -1;
 }
 
 /* Zwalnia rejestr o podanym indeksie. Nie czysci zawartosci rejestru,

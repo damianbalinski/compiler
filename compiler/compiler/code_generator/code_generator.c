@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include "../others/types.h"
 #include "../registers/registers.h"
-#include "../registers/registers.c"
 #include "../debugger/debugger.h"
-#include "../others/codes.h"
+#include "code_generator.h"
 
-register_type registers[6];
+extern register_type registers[6];
+instr_type instr_table[MAX_INSTRUCTIONS];
+int instr_counter = 0;
 
 /* umieszcza stala w podanym rejestrze */
 int reg_put_const(val_type val) {
@@ -23,8 +24,59 @@ void reg_add(int reg1, int reg2);
 /* odejmuje rejestry */
 void reg_sub(int reg1, int reg2);
 
-/* generuje kod na standardowym wyjsciu */
-void generate_code(code_type code, int x, int y) {
+void get(int x)          { instr_add1(GET, x);      }
+void put(int x)          { instr_add1(PUT, x);      }
+void load(int x, int y)  { instr_add2(LOAD, x, y);  }
+void store(int x, int y) { instr_add2(STORE, x, y); }
+void add(int x, int y)   { instr_add2(ADD, x, y);   }
+void sub(int x, int y)   { instr_add2(SUB, x, y);   }
+void reset(int x)        { instr_add1(RESET, x);    }
+void inc(int x)          { instr_add1(INC, x);      }
+void dec(int x)          { instr_add1(DEC, x);      }
+void shr(int x)          { instr_add1(SHR, x);      }
+void shl(int x)          { instr_add1(SHL, x);      }
+void jump(int x)         { instr_add1(JUMP, x);     }
+void jzero(int x, int y) { instr_add2(JZERO, x, y); }
+void jodd(int x, int y)  { instr_add2(JODD, x, y);  }
+void halt()              { instr_add0(HALT);        }
+
+void instr_add0(code_type code) {
+    CHECK_CODE(code);
+    CHECK_INSTRUCTION(instr_counter);
+
+    instr_table[instr_counter++].code = code;
+    PR_INSTR0(instr_counter-1, code);
+}
+
+void instr_add1(code_type code, int x) {
+    CHECK_CODE(code);
+    CHECK_REGISTER(x);
+    CHECK_INSTRUCTION(instr_counter);
+
+    instr_table[instr_counter].code = code;
+    instr_table[instr_counter++].x = x;
+    PR_INSTR1(instr_counter-1, code, x);
+}
+
+void instr_add2(code_type code, int x, int y) {
+    CHECK_CODE(code);
+    CHECK_REGISTER(x);
+    CHECK_REGISTER(y);
+    CHECK_INSTRUCTION(instr_counter);
+    
+    instr_table[instr_counter].code = code;
+    instr_table[instr_counter].x = x;
+    instr_table[instr_counter++].y = y;
+    PR_INSTR2(instr_counter-1, code, x, y);
+}
+
+/* drukuje wszystkie instrukcje */
+void instr_print_all() {
+    for (int i = 0; i < instr_counter; i++)
+        instr_print(instr_table[i].code, instr_table[i].x, instr_table[i].y);
+}
+/* drukuje pojedyncza instrukcje */
+void instr_print(code_type code, int x, int y) {
     switch(code) {
         case GET:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
         case PUT:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
@@ -41,13 +93,5 @@ void generate_code(code_type code, int x, int y) {
         case JZERO: printf("%s %c %d\n", code_names[code], registers[x].name, y);                  break;
         case JODD:  printf("%s %c %d\n", code_names[code], registers[x].name, y);                  break;
         case HALT:  printf("%s\n",       code_names[code]);                                        break;
-        default:    fprintf(stderr, ERR_UNDEFINED_CODE(code));
     }
-}
-
-int main(void) {
-    generate_code(GET, 1, NOTHING);
-    generate_code(PUT, 1, NOTHING);
-    generate_code(LOAD, 1, 2);
-    generate_code(STORE, 1, 2);
 }

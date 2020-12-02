@@ -1,4 +1,6 @@
 #include "../others/colors.h"
+#include "../code_generator/code_generator.h"
+#include "../registers/registers.h"
 
 #define DEBUG_MODE
 
@@ -7,6 +9,8 @@
     #define DEBUG_PARSE_BEGIN_END
     #define DEBUG_SYMBOL_TABLE
     #define DEBUG_REGISTERS
+    #define DEBUG_INSTRUCTIONS
+    #define DEBUG_CODES
 #endif
 
 // TOKENS
@@ -37,8 +41,33 @@
 // REGISTERS
 #ifdef DEBUG_REGISTERS
     #define PR_REGISTER_GET_FREE(X) printf(GREEN "registers [ get free reg %d]\n" DEF, X)
-    #define PR_REGISTER_FREE(X)     printf(GREEN "registers [ free reg %d]\n" DEF, X)
+    #define PR_REGISTER_FREE(X)     printf(GREEN "registers [ free reg %d]\n"     DEF, X)
+    #define CHECK_REGISTER(X)       if (X < 0 || X >= MAX_REGISTERS) \
+                                    fprintf(stderr, RED "Rejestr %d poza zakresem\n" DEF, X)
 #else
     #define PR_REGISTER_GET_FREE(X)
     #define PR_REGISTER_FREE(X)
+    #define CHECK_REGISTER(X)
+#endif
+
+// INSTRUCTIONS
+#ifdef DEBUG_INSTRUCTIONS
+    #define PR_INSTR0(C,I)          printf(BLUE "instructions [ (%d) %s ]\n"       DEF, C, code_names[I])
+    #define PR_INSTR1(C,I,X)        printf(BLUE "instructions [ (%d) %s %d ]\n"    DEF, C, code_names[I], X)
+    #define PR_INSTR2(C,I,X,Y)      printf(BLUE "instructions [ (%d) %s %d %d ]\n" DEF, C, code_names[I], X, Y)         
+    #define CHECK_INSTRUCTION(X)    if (X >= MAX_INSTRUCTIONS) \
+                                    fprintf(stderr, RED "Brak miejsca w tablicy kodow\n" DEF)
+#else
+    #define PR_INSTR0(C,I)
+    #define PR_INSTR1(C,I,X)
+    #define PR_INSTR(I,X,Y)
+    #define CHECK_INSTRUCTION(X)
+#endif
+
+// CODES
+#ifdef DEBUG_CODES
+    #define CHECK_CODE(X)           if (X < 0 || X >= MAX_CODES) \
+                                    fprintf(stderr, RED "Kod %d poza zakresem\n" DEF, X)
+#else
+    #define CHECK_CODE(X)
 #endif
