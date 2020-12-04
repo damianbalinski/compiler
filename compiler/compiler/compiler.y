@@ -27,6 +27,7 @@
 
 %start program
 %nterm <reg> value
+%nterm <reg> expression
 %token <val> NUMBER
 %token <id> PIDENTIFIER
 %token DECLARE T_BEGIN END
@@ -68,7 +69,7 @@ command: identifier ASSIGN expression ';'
 ;
 
 expression: value
-|  value '+' value
+|  value '+' value                   { $$ = reg_add($1, $3); }
 |  value '-' value
 |  value '*' value
 |  value '/' value
@@ -83,7 +84,7 @@ condition: value EQ value
 |  value GE value
 ;
 
-value: NUMBER                        { $$ = load_const($1); }
+value: NUMBER                        { $$ = get_const($1); }
 |  identifier
 ;
 

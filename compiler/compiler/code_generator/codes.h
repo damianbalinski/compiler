@@ -1,6 +1,6 @@
 #pragma once
 #define MAX_CODES 15
-#define MAX_CODES_TABLE 10
+#define MAX_CODES_TABLE 999
 
 typedef enum {
     GET, PUT, LOAD, STORE, 

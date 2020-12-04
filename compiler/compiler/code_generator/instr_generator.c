@@ -2,7 +2,7 @@
 
 /* pobiera wolny rejestr oraz umieszcza w nim podana stala,
  * zwraca rejestr, w ktorym zostala umieszczona stala */
-int load_const(val_type val) {
+int get_const(val_type val) {
     DBG_INSTRUCTION_BEGIN("load_const");
     int reg = register_get();
     reset(reg);
@@ -29,7 +29,7 @@ void put_variable(char* id) {
     
     if (sym != NULL) {
         ERR_ADD();
-        ERR_ID_DECLARED();
+        ERR_ID_DECLARED(id);
     }
     else {
         sym = sym_put(id);
@@ -39,8 +39,12 @@ void put_variable(char* id) {
     DBG_INSTRUCTION_END("put_variable");
 }
 
-int put_table(char* id) {}
-
-int get_variable(char* id) {}
-
-int get_table(char* id) {}
+/* Dodaje zawartosc jednego rejestru do drugiego,
+ * zwalnia niepotrzebny rejstr, zwraca rejestr z suma */
+int reg_add(int x, int y) {
+    DBG_INSTRUCTION_BEGIN("add");
+    add(x,y);
+    register_free(y);
+    DBG_INSTRUCTION_END("add");
+    return x;
+}

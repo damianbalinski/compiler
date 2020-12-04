@@ -20,7 +20,8 @@ typedef struct {
     val_type val;             /* wartosc rejestru */
     int var_id;               /* lokalizacje zmiennej, ktora przechowuje rejestr */
     bool is_free;             /* czy wartosc rejestru nie jest juz potrzebna */
-
+    bool is_determ;           /* czy wartosc rejestru jest zdeterminowana */
+    
 } register_type;
 
 int register_get();

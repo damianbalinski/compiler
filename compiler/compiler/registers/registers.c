@@ -3,12 +3,12 @@
 /* Inicjalizacja rejestrow. Poczatkowo wszystkie rejestry sa wolne
  * oraz maja niezdeterminowana wartosc. */
 register_type registers[6] = {
-    {'a', 0, -1, true},
-    {'b', 0, -1, true},
-    {'c', 0, -1, true},
-    {'d', 0, -1, true},
-    {'e', 0, -1, true},
-    {'f', 0, -1, true}
+    {'a', 0, -1, true, false},
+    {'b', 0, -1, true, false},
+    {'c', 0, -1, true, false},
+    {'d', 0, -1, true, false},
+    {'e', 0, -1, true, false},
+    {'f', 0, -1, true, false}
 };
 
 /* Zwraca pierwszy z lewej wolny rejestr. Jesli wszystkie rejestry
