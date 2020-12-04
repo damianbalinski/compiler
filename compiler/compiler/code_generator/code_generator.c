@@ -8,13 +8,13 @@ void get(int x)          { code_put1(GET, x);      }
 void put(int x)          { code_put1(PUT, x);      }
 void load(int x, int y)  { code_put2(LOAD, x, y);  }
 void store(int x, int y) { code_put2(STORE, x, y); }
-void add(int x, int y)   { code_put2(ADD, x, y);   }
-void sub(int x, int y)   { code_put2(SUB, x, y);   }
-void reset(int x)        { code_put1(RESET, x);    }
-void inc(int x)          { code_put1(INC, x);      }
-void dec(int x)          { code_put1(DEC, x);      }
-void shr(int x)          { code_put1(SHR, x);      }
-void shl(int x)          { code_put1(SHL, x);      }
+void add(int x, int y)   { code_put2(ADD, x, y);   DBG_RADD(x,y); }
+void sub(int x, int y)   { code_put2(SUB, x, y);   DBG_RSUB(x,y); }
+void reset(int x)        { code_put1(RESET, x);    DBG_RRESET(x); }
+void inc(int x)          { code_put1(INC, x);      DBG_RINC(x);   }
+void dec(int x)          { code_put1(DEC, x);      DBG_RDEC(x);   }
+void shr(int x)          { code_put1(SHR, x);      DBG_RSHR(x);   }
+void shl(int x)          { code_put1(SHL, x);      DBG_RSHL(x);   }
 void jump(int x)         { code_put1(JUMP, x);     }
 void jzero(int x, int y) { code_put2(JZERO, x, y); }
 void jodd(int x, int y)  { code_put2(JODD, x, y);  }

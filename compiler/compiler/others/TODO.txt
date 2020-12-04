@@ -2,3 +2,4 @@
   najdawniej uzywany
 
 - przerzucic pamiec z powrotem po zwolnieniu rejestru
+- po wystapieniu bledu, od razu konczyc program metoda exit()

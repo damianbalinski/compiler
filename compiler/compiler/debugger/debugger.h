@@ -9,6 +9,7 @@
     #define DEBUG_PARSER
     #define DEBUG_SYMBOL_TABLE
     #define DEBUG_REGISTERS
+    #define DEBUG_REGISTER_OPERATIONS
     #define DEBUG_CODES
     #define DEBUG_INSTRUCTIONS
 #endif
@@ -65,4 +66,25 @@
 #else
     #define DBG_INSTRUCTION_BEGIN(X)
     #define DBG_INSTRUCTION_END(X) 
+#endif
+
+// REGISTER OPERATIONS
+#ifdef DEBUG_REGISTER_OPERATIONS
+    #define DBG_RRESET(X) registers[X].val = 0
+    #define DBG_RINC(X)   registers[X].val++
+    #define DBG_RDEC(X)   registers[X].val--
+    #define DBG_RSHL(X)   registers[X].val <<= 1
+    #define DBG_RSHR(X)   registers[X].val >>= 1
+    #define DBG_RADD(X,Y) registers[X].val += registers[Y].val
+    #define DBG_RSUB(X,Y) registers[X].val = (registers[X].val > registers[Y].val) ? (registers[X].val - registers[Y].val) : 0
+    #define DBG_RVAL(X)   printf(GREEN "registers [ val %d = %lld]\n" DEF, X, registers[X].val)  
+#else
+    #define DBG_RRESET(X)
+    #define DBG_RINC(X)
+    #define DBG_RDEC(X)
+    #define DBG_RSHL(X)
+    #define DBG_RSHR(X)
+    #define DBG_RADD(X,Y)
+    #define DBG_RSUB(X,Y)
+    #define DBG_RVAL(X)
 #endif

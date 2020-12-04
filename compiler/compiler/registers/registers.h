@@ -1,4 +1,5 @@
 #pragma once
+#define RG(X) registers[X]
 #include <stdbool.h>
 #include <stdio.h>
 #include "../others/types.h"
@@ -16,13 +17,11 @@
 #define MAX_REGISTERS 6
 
 typedef struct {
-    const char name;          /* nazwa rejestru */
-    val_type val;             /* wartosc rejestru */
-    int var_id;               /* lokalizacje zmiennej, ktora przechowuje rejestr */
-    bool is_free;             /* czy wartosc rejestru nie jest juz potrzebna */
-    bool is_determ;           /* czy wartosc rejestru jest zdeterminowana */
-    
+    const char name;            /* nazwa rejestru */
+    val_type val;               /* wartosc rejestru */
+    unsigned long long offset;  /* lokalizacje w pamieci, ktora przechowuje rejestr */
+    bool is_free;               /* czy wartosc rejestru nie jest juz potrzebna */
+
 } register_type;
 
 int register_get();
-void register_free(int reg);

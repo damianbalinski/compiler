@@ -1,14 +1,14 @@
 #include "../registers/registers.h"
 
 /* Inicjalizacja rejestrow. Poczatkowo wszystkie rejestry sa wolne
- * oraz maja niezdeterminowana wartosc. */
+ * oraz nie wskazuja na zadna komorke pamieci. */
 register_type registers[6] = {
-    {'a', 0, -1, true, false},
-    {'b', 0, -1, true, false},
-    {'c', 0, -1, true, false},
-    {'d', 0, -1, true, false},
-    {'e', 0, -1, true, false},
-    {'f', 0, -1, true, false}
+    {'a', 0, NOTHING, true},
+    {'b', 0, NOTHING, true},
+    {'c', 0, NOTHING, true},
+    {'d', 0, NOTHING, true},
+    {'e', 0, NOTHING, true},
+    {'f', 0, NOTHING, true}
 };
 
 /* Zwraca pierwszy z lewej wolny rejestr. Jesli wszystkie rejestry
@@ -24,11 +24,4 @@ int register_get() {
 
     CHECK_REGISTER_FREE();
     return -1;
-}
-
-/* Zwalnia rejestr o podanym indeksie. Nie czysci zawartosci rejestru,
- * ktora moze zostac wykorzystana w przyszlosci */
-void register_free(int reg) {
-    DBG_REGISTER_FREE(reg);
-    registers[reg].is_free = true;
 }

@@ -28,6 +28,7 @@
 %start program
 %nterm <reg> value
 %nterm <reg> expression
+%nterm <reg> identifier
 %token <val> NUMBER
 %token <id> PIDENTIFIER
 %token DECLARE T_BEGIN END
@@ -85,12 +86,12 @@ condition: value EQ value
 ;
 
 value: NUMBER                        { $$ = get_const($1); }
-|  identifier
+|  identifier                        { $$ = $1; }
 ;
 
-identifier: PIDENTIFIER
-|  PIDENTIFIER '(' PIDENTIFIER ')'
-|  PIDENTIFIER '(' NUMBER ')'
+identifier: PIDENTIFIER              { $$ = get_variable($1); }
+|  PIDENTIFIER '(' PIDENTIFIER ')'   { $$ = -1; }
+|  PIDENTIFIER '(' NUMBER ')'        { $$ = -1; }
 ;
 
 %%
