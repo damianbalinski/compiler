@@ -68,6 +68,7 @@ void put_variable(char* id) {
     }
 
     DBG_INSTRUCTION_END("put_variable");
+    DBG_SYMBOL_PRINT();
 }
 
 /* Dodaje tablice o podanej nazwie do tablicy symboli,
@@ -95,6 +96,7 @@ void put_array(char* id, input_type begin, input_type end) {
     }
 
     DBG_INSTRUCTION_END("put_table");
+    DBG_SYMBOL_PRINT();
 }
 
 /* Dodaje zawartosc jednego rejestru do drugiego,

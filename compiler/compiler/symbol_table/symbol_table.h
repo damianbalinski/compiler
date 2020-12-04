@@ -12,8 +12,8 @@
 
 typedef struct symbol
 {
-    bool type;              /* zmianna/tablica           */
     char* id;               /* id symbolu                */
+    bool type;              /* zmianna/tablica           */
     bool is_init;           /* czy zainicjalizowana      */
     input_type offset;      /* lokalizacja w pamieci     */
     input_type begin;       /* indeks poczatkowy tablicy */
@@ -24,3 +24,4 @@ typedef struct symbol
 
 symbol* sym_put(char *id);
 symbol* sym_get(char*id);
+void sym_print();
