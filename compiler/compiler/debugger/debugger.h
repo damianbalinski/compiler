@@ -5,10 +5,11 @@
 #define DEBUG_MODE
 
 #ifdef DEBUG_MODE
-    #define DEBUG_TOKENS            /* OK */
-    #define DEBUG_PARSE_BEGIN_END   /* OK */
-    #define DEBUG_SYMBOL_TABLE      /* OK */
+    //#define DEBUG_TOKENS
+    #define DEBUG_PARSER
+    #define DEBUG_SYMBOL_TABLE
     #define DEBUG_REGISTERS
+    #define DEBUG_CODES
     #define DEBUG_INSTRUCTIONS
 #endif
 
@@ -20,12 +21,12 @@
 #endif
 
 // PARSE START/STOP
-#ifdef DEBUG_PARSE_BEGIN_END
-    #define DBG_PARSE_BEGIN() printf(GREEN "perser [ BEGIN ]\n" DEF)
-    #define DBG_PARSE_END()   printf(GREEN "parser [ END ]\n"   DEF)
+#ifdef DEBUG_PARSER
+    #define DBG_PARSER_BEGIN() printf(GREEN "perser [ begin ]\n" DEF)
+    #define DBG_PARSER_END()   printf(GREEN "parser [ end ]\n"   DEF)
 #else
-    #define DBG_PARSE_BEGIN()
-    #define DBG_PARSE_END()
+    #define DBG_PARSER_BEGIN()
+    #define DBG_PARSER_END()
 #endif
 
 // SYMBOL TABLE
@@ -46,13 +47,22 @@
     #define DBG_REGISTER_FREE(X)
 #endif
 
+// CODES
+#ifdef DEBUG_CODES
+    #define DBG_CODE0(C,I)     printf(BLUE "code [ (%d) %s ]\n"       DEF, C, code_names[I])
+    #define DBG_CODE1(C,I,X)   printf(BLUE "code [ (%d) %s %d ]\n"    DEF, C, code_names[I], X)
+    #define DBG_CODE2(C,I,X,Y) printf(BLUE "code [ (%d) %s %d %d ]\n" DEF, C, code_names[I], X, Y)         
+#else
+    #define DBG_CODE0(C,I)
+    #define DBG_CODE1(C,I,X)
+    #define DBG_CODE2(C,I,X,Y)
+#endif
+
 // INSTRUCTIONS
 #ifdef DEBUG_INSTRUCTIONS
-    #define DBG_INSTR0(C,I)     printf(BLUE "instructions [ (%d) %s ]\n"       DEF, C, code_names[I])
-    #define DBG_INSTR1(C,I,X)   printf(BLUE "instructions [ (%d) %s %d ]\n"    DEF, C, code_names[I], X)
-    #define DBG_INSTR2(C,I,X,Y) printf(BLUE "instructions [ (%d) %s %d %d ]\n" DEF, C, code_names[I], X, Y)         
+    #define DBG_INSTRUCTION_BEGIN(X) printf(GREEN "instruction [ begin %s ]\n" DEF, X)
+    #define DBG_INSTRUCTION_END(X)   printf(GREEN "instruction [ end %s ]\n" DEF, X)
 #else
-    #define DBG_INSTR0(C,I)
-    #define DBG_INSTR1(C,I,X)
-    #define DBG_INSTR(I,X,Y)
+    #define DBG_INSTRUCTION_BEGIN(X)
+    #define DBG_INSTRUCTION_END(X) 
 #endif

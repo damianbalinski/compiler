@@ -46,9 +46,9 @@ program: DECLARE declarations T_BEGIN commands END
 | T_BEGIN commands END
 ;
 
-declarations: declarations ',' PIDENTIFIER                  { sym_put($3); }
+declarations: declarations ',' PIDENTIFIER                  { put_variable($3); }
 |  declarations ',' PIDENTIFIER '(' NUMBER ':' NUMBER ')'
-|  PIDENTIFIER                                              { sym_put($1); }
+|  PIDENTIFIER                                              { put_variable($1); }
 |  PIDENTIFIER '(' NUMBER ':' NUMBER ')'
 ;
 
@@ -102,9 +102,9 @@ int main( int argc, char** argv )
     extern FILE *yyin;
     yyin = fopen(argv[1], "r");
 
-    DBG_PARSE_BEGIN();
+    DBG_PARSER_BEGIN();
     yyparse();
-    DBG_PARSE_END();
+    DBG_PARSER_END();
 }
 
 void yyerror (char* str)

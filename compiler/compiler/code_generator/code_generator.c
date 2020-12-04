@@ -23,7 +23,7 @@ void halt()              { code_put0(HALT);        }
 void code_put0(code_type code) {
     CHECK_CODE(code);
     CHECK_INSTRUCTION(code_counter);
-    DBG_INSTR0(code_counter, code);
+    DBG_CODE0(code_counter, code);
     code_table[code_counter++].code = code;
 }
 
@@ -31,7 +31,7 @@ void code_put1(code_type code, int x) {
     CHECK_CODE(code);
     CHECK_INSTRUCTION(code_counter);
     CHECK_REGISTER(x);
-    DBG_INSTR1(code_counter, code, x);
+    DBG_CODE1(code_counter, code, x);
     code_table[code_counter].code = code;
     code_table[code_counter++].x = x;
 }
@@ -41,7 +41,7 @@ void code_put2(code_type code, int x, int y) {
     CHECK_INSTRUCTION(code_counter);
     CHECK_REGISTER(x);
     CHECK_REGISTER(y);
-    DBG_INSTR2(code_counter, code, x, y);
+    DBG_CODE2(code_counter, code, x, y);
     code_table[code_counter].code = code;
     code_table[code_counter].x = x;
     code_table[code_counter++].y = y;

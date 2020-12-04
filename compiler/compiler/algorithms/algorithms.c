@@ -10,7 +10,7 @@ int load_const(int val) {
         return reg;
 
     int n = (int)log2(val) - 1;
-        reg++;
+    reg++;
     for(int mask = (1 << n); mask > 0; mask >>= 1) {
         reg <<= 1;
         if (mask & val)
