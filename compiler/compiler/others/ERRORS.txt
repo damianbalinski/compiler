@@ -1,3 +1,5 @@
 MOZLIWE BLEDY:
    nieprawidlowa kolejnosc tokenow
    czy komentarz w kodzie moze byc wielolinijkowy
+
+przy zamianie wersji C na C++ zamienic stale statyczne z code_generator.h na same stale

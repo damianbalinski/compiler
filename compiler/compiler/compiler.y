@@ -8,6 +8,7 @@
     #include "symbol_table/symbol_table.h"
     #include "registers/registers.h"
     #include "code_generator/code_generator.h"
+    #include <math.h>
 
     extern int yylineno;
     extern char* yytext;
@@ -22,12 +23,14 @@
 }
 
 %union{
-    num_type num;        /* wartosc i rejestr */
+    val_type val;        /* wartosc i rejestr */
     char *id;            /* identyfikator */
+    int reg;
 }
 
 %start program
-%token <num> NUMBER
+%nterm <reg> value
+%token <val> NUMBER
 %token <id> PIDENTIFIER
 %token DECLARE T_BEGIN END
 %token IF THEN ELSE ENDIF
@@ -83,7 +86,7 @@ condition: value EQ value
 |  value GE value
 ;
 
-value: NUMBER
+value: NUMBER                        { $$ = _const($1); }
 |  identifier
 ;
 
@@ -98,10 +101,7 @@ int main( int argc, char** argv )
 {
     // TEST
     // yydebug = 1;
-
-    // inicjalizacja
-    ERR_INIT;
-
+    
     extern FILE *yyin;
     yyin = fopen(argv[1], "r");
 

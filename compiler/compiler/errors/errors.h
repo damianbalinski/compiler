@@ -9,6 +9,6 @@
 #define ERR_NO_FREE_REGISTER  RED "Brak wolnych rejestrow\n"                DEF    /* delete */
 
 // obsluga bledow
-int errors_counter = 0;
+static int errors_counter = 0;
 #define ERR_ADD (++errors_counter)
 #define ERR_GET errors_counter

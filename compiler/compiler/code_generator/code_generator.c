@@ -3,15 +3,29 @@
 #include "../registers/registers.h"
 #include "../debugger/debugger.h"
 #include "code_generator.h"
+#include <math.h>
 
 extern register_type registers[6];
+
 instr_type instr_table[MAX_INSTRUCTIONS];
 int instr_counter = 0;
 
-/* umieszcza stala w podanym rejestrze */
-int reg_put_const(val_type val) {
+/* pobiera wolny rejestr oraz umieszcza w nim podana stala */
+int _const(val_type val) {
     int reg = register_get();
+    reset(reg);             // reg = 0
+
+    // wartosc zerowa
+    if (val == 0)
+        return reg;
     
+    // wartosc rozna od zera
+    val_type n = (val_type)log2(val);
+    for(val_type mask = (1 << n); mask > 0; mask >>= 1) {
+        shl(reg);           // reg <<= 1
+        if (mask & val)
+            inc(reg);      // reg++;
+    }
     return reg;
 }
 
@@ -75,6 +89,7 @@ void instr_print_all() {
     for (int i = 0; i < instr_counter; i++)
         instr_print(instr_table[i].code, instr_table[i].x, instr_table[i].y);
 }
+
 /* drukuje pojedyncza instrukcje */
 void instr_print(code_type code, int x, int y) {
     switch(code) {
