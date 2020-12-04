@@ -1,5 +1,9 @@
 #pragma once
 #define MAX_DATA 999
 
+#include "../debugger/warnings.h"
+#include "../debugger/debugger.h"
+#include "../others/types.h"
+
 int variable_allocate();
-void table_allocate(int n);
+int array_allocate(input_type n);

@@ -11,9 +11,10 @@ extern char* yytext;
 
 int get_const(val_type val);
 int get_variable(char* id);     // TODO
-int get_table(char* id);        // TODO
+int get_array(char* id);        // TODO
 
 void put_variable(char* id);
-void put_table(char* id);       // TODO
+void put_array(char* id, input_type begin, input_type end);
 
-int reg_add(int x, int y);
+int sum(int x, int y);
+int dif(int x, int y);

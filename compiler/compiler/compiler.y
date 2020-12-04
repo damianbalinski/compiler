@@ -48,10 +48,10 @@ program: DECLARE declarations T_BEGIN commands END
 | T_BEGIN commands END
 ;
 
-declarations: declarations ',' PIDENTIFIER                  { put_variable($3); }
-|  declarations ',' PIDENTIFIER '(' NUMBER ':' NUMBER ')'
-|  PIDENTIFIER                                              { put_variable($1); }
-|  PIDENTIFIER '(' NUMBER ':' NUMBER ')'
+declarations: declarations ',' PIDENTIFIER                  { put_variable($3);      }
+|  declarations ',' PIDENTIFIER '(' NUMBER ':' NUMBER ')'   { put_array($3, $5, $7); }
+|  PIDENTIFIER                                              { put_variable($1);      }
+|  PIDENTIFIER '(' NUMBER ':' NUMBER ')'                    { put_array($1, $3, $5); }
 ;
 
 commands: commands command
@@ -70,7 +70,7 @@ command: identifier ASSIGN expression ';'
 ;
 
 expression: value
-|  value '+' value                   { $$ = reg_add($1, $3); }
+|  value '+' value                   { $$ = sum($1, $3); }
 |  value '-' value
 |  value '*' value
 |  value '/' value

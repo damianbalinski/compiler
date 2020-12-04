@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../debugger/debugger.h"
+#include "../others/types.h"
+
 #define VARIABLE true
 #define ARRAY false
 
@@ -12,11 +14,12 @@ typedef struct symbol
 {
     bool type;              /* zmianna/tablica           */
     char* id;               /* id symbolu                */
-    int offset;             /* lokalizacja w pamieci     */
     bool is_init;           /* czy zainicjalizowana      */
-    int begin;              /* indeks poczatkowy tablicy */
-    int end;                /* indeks poczatkowy tablicy */
+    input_type offset;      /* lokalizacja w pamieci     */
+    input_type begin;       /* indeks poczatkowy tablicy */
+    input_type end;         /* indeks poczatkowy tablicy */
     struct symbol* next;    /* nastepny symbol           */
+    
 } symbol;
 
 symbol* sym_put(char *id);

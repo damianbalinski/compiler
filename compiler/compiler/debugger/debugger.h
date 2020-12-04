@@ -12,6 +12,7 @@
     #define DEBUG_REGISTER_OPERATIONS
     #define DEBUG_CODES
     #define DEBUG_INSTRUCTIONS
+    #define DEBUG_DATA_MANAGER
 #endif
 
 // TOKENS
@@ -87,4 +88,13 @@
     #define DBG_RADD(X,Y)
     #define DBG_RSUB(X,Y)
     #define DBG_RVAL(X)
+#endif
+
+// DATA MANAGER
+#ifdef DEBUG_DATA_MANAGER
+    #define DBG_ALLOCATE_VARIABLE(X) printf(GREEN "allocate [ variable %lld ]\n" DEF, X)
+    #define DBG_ALLOCATE_ARRAY(X,Y)  printf(GREEN "allocate [ array %lld %lld ]\n" DEF, X, Y)
+#else
+    #define DBG_ALLOCATE_VARIABLE(X)
+    #define DBG_ALLOCATE_ARRAY(X,Y)
 #endif

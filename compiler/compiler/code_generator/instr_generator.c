@@ -41,17 +41,16 @@ int get_variable(char* id) {
         int x = register_get();
         int y = get_const(sym->offset);
         load(x, y);
-        RG(x).offset = sym->offset;
-        RG(y).is_free = true;
+        REG_OFFSET(x, sym->offset);
+        REG_FREE(y);
         return x;
     }
     DBG_INSTRUCTION_END("put_variable");
     return NOTHING;
 }
 
-
 /* Dodaje zmienna o podanej nazwie do tablicy symboli,
- * alokuje miejsce dla nowej zmiennej. Jesli zmienna 
+ * alokuje miejsce dla nowej zmiennej. Jesli symbol 
  * o podanej nazwie juz istnieje, informuje o bledzie. */
 void put_variable(char* id) {
     DBG_INSTRUCTION_BEGIN("put_variable");
@@ -65,17 +64,45 @@ void put_variable(char* id) {
         sym = sym_put(id);
         sym->type = VARIABLE;
         sym->offset = variable_allocate();
+        sym->is_init = false;
     }
 
     DBG_INSTRUCTION_END("put_variable");
 }
 
+/* Dodaje tablice o podanej nazwie do tablicy symboli,
+ * alokuje miejsce dla nowej tablicy. Jesli symbol
+ * o podanej nazwie juz istnieje lub podano nieprawidlowy
+ * zakres tablicy, informuje o bledzie. */
+void put_array(char* id, input_type begin, input_type end) {
+    DBG_INSTRUCTION_BEGIN("put_table");
+    symbol* sym = sym_get(id);
+
+    if (sym != NULL) {
+        ERR_ADD();
+        ERR_ID_DECLARED(id);
+    }
+    else if (begin > end) {
+        ERR_ADD();
+        ERR_ARRAY_RANGE(id, begin, end);
+    } 
+    else {
+        sym = sym_put(id);
+        sym->type = ARRAY;
+        sym->offset = array_allocate(end-begin+1);
+        sym->begin = begin;
+        sym->end = end;
+    }
+
+    DBG_INSTRUCTION_END("put_table");
+}
+
 /* Dodaje zawartosc jednego rejestru do drugiego,
  * zwalnia niepotrzebny rejstr, zwraca rejestr z suma. */
-int reg_add(int x, int y) {
+int sum(int x, int y) {
     DBG_INSTRUCTION_BEGIN("add");
     add(x,y);
-    RG(y).is_free = true;
+    REG_FREE(y);
 
     DBG_INSTRUCTION_END("add");
     return x;

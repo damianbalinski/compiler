@@ -1,5 +1,4 @@
 #pragma once
-#define RG(X) registers[X]
 #include <stdbool.h>
 #include <stdio.h>
 #include "../others/types.h"
@@ -15,6 +14,9 @@
 #define NOTHING -1
 #define EMPTY -2
 #define MAX_REGISTERS 6
+
+#define REG_FREE(X)    registers[X].is_free = true
+#define REG_OFFSET(X,Y)  registers[X].offset = Y
 
 typedef struct {
     const char name;            /* nazwa rejestru */
