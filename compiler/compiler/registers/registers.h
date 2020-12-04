@@ -1,6 +1,9 @@
 #pragma once
 #include <stdbool.h>
+#include <stdio.h>
 #include "../others/types.h"
+#include "../debugger/debugger.h"
+#include "../debugger/warnings.h"
 
 #define A 0
 #define B 1

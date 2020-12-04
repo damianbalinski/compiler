@@ -4,18 +4,15 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "debugger/debugger.h"
-    #include "errors/errors.h"
+    #include "debugger/errors.h"
     #include "symbol_table/symbol_table.h"
     #include "registers/registers.h"
-    #include "code_generator/code_generator.h"
-    #include <math.h>
+    #include "code_generator/instr_generator.h"
 
     extern int yylineno;
     extern char* yytext;
     int yylex();
     void yyerror( char *str );
-
-
 %}
 
 %code requires {
@@ -49,9 +46,9 @@ program: DECLARE declarations T_BEGIN commands END
 | T_BEGIN commands END
 ;
 
-declarations: declarations ',' PIDENTIFIER                  { putsym($3); }
+declarations: declarations ',' PIDENTIFIER                  { sym_put($3); }
 |  declarations ',' PIDENTIFIER '(' NUMBER ':' NUMBER ')'
-|  PIDENTIFIER                                              { putsym($1); }
+|  PIDENTIFIER                                              { sym_put($1); }
 |  PIDENTIFIER '(' NUMBER ':' NUMBER ')'
 ;
 
@@ -86,7 +83,7 @@ condition: value EQ value
 |  value GE value
 ;
 
-value: NUMBER                        { $$ = _const($1); }
+value: NUMBER                        { $$ = load_const($1); }
 |  identifier
 ;
 
@@ -105,13 +102,13 @@ int main( int argc, char** argv )
     extern FILE *yyin;
     yyin = fopen(argv[1], "r");
 
-    PR_PARSE_BEGIN;
+    DBG_PARSE_BEGIN();
     yyparse();
-    PR_PARSE_END;
+    DBG_PARSE_END();
 }
 
 void yyerror (char* str)
 {
-    ERR_ADD;
-    fprintf(stderr, ERR_SYNTAX);
+    ERR_ADD();
+    ERR_SYNTAX();
 }

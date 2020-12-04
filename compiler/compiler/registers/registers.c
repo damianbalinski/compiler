@@ -1,8 +1,4 @@
-#include <stdbool.h>
-#include <stdio.h>
 #include "../registers/registers.h"
-#include "../debugger/debugger.h"
-#include "../errors/errors.h"
 
 /* Inicjalizacja rejestrow. Poczatkowo wszystkie rejestry sa wolne
  * oraz maja niezdeterminowana wartosc. */
@@ -21,20 +17,18 @@ register_type registers[6] = {
 int register_get() {
     for(int i = 0; i < MAX_REGISTERS; i++)
         if (registers[i].is_free) {
-            PR_REGISTER_GET_FREE(i);
+            DBG_REGISTER_GET(i);
             registers[i].is_free = false;
             return i;
         }
 
-    // TODO przerzucic rejestr
-    ERR_ADD;
-    fprintf(stderr, ERR_NO_FREE_REGISTER);
+    CHECK_REGISTER_FREE();
     return -1;
 }
 
 /* Zwalnia rejestr o podanym indeksie. Nie czysci zawartosci rejestru,
  * ktora moze zostac wykorzystana w przyszlosci */
 void register_free(int reg) {
-    PR_REGISTER_FREE(reg);
+    DBG_REGISTER_FREE(reg);
     registers[reg].is_free = true;
 }

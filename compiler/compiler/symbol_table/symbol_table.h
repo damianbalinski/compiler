@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "../debugger/debugger.h"
+
 typedef struct symbol
 {
     char* id;               /* id symbolu            */
@@ -5,5 +10,5 @@ typedef struct symbol
     struct symbol* next;    /* nastepny symbol       */
 } symbol;
 
-symbol* putsym();
-symbol* getsym();
+symbol* sym_put();
+symbol* sym_get();
