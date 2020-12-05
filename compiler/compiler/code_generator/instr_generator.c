@@ -2,51 +2,166 @@
 
 extern register_type registers[6];
 
-/* pobiera wolny rejestr oraz umieszcza w nim podana stala,
- * zwraca rejestr, w ktorym zostala umieszczona stala */
-int get_const(val_type val) {
-    DBG_INSTRUCTION_BEGIN("load_const");
-    int reg = register_get();
-    reset(reg);
+
+/* Pobiera stala. Przechowuje ja w rejestrze. */
+unit_type get_const(input_type val) {
+    DBG_INSTRUCTION_BEGIN("get_const");
+    unit_type unit;
+    
+    int x = register_get();
+    unit.reg = x;
+    reset(x);
     
     if (val != 0) {
-        val_type n = (val_type)log2(val) - 1;
-        inc(reg);
+        input_type n = (input_type)log2(val) - 1;
+        inc(x);
     
-        for(val_type mask = (1 << n); mask > 0; mask >>= 1) {
-            shl(reg);
-            if (mask & val) inc(reg);
+        for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
+            shl(x);
+            if (mask & val) inc(x);
         }
     }
-    
-    DBG_RVAL(reg);
-    DBG_INSTRUCTION_END("load_const");
-    return reg;
+    DBG_RVAL(x);
+
+    DBG_INSTRUCTION_END("get_const");
+    return unit;
 }
 
-/* Pobiera dwa wolne rejestry x oraz y. W rejestrze y umieszcza
- * lokalizacje zmiennej id w pamieci. Nastepnie pobiera wartosci
- * pamieci z tej lokalizjacji oraz zapisuje pod rejestrem x.
- * Na koniec zwalnia rejestr y. Jesli podana zmienna nie istnieje,
- * informuje o bledzie. */
-int get_variable(char* id) {
-    DBG_INSTRUCTION_BEGIN("get_variable");
+
+/* Pobiera lokalizacje zmiennej. Ustawia zmienna
+ * jako zainicjalizowana.
+ * ERR1 - id nie zostal zadeklarowany
+ * ERR2 - id nie jest zmienna
+ */
+unit_type get_lvariable(char* id) {
+    DBG_INSTRUCTION_BEGIN("get_lvariable");
     symbol* sym = sym_get(id);
+    unit_type unit;
 
     if (sym == NULL) {
         ERR_ADD();
         ERR_ID_UNDECLARED(id);
     }
-    else {
-        int x = register_get();
-        int y = get_const(sym->offset);
-        load(x, y);
-        REG_OFFSET(x, sym->offset);
-        REG_FREE(y);
-        return x;
+    else if (sym->type != VARIABLE) {
+        ERR_ADD();
+        ERR_ID_NOT_VARIABLE(id);
     }
-    DBG_INSTRUCTION_END("put_variable");
-    return NOTHING;
+    else {
+        sym->is_init = true;
+        unit.offset = sym->offset;
+    }
+
+    DBG_INSTRUCTION_END("get_lvariable");
+    return unit;
+}
+
+/* Pobiera lokalizacje komorki tablicy
+ * indeksowanej przez stala.
+ * ERR1 - id nie zostal zadeklarowany
+ * ERR2 - id nie jest tablica
+ * ERR3 - num jest poza zakresem tablicy
+ */
+unit_type get_larray_num(char* id, input_type num) {
+    DBG_INSTRUCTION_BEGIN("get_larray_num");
+    symbol* sym = sym_get(id);
+    unit_type unit;
+
+    if (sym == NULL) {
+        ERR_ADD();
+        ERR_ID_UNDECLARED(id);
+    }
+    else if (sym->type != ARRAY) {
+        ERR_ADD();
+        ERR_ID_NOT_ARRAY(id);
+    }
+    else if (num < sym->begin || num > sym->end) {
+        ERR_ADD();
+        ERR_ARRAY_INDEX_RANGE(id, num);
+    }
+    else {
+        unit.offset = sym->offset + num - sym->begin;
+    }
+
+    DBG_INSTRUCTION_END("get_larray_num");
+    return unit;
+}
+
+/*
+ * Pobiera lokalizacje komorki tablicy
+ * indeksowanej przez zmienna.
+ * ERR1 - id nie zostal zadeklarowany
+ * ERR2 - id nie jest tablica
+ * ERR3 - id_var nie zostal zadeklarowany
+ * ERR4 - id_var nie jest zmienna
+ * ERR5 - id_var nie zostal zainicjalizowany
+ */
+unit_type get_larray_var(char* id, char* id_var) {
+    DBG_INSTRUCTION_BEGIN("get_larray_var");
+    symbol* sym = sym_get(id);
+    symbol* sym_var = sym_get(id_var);
+    unit_type unit;
+
+    if (sym == NULL) {
+        ERR_ADD();
+        ERR_ID_UNDECLARED(id);
+    }
+    else if (sym->type != ARRAY) {
+        ERR_ADD();
+        ERR_ID_NOT_ARRAY(id);
+    }
+    else if (sym_var == NULL) {
+        ERR_ADD();
+        ERR_ID_UNDECLARED(id_var);
+    }
+    else if (sym_var->type != VARIABLE) {
+        ERR_ADD();
+        ERR_ID_NOT_VARIABLE(id_var);
+    }
+    else if (sym_var->is_init == false) {
+        ERR_ADD();
+        ERR_ID_NOT_INIT(id_var);
+    }
+    else {
+        // TODO pobiera wolny rejestr, zapisuje w nim adres
+        // wskazujacy na komorke pamieci, zapisuje ten rejestr
+        // do unit
+    }
+
+    DBG_INSTRUCTION_END("get_larray_var");
+    return unit;
+}
+
+
+/* Pobiera wartosc zmiennej. Przechowuje ja
+ * w rejestrze.
+ * ERR1 - id nie zostal zadeklarowany
+ * ERR2 - id nie jest zmienna
+ * ERR3 - id nie zostal zainicjalizowany
+ */
+unit_type get_rvariable(char* id) {
+    DBG_INSTRUCTION_BEGIN("get_rvariable");
+    symbol* sym = sym_get(id);
+    unit_type unit;
+    
+    if (sym == NULL) {
+        ERR_ADD();
+        ERR_ID_UNDECLARED(id);
+    }
+    else if (sym->type != VARIABLE) {
+        ERR_ADD();
+        ERR_ID_NOT_VARIABLE(id);
+    }
+    else if (sym->is_init == false) {
+        ERR_ADD();
+        ERR_ID_NOT_INIT(id);
+    }
+    else {
+        unit = get_const(sym->offset);   // pozycja w pamieci do rejestru
+        load(unit.reg, unit.reg);        // wartosc zmiennej do rejestru
+    }
+
+    DBG_INSTRUCTION_END("get_rvariable");
+    return unit;
 }
 
 /* Dodaje zmienna o podanej nazwie do tablicy symboli,
@@ -85,7 +200,7 @@ void put_array(char* id, input_type begin, input_type end) {
     }
     else if (begin > end) {
         ERR_ADD();
-        ERR_ARRAY_RANGE(id, begin, end);
+        ERR_ARRAY_INIT_RANGE(id, begin, end);
     } 
     else {
         sym = sym_put(id);

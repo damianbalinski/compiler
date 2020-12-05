@@ -20,17 +20,18 @@
 }
 
 %union{
-    val_type val;        /* wartosc i rejestr */
+    input_type val;      /* wartosc i rejestr */
+    unit_type unit;      /* pamiec i rejestr */
     char *id;            /* identyfikator */
-    int reg;
 }
 
 %start program
-%nterm <reg> value
-%nterm <reg> expression
-%nterm <reg> identifier
+%nterm <unit> value
+%nterm <unit> expression
+%nterm <unit> identifier
+%nterm <unit> lidentifier
 %token <val> NUMBER
-%token <id> PIDENTIFIER
+%token <id> ID
 %token DECLARE T_BEGIN END
 %token IF THEN ELSE ENDIF
 %token DO
@@ -48,29 +49,29 @@ program: DECLARE declarations T_BEGIN commands END
 | T_BEGIN commands END
 ;
 
-declarations: declarations ',' PIDENTIFIER                  { put_variable($3);      }
-|  declarations ',' PIDENTIFIER '(' NUMBER ':' NUMBER ')'   { put_array($3, $5, $7); }
-|  PIDENTIFIER                                              { put_variable($1);      }
-|  PIDENTIFIER '(' NUMBER ':' NUMBER ')'                    { put_array($1, $3, $5); }
+declarations: declarations ',' ID                  { put_variable($3);      }
+|  declarations ',' ID '(' NUMBER ':' NUMBER ')'   { put_array($3, $5, $7); }
+|  ID                                              { put_variable($1);      }
+|  ID '(' NUMBER ':' NUMBER ')'                    { put_array($1, $3, $5); }
 ;
 
 commands: commands command
 |  command
 ;
 
-command: identifier ASSIGN expression ';'
+command: lidentifier ASSIGN expression ';'
 |  IF condition THEN commands ELSE commands ENDIF
 |  IF condition THEN commands ENDIF
 |  WHILE condition DO commands ENDWHILE
 |  REPEAT commands UNTIL condition ';'
-|  FOR PIDENTIFIER FROM value TO value DO commands ENDFOR
-|  FOR PIDENTIFIER FROM value DOWNTO value DO commands ENDFOR
+|  FOR ID FROM value TO value DO commands ENDFOR
+|  FOR ID FROM value DOWNTO value DO commands ENDFOR
 |  READ identifier ';'
 |  WRITE value ';'
 ;
 
 expression: value
-|  value '+' value                   { $$ = sum($1, $3); }
+|  value '+' value                   { /* $$ = sum($1, $3); */ }
 |  value '-' value
 |  value '*' value
 |  value '/' value
@@ -85,15 +86,18 @@ condition: value EQ value
 |  value GE value
 ;
 
-value: NUMBER                        { $$ = get_const($1); }
-|  identifier                        { $$ = $1; }
+value: NUMBER                        { /*$$ = get_const($1);*/ }
+|  identifier                        {  }
 ;
 
-identifier: PIDENTIFIER              { $$ = get_variable($1); }
-|  PIDENTIFIER '(' PIDENTIFIER ')'   { $$ = -1; }
-|  PIDENTIFIER '(' NUMBER ')'        { $$ = -1; }
+identifier: ID                       { $$ = get_rvariable($1); }
+|  ID '(' ID ')'
+|  ID '(' NUMBER ')' 
 ;
 
+lidentifier: ID                      { $$ = get_lvariable($1); }
+|  ID '(' ID ')'
+|  ID '(' NUMBER ')'                 { $$ = get_larray_num($1, $3); }
 %%
 
 int main( int argc, char** argv )

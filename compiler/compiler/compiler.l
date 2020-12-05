@@ -43,7 +43,7 @@ TO          { DBG_TOKEN("TO");       return(TO);       }
 UNTIL       { DBG_TOKEN("UNTIL");    return(UNTIL);    }
 WHILE       { DBG_TOKEN("WHILE");    return(WHILE);    }
 WRITE       { DBG_TOKEN("WRITE");    return(WRITE);    }
-{ID}        { DBG_TOKEN("PIDENTIFIER"); yylval.id = strdup( yytext); return(PIDENTIFIER); }
+{ID}        { DBG_TOKEN("ID");       yylval.id = strdup( yytext); return(ID); }
 \[          { DBG_TOKEN("COMMENT_IN");  BEGIN COMMENT;  }
 <COMMENT>\] { DBG_TOKEN("COMMENT_OUT"); BEGIN INITIAL; }
 <COMMENT>.  ;
