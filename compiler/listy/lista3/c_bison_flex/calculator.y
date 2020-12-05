@@ -64,6 +64,7 @@ void yyerror (char const *s)
     fprintf(stderr, "Blad [linia %d] : %s\n", yylineno, s);
 }
 
+/* Dodaje operator lub liczbe do tablicy */
 void put(int type, int val)
 {
     LIST_TYPE[N] = type;
@@ -76,6 +77,8 @@ void clear()
     N = 0;
 }
 
+/* Odtwarza tablice, w zaleznosci od typu drukuje operator
+ * lub liczbe. */
 void print()
 {
     for(int i = 0; i < N; i++) {

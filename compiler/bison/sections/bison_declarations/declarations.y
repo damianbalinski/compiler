@@ -34,3 +34,31 @@ ona cicho usuwana.
 
 %%
 %%
+
+
+3.7.12 Bison Declaration Summary
+Here is a summary of the declarations used to define a grammar:
+
+— Directive: %union
+Declare the collection of data types that semantic values may have (see The Collection of Value Types).
+
+— Directive: %token
+Declare a terminal symbol (token type name) with no precedence or associativity specified (see Token Type Names).
+
+— Directive: %right
+Declare a terminal symbol (token type name) that is right-associative (see Operator Precedence).
+
+— Directive: %left
+Declare a terminal symbol (token type name) that is left-associative (see Operator Precedence).
+
+— Directive: %nonassoc
+Declare a terminal symbol (token type name) that is nonassociative (see Operator Precedence). Using it in a way that would be associative is a syntax error.
+
+— Directive: %type
+Declare the type of semantic values for a nonterminal symbol (see Nonterminal Symbols).
+
+— Directive: %start
+Specify the grammar's start symbol (see The Start-Symbol).
+
+— Directive: %expect
+Declare the expected number of shift-reduce conflicts (see Suppressing Conflict Warnings)

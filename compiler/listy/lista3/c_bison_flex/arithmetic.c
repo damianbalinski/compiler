@@ -6,8 +6,7 @@
  * UWAGA!
  * 2^20 < BASE < 2^21
  * poniewaz istnieje ryzyko przepelnienia,
- * obliczenia posrednie wykonujemy na typie
- * long long
+ * obliczenia posrednie wykonujemy na long long
  */
 
 // sprawdza, czy x jest zerem
@@ -159,12 +158,6 @@ void fast_exponent(int a, int b, int* res)
 	//for (int i = -22; i <= 22; i++)
 	//	if (i % BASE != ZERO)
 	//		printf("%d(%d) / %d = %d\n", i, norm(i), 2, div(i, 2));
-
-
-	// TEST FAST_MULTIPLICATION
-	//int x = 1;
-	//fast_multiplication(7, 3, &x);
-	//printf("x = %d\n", x);
 
 	// TEST POWER
 	//for (int i = -22; i <= 22; i++)
