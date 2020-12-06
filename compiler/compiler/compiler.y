@@ -49,10 +49,10 @@ program: DECLARE declarations T_BEGIN commands END
 | T_BEGIN commands END
 ;
 
-declarations: declarations ',' ID                  { put_variable($3);      }
-|  declarations ',' ID '(' NUMBER ':' NUMBER ')'   { put_array($3, $5, $7); }
-|  ID                                              { put_variable($1);      }
-|  ID '(' NUMBER ':' NUMBER ')'                    { put_array($1, $3, $5); }
+declarations: declarations ',' ID                  { add_variable($3);      }
+|  declarations ',' ID '(' NUMBER ':' NUMBER ')'   { add_array($3, $5, $7); }
+|  ID                                              { add_variable($1);      }
+|  ID '(' NUMBER ':' NUMBER ')'                    { add_array($1, $3, $5); }
 ;
 
 commands: commands command
@@ -86,7 +86,7 @@ condition: value EQ value
 |  value GE value
 ;
 
-value: NUMBER                        { /*$$ = get_const($1);*/ }
+value: NUMBER                        { $$ = get_const($1); }
 |  identifier                        {  }
 ;
 

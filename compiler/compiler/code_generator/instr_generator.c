@@ -1,8 +1,5 @@
 #include "instr_generator.h"
 
-extern register_type registers[6];
-
-
 /* Pobiera stala. Przechowuje ja w rejestrze. */
 unit_type get_const(input_type val) {
     DBG_INSTRUCTION_BEGIN("get_const");
@@ -10,18 +7,7 @@ unit_type get_const(input_type val) {
     
     int x = register_get();
     unit.reg = x;
-    reset(x);
-    
-    if (val != 0) {
-        input_type n = (input_type)log2(val) - 1;
-        inc(x);
-    
-        for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
-            shl(x);
-            if (mask & val) inc(x);
-        }
-    }
-    DBG_RVAL(x);
+    reg_const(x, val);
 
     DBG_INSTRUCTION_END("get_const");
     return unit;
@@ -87,8 +73,8 @@ unit_type get_larray_num(char* id, input_type num) {
 }
 
 /*
- * Pobiera lokalizacje komorki tablicy
- * indeksowanej przez zmienna.
+ * Pobiera lokalizacje komorki tablicy indeksowanej 
+ * przez zmienna. Przechowuje ja w rejestrze.
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest tablica
  * ERR3 - id_var nie zostal zadeklarowany
@@ -125,6 +111,7 @@ unit_type get_larray_var(char* id, char* id_var) {
         // TODO pobiera wolny rejestr, zapisuje w nim adres
         // wskazujacy na komorke pamieci, zapisuje ten rejestr
         // do unit
+
     }
 
     DBG_INSTRUCTION_END("get_larray_var");
@@ -164,11 +151,11 @@ unit_type get_rvariable(char* id) {
     return unit;
 }
 
-/* Dodaje zmienna o podanej nazwie do tablicy symboli,
- * alokuje miejsce dla nowej zmiennej. Jesli symbol 
- * o podanej nazwie juz istnieje, informuje o bledzie. */
-void put_variable(char* id) {
-    DBG_INSTRUCTION_BEGIN("put_variable");
+/* Dodaje nowa zmienna, przydziela jej pamiec.
+ * ERR1 - id zostal zadeklarowany
+ */
+void add_variable(char* id) {
+    DBG_INSTRUCTION_BEGIN("add_variable");
     symbol* sym = sym_get(id);
     
     if (sym != NULL) {
@@ -178,20 +165,20 @@ void put_variable(char* id) {
     else {
         sym = sym_put(id);
         sym->type = VARIABLE;
-        sym->offset = variable_allocate();
         sym->is_init = false;
+        sym->offset = variable_allocate();
     }
 
-    DBG_INSTRUCTION_END("put_variable");
+    DBG_INSTRUCTION_END("add_variable");
     DBG_SYMBOL_PRINT();
 }
 
-/* Dodaje tablice o podanej nazwie do tablicy symboli,
- * alokuje miejsce dla nowej tablicy. Jesli symbol
- * o podanej nazwie juz istnieje lub podano nieprawidlowy
- * zakres tablicy, informuje o bledzie. */
-void put_array(char* id, input_type begin, input_type end) {
-    DBG_INSTRUCTION_BEGIN("put_table");
+/* Dodaje nowa tablice, przydziela jej pamiec.
+ * ERR1 - id zostal zadeklarowany
+ * ERR2 - begin wieksze od end
+ */
+void add_array(char* id, input_type begin, input_type end) {
+    DBG_INSTRUCTION_BEGIN("add_table");
     symbol* sym = sym_get(id);
 
     if (sym != NULL) {
@@ -210,23 +197,42 @@ void put_array(char* id, input_type begin, input_type end) {
         sym->end = end;
     }
 
-    DBG_INSTRUCTION_END("put_table");
+    DBG_INSTRUCTION_END("add_table");
     DBG_SYMBOL_PRINT();
 }
 
 /* Dodaje zawartosc jednego rejestru do drugiego,
  * zwalnia niepotrzebny rejstr, zwraca rejestr z suma. */
-int sum(int x, int y) {
-    DBG_INSTRUCTION_BEGIN("add");
-    add(x,y);
-    REG_FREE(y);
+// int sum(int x, int y) {
+//     DBG_INSTRUCTION_BEGIN("add");
+//     add(x,y);
+//     REG_FREE(y);
 
-    DBG_INSTRUCTION_END("add");
-    return x;
-}
+//     DBG_INSTRUCTION_END("add");
+//     return x;
+// }
 
 /* Przypisuje wartosc z rejestru y do zmiennej przechowywanej
  * przez rejestr x, na koniec zwalnia obydwa rejestry. */
-void assign(int x, int y) {
+// void assign(int x, int y) {
+    
+// }
+
+/* Sprawdza, czy wartosc znajduje sie w rejestrze,
+ * jesli nie, laduje ja do rejestru. */
+unit_type memory_to_register(unit_type unit) {
+    if (unit.reg != NOTHING)
+        return unit;
+    else {
+        unit = get_const(unit.offset);  // pozycja w pamieci do rejestru
+        load(unit.reg, unit.reg);       // wartosc zmiennej do rejestru
+        return unit;
+    }
+}
+
+/* Przerzuca zawartosc rejestru do pamieci,
+ * zwalnia rejestr */
+void register_to_memory(int reg) {
+    int data = variable_allocate();
     
 }

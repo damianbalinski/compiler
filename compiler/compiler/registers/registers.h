@@ -15,7 +15,7 @@
 #define EMPTY -2
 #define MAX_REGISTERS 6
 
-#define REG_FREE(X)    registers[X].is_free = true
+#define REG_FREE(X)      registers[X].is_free = true
 #define REG_OFFSET(X,Y)  registers[X].offset = Y
 
 typedef struct {

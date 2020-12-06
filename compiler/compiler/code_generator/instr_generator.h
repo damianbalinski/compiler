@@ -1,6 +1,6 @@
 # pragma once
-#include <math.h>
 #include "code_generator.h"
+#include "instr_reg.h"
 #include "../symbol_table/data_manager.h"
 #include "../others/types.h"
 #include "../debugger/errors.h"
@@ -16,8 +16,5 @@ unit_type get_larray_var(char* id, char* id_var);       // PEND
 unit_type get_rvariable(char* id);                      // DONE
 
 
-void put_variable(char* id);
-void put_array(char* id, input_type begin, input_type end);
-
-int sum(int x, int y);
-int dif(int x, int y);
+void add_variable(char* id);                                    // DONE
+void add_array(char* id, input_type begin, input_type end);     // DONE
