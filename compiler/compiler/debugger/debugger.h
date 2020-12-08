@@ -14,6 +14,7 @@
     #define DEBUG_INSTRUCTIONS
     #define DEBUG_DATA_MANAGER
     #define DEBUG_UNIT
+    #define DEBUG_REGISTER_MACHINE
 #endif
 
 // TOKENS
@@ -109,4 +110,13 @@
 #else
     #define DBG_UNIT_ALLOC(X)
     #define DBG_UNIT_FREE(X)
+#endif
+
+// REGISTER MACHINE
+#ifdef DEBUG_REGISTER_MACHINE
+    #define DBG_RMACHINE_BEGIN(X) printf(GREEN "register machine [ begin %s ]\n" DEF, X)
+    #define DBG_RMACHINE_END(X)   printf(GREEN "register machine [ end %s ]\n" DEF, X)
+#else
+    #define DBG_RMACHINE_BEGIN(X)
+    #define DBG_RMACHINE_END(X)
 #endif

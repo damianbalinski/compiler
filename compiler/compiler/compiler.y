@@ -20,15 +20,14 @@
 
 %union{
     input_type val;      /* wartosc i rejestr */
-    unit_type unit;      /* pamiec i rejestr */
-    unit_type* unit2;   
+    unit_type* unit;     /* pamiec i rejestr */
     char *id;            /* identyfikator */
 }
 
-%destructor { unit_free($$); } unit2
+%destructor { unit_free($$); } unit
 %start program
-%nterm <unit2> value
-%nterm <unit2> expression
+%nterm <unit> value
+%nterm <unit> expression
 %nterm <unit> identifier
 %nterm <unit> lidentifier
 %token <val> NUMBER
@@ -91,14 +90,14 @@ value: NUMBER                        { $$ = get_const($1); }
 |  identifier                        {  }
 ;
 
-identifier: ID                       { $$ = get_rvariable($1); }
+identifier: ID                       { /* $$ = get_rvariable($1); */ }
 |  ID '(' ID ')'
 |  ID '(' NUMBER ')' 
 ;
 
 lidentifier: ID                      { $$ = get_lvariable($1); }
 |  ID '(' ID ')'
-|  ID '(' NUMBER ')'                 { $$ = get_larray_num($1, $3); }
+|  ID '(' NUMBER ')'                 { /*$$ = get_larray_num($1, $3); */ }
 %%
 
 int main( int argc, char** argv )

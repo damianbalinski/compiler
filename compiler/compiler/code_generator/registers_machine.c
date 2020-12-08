@@ -33,7 +33,9 @@ int reg_get_free() {
     return -1;
 }
 
+/* Umieszcza stala w rejestrze. */
 void reg_const(int x, input_type val) {
+    DBG_RMACHINE_BEGIN("reg_const");
     reset(x);
     if (val != 0) {
         input_type n = (input_type)log2(val) - 1;
@@ -45,6 +47,7 @@ void reg_const(int x, input_type val) {
         }
     }
     DBG_RVAL(x);
+    DBG_RMACHINE_END("reg_const");
 }
 
 /* Przerzuca zawartosc pamieci do rejstru,

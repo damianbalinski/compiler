@@ -1,5 +1,7 @@
 #include "instr_generator.h"
 #include "code_generator.h"
+#include "registers_machine.h"
+#include "registers.h"
 #include "../others/types.h"
 #include "../others/unit.h"
 #include "../debugger/errors.h"
@@ -23,16 +25,16 @@ unit_type* get_const(input_type val) {
     return unit;
 }
 
-
 /* Pobiera lokalizacje zmiennej. Ustawia zmienna
  * jako zainicjalizowana.
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest zmienna
+ * ERR3 - (RVARIABLE) id nie zostal zainicjalizowany
  */
-unit_type get_lvariable(char* id) {
+unit_type* get_variable(char* id, bool type) {
     DBG_INSTRUCTION_BEGIN("get_lvariable");
     symbol* sym = sym_get(id);
-    unit_type unit;
+    unit_type* unit = unit_alloc();
 
     if (sym == NULL) {
         ERR_ADD();
@@ -42,9 +44,14 @@ unit_type get_lvariable(char* id) {
         ERR_ADD();
         ERR_ID_NOT_VARIABLE(id);
     }
+    else if (type == RVARIABLE && sym->is_init == false) {
+        ERR_ADD();
+        ERR_ID_NOT_INIT(id);
+    }
     else {
         sym->is_init = true;
-        unit.offset = sym->offset;
+        unit->offset = sym->offset;
+        unit->reg = NOTHING;
     }
 
     DBG_INSTRUCTION_END("get_lvariable");
@@ -57,10 +64,10 @@ unit_type get_lvariable(char* id) {
  * ERR2 - id nie jest tablica
  * ERR3 - num jest poza zakresem tablicy
  */
-unit_type get_larray_num(char* id, input_type num) {
+unit_type* get_larray_num(char* id, input_type num) {
     DBG_INSTRUCTION_BEGIN("get_larray_num");
     symbol* sym = sym_get(id);
-    unit_type unit;
+    unit_type* unit = unit_alloc();
 
     if (sym == NULL) {
         ERR_ADD();
@@ -75,7 +82,8 @@ unit_type get_larray_num(char* id, input_type num) {
         ERR_ARRAY_INDEX_RANGE(id, num);
     }
     else {
-        unit.offset = sym->offset + num - sym->begin;
+        unit->offset = sym->offset + num - sym->begin;
+        unit->reg = NOTHING;
     }
 
     DBG_INSTRUCTION_END("get_larray_num");
@@ -91,11 +99,11 @@ unit_type get_larray_num(char* id, input_type num) {
  * ERR4 - id_var nie jest zmienna
  * ERR5 - id_var nie zostal zainicjalizowany
  */
-unit_type get_larray_var(char* id, char* id_var) {
+unit_type* get_larray_var(char* id, char* id_var) {
     DBG_INSTRUCTION_BEGIN("get_larray_var");
     symbol* sym = sym_get(id);
     symbol* sym_var = sym_get(id_var);
-    unit_type unit;
+    unit_type* unit = unit_alloc();
 
     if (sym == NULL) {
         ERR_ADD();
@@ -118,10 +126,10 @@ unit_type get_larray_var(char* id, char* id_var) {
         ERR_ID_NOT_INIT(id_var);
     }
     else {
-        // TODO pobiera wolny rejestr, zapisuje w nim adres
-        // wskazujacy na komorke pamieci, zapisuje ten rejestr
-        // do unit
-
+        int x = reg_get_free();         // wolny rejestr
+        reg_const(x, sym_var->offset);  // offset do rejestru
+        load(x,x);                      // pamiec do rejestru
+        unit->reg = x;
     }
 
     DBG_INSTRUCTION_END("get_larray_var");
