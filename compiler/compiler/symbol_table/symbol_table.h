@@ -1,10 +1,5 @@
 # pragma once
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include "../debugger/debugger.h"
 #include "../others/types.h"
 
 #define VARIABLE true

@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "symbol_table.h"
+#include "../debugger/debugger.h"
 
 symbol* sym_table = NULL;
 

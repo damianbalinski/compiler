@@ -5,8 +5,6 @@
     #include <stdlib.h>
     #include "debugger/debugger.h"
     #include "debugger/errors.h"
-    #include "symbol_table/symbol_table.h"
-    #include "registers/registers.h"
     #include "code_generator/instr_generator.h"
 
     extern int yylineno;
@@ -17,17 +15,20 @@
 
 %code requires {
     #include "others/types.h"
+    #include "others/unit.h"
 }
 
 %union{
     input_type val;      /* wartosc i rejestr */
     unit_type unit;      /* pamiec i rejestr */
+    unit_type* unit2;   
     char *id;            /* identyfikator */
 }
 
+%destructor { unit_free($$); } unit2
 %start program
-%nterm <unit> value
-%nterm <unit> expression
+%nterm <unit2> value
+%nterm <unit2> expression
 %nterm <unit> identifier
 %nterm <unit> lidentifier
 %token <val> NUMBER
@@ -59,7 +60,7 @@ commands: commands command
 |  command
 ;
 
-command: lidentifier ASSIGN expression ';'
+command: lidentifier ASSIGN expression ';'         { }
 |  IF condition THEN commands ELSE commands ENDIF
 |  IF condition THEN commands ENDIF
 |  WHILE condition DO commands ENDWHILE

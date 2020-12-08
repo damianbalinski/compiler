@@ -1,12 +1,22 @@
 #include "instr_generator.h"
+#include "code_generator.h"
+#include "../others/types.h"
+#include "../others/unit.h"
+#include "../debugger/errors.h"
+#include "../debugger/debugger.h"
+#include "../symbol_table/symbol_table.h"
+#include "../symbol_table/data_manager.h"
+
+extern int yylineno;
+extern char* yytext;
 
 /* Pobiera stala. Przechowuje ja w rejestrze. */
-unit_type get_const(input_type val) {
+unit_type* get_const(input_type val) {
     DBG_INSTRUCTION_BEGIN("get_const");
-    unit_type unit;
+    unit_type* unit = unit_alloc();
     
-    int x = register_get();
-    unit.reg = x;
+    int x = reg_get_free();
+    unit->reg = x;
     reg_const(x, val);
 
     DBG_INSTRUCTION_END("get_const");
@@ -143,7 +153,7 @@ unit_type get_rvariable(char* id) {
         ERR_ID_NOT_INIT(id);
     }
     else {
-        unit = get_const(sym->offset);   // pozycja w pamieci do rejestru
+        //unit = get_const(sym->offset);   // pozycja w pamieci do rejestru
         load(unit.reg, unit.reg);        // wartosc zmiennej do rejestru
     }
 
@@ -217,22 +227,3 @@ void add_array(char* id, input_type begin, input_type end) {
 // void assign(int x, int y) {
     
 // }
-
-/* Sprawdza, czy wartosc znajduje sie w rejestrze,
- * jesli nie, laduje ja do rejestru. */
-unit_type memory_to_register(unit_type unit) {
-    if (unit.reg != NOTHING)
-        return unit;
-    else {
-        unit = get_const(unit.offset);  // pozycja w pamieci do rejestru
-        load(unit.reg, unit.reg);       // wartosc zmiennej do rejestru
-        return unit;
-    }
-}
-
-/* Przerzuca zawartosc rejestru do pamieci,
- * zwalnia rejestr */
-void register_to_memory(int reg) {
-    int data = variable_allocate();
-    
-}

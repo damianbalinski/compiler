@@ -1,8 +1,4 @@
 #pragma once
-#include <stdio.h>
-#include "../registers/registers.h"
-#include "../debugger/debugger.h"
-#include "../debugger/warnings.h"
 #include "codes.h"
 
 void code_put0(code_type code);

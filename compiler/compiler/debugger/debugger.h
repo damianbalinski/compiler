@@ -13,6 +13,7 @@
     #define DEBUG_CODES
     #define DEBUG_INSTRUCTIONS
     #define DEBUG_DATA_MANAGER
+    #define DEBUG_UNIT
 #endif
 
 // TOKENS
@@ -99,4 +100,13 @@
 #else
     #define DBG_ALLOCATE_VARIABLE(X)
     #define DBG_ALLOCATE_ARRAY(X,Y)
+#endif
+
+// UNIT
+#ifdef DEBUG_UNIT
+    #define DBG_UNIT_ALLOC(X) printf(GREEN "unit [ allocate %p ]\n" DEF, X)
+    #define DBG_UNIT_FREE(X)  printf(GREEN "unit [ free %p ]\n" DEF, X)
+#else
+    #define DBG_UNIT_ALLOC(X)
+    #define DBG_UNIT_FREE(X)
 #endif

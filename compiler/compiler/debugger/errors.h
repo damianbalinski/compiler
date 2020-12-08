@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 #include "colors.h"
 
 #define ERR_SYNTAX()           fprintf(stderr, RED "Blad linia %d: Blad skladniowy \'%s\'\n"                  DEF, yylineno, yytext)
