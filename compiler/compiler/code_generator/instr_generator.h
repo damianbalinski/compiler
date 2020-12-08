@@ -5,13 +5,10 @@
 #define LVARIABLE true
 #define RVARIABLE false
 
-unit_type* get_const(input_type val);                   // DONE
-unit_type* get_variable(char* id, bool type);           // DONE
-unit_type* get_larray_num(char* id, input_type num);    // DONE
-unit_type* get_larray_var(char* id, char* id_var);      // DONE
+void add_variable(char* id);                                    // DONE
+void add_array(char* id, input_type begin, input_type end);     // DONE
 
-unit_type get_rvariable(char* id);
-
-void add_variable(char* id);
-void add_array(char* id, input_type begin, input_type end);
-
+unit_type* get_const(input_type val);                           // DONE
+unit_type* get_variable(char* id, bool type);                   // DONE
+unit_type* get_array_num(char* id, input_type num, bool type);  // DONE
+unit_type* get_array_var(char* id, char* id_var, bool type);    // DONE

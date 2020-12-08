@@ -68,3 +68,13 @@ int reg_to_mem(int x) {
     // TODO powiadomic unity
     return x;
 }
+
+/* Sprawdza, czy zawartosc jest w rejestrze,
+ * jesli nie, przerzuca ja do rejestru */
+void reg_check(unit_type* unit) {
+    if (unit->reg == NOTHING) {
+        int x = mem_to_reg(unit->offset);
+        unit->reg = x;
+        reg_unit(x, unit);
+    }
+}

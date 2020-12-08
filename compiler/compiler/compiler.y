@@ -24,11 +24,10 @@
     char *id;            /* identyfikator */
 }
 
-%destructor { unit_free($$); } unit
 %start program
 %nterm <unit> value
 %nterm <unit> expression
-%nterm <unit> identifier
+%nterm <unit> ridentifier
 %nterm <unit> lidentifier
 %token <val> NUMBER
 %token <id> ID
@@ -59,19 +58,19 @@ commands: commands command
 |  command
 ;
 
-command: lidentifier ASSIGN expression ';'         { }
+command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
 |  IF condition THEN commands ELSE commands ENDIF
 |  IF condition THEN commands ENDIF
 |  WHILE condition DO commands ENDWHILE
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR
 |  FOR ID FROM value DOWNTO value DO commands ENDFOR
-|  READ identifier ';'
+|  READ ridentifier ';'
 |  WRITE value ';'
 ;
 
 expression: value
-|  value '+' value                   { /* $$ = sum($1, $3); */ }
+|  value '+' value
 |  value '-' value
 |  value '*' value
 |  value '/' value
@@ -86,18 +85,18 @@ condition: value EQ value
 |  value GE value
 ;
 
-value: NUMBER                        { $$ = get_const($1); }
-|  identifier                        {  }
+value: NUMBER                        { $$ = get_const($1);                    }
+|  ridentifier                       { $$ = $1;                               }
 ;
 
-identifier: ID                       { /* $$ = get_rvariable($1); */ }
-|  ID '(' ID ')'
-|  ID '(' NUMBER ')' 
+ridentifier: ID                      { $$ = get_variable($1,      RVARIABLE); }
+|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, RVARIABLE); }
+|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, RVARIABLE); }
 ;
 
-lidentifier: ID                      { $$ = get_lvariable($1); }
-|  ID '(' ID ')'
-|  ID '(' NUMBER ')'                 { /*$$ = get_larray_num($1, $3); */ }
+lidentifier: ID                      { $$ = get_variable($1,      LVARIABLE); }
+|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LVARIABLE); }
+|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LVARIABLE); }
 %%
 
 int main( int argc, char** argv )

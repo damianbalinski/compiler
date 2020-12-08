@@ -12,6 +12,5 @@ unit_type* unit_alloc() {
 
 void unit_free(unit_type* unit) {
     DBG_UNIT_FREE(unit);
-    // TODO usunac rejestr
     free(unit);
 }
