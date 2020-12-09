@@ -1,7 +1,6 @@
 #pragma once
 #include "../others/types.h"
 
-#define reg_free(X)    registers[X].unit = NULL
 #define reg_unit(X,Y)  registers[X].unit = Y
 
 int reg_get_free();
