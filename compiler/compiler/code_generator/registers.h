@@ -11,6 +11,5 @@ typedef struct register_type{
     const int num;
     input_type val;             /* zawartosc rejestru */
     unit_type* unit;            /* unit, ktorego przechowuje rejestr */
-    register_type* next;
-    register_type* prev;
+    struct register_type* next;
 } register_type;

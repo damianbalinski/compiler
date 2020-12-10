@@ -1,9 +1,19 @@
 #pragma once
 #include "../others/types.h"
+#include "../others/unit.h"
+#include "registers.h"
 
 #define reg_unit(X,Y)  registers[X].unit = Y
 
-int reg_get_free();
-void reg_const(int x, input_type val);  // DONE
+void reg_init();
+void reg_print();
 
-int mem_to_reg(input_type offset);
+int reg_get_free();
+void reg_free(int x);
+void reg_check(unit_type* unit);
+void reg_const(int x, input_type val);
+
+void reg_to_mem(unit_type* unit, int reg);
+void mem_to_reg(unit_type* unit, int reg);
+void reg_connect(unit_type* unit, int reg);
+void reg_disconnect(unit_type* unit, int reg);

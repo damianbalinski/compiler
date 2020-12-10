@@ -108,6 +108,7 @@ int main( int argc, char** argv )
     yyin = fopen(argv[1], "r");
 
     DBG_PARSER_BEGIN();
+    reg_init();
     yyparse();
     DBG_PARSER_END();
 }

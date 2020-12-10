@@ -99,15 +99,13 @@ unit_type* get_array_num(char* id, input_type num, bool type) {
         int x = reg_get_free();                         // wolny rejestr
         reg_const(x, sym->offset + num - sym->begin);   // stala do rejestru
         load(x,x);                                      // wartosc do rejestru
-        reg_unit(x, unit);
-        unit->reg = x;
+        reg_connect(unit, x);
     }
     else {
         // LVARIABLE
         int x = reg_get_free();                         // wolny rejestr
         reg_const(x, sym->offset + num - sym->begin);   // stala do rejestru
-        reg_unit(x, unit);
-        unit->reg = x;
+        reg_connect(unit, x);
     }
 
     DBG_INSTRUCTION_END("get_array_num");
@@ -156,8 +154,7 @@ unit_type* get_array_var(char* id, char* id_var, bool type) {
         reg_const(SUPER_REGISTER, sym_var->offset);     // stala do rejestru
         add(x, SUPER_REGISTER);                         // suma rejestrow
         load(x,x);                                      // wartosc do rejestru
-        reg_unit(x, unit);
-        unit->reg = x;
+        reg_connect(unit, x);
     }
     else {
         // LVARIABLE
@@ -165,8 +162,7 @@ unit_type* get_array_var(char* id, char* id_var, bool type) {
         reg_const(x, sym->offset - sym->begin);         // stala do rejestru
         reg_const(SUPER_REGISTER, sym_var->offset);     // stala do rejestru
         add(x, SUPER_REGISTER);                         // suma rejestrow
-        reg_unit(x, unit);
-        unit->reg = x;
+        reg_connect(unit, x);
     }
 
     DBG_INSTRUCTION_END("get_array_var");

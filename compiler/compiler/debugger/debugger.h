@@ -6,15 +6,14 @@
 
 #ifdef DEBUG_MODE
     //#define DEBUG_TOKENS
-    #define DEBUG_PARSER
-    #define DEBUG_SYMBOL_TABLE
+    //#define DEBUG_PARSER
+    //#define DEBUG_SYMBOL_TABLE
     #define DEBUG_REGISTERS
     #define DEBUG_REGISTER_OPERATIONS
     #define DEBUG_CODES
-    #define DEBUG_INSTRUCTIONS
-    #define DEBUG_DATA_MANAGER
+    //#define DEBUG_INSTRUCTIONS
+    //#define DEBUG_DATA_MANAGER
     #define DEBUG_UNIT
-    #define DEBUG_REGISTER_MACHINE
 #endif
 
 // TOKENS
@@ -42,15 +41,6 @@
     #define DBG_SYMBOL_PUT(X)
     #define DBG_SYMBOL_GET(X)
     #define DBG_SYMBOL_PRINT()
-#endif
-
-// REGISTERS
-#ifdef DEBUG_REGISTERS
-    #define DBG_REGISTER_GET(X)  printf(GREEN "registers [ get free reg %d]\n" DEF, X)
-    #define DBG_REGISTER_FREE(X) printf(GREEN "registers [ free reg %d]\n"     DEF, X)
-#else
-    #define DBG_REGISTER_GET(X)
-    #define DBG_REGISTER_FREE(X)
 #endif
 
 // CODES
@@ -112,11 +102,15 @@
     #define DBG_UNIT_FREE(X)
 #endif
 
-// REGISTER MACHINE
-#ifdef DEBUG_REGISTER_MACHINE
-    #define DBG_RMACHINE_BEGIN(X) printf(GREEN "register machine [ begin %s ]\n" DEF, X)
-    #define DBG_RMACHINE_END(X)   printf(GREEN "register machine [ end %s ]\n" DEF, X)
+// REGISTERS
+#ifdef DEBUG_REGISTERS
+    #define DBG_REGISTER_PRINT()       reg_print()
+    #define DBG_REGISTERS_BEGIN(X)     printf(GREEN "register machine [ begin %s ]\n" DEF, X)
+    #define DBG_REGISTERS_END(X)       printf(GREEN "register machine [ end %s ]\n" DEF, X)
+    #define DBG_REGISTERS_HEAD_NUM(X)  printf(GREEN "register machine [ head->num =  %d ]\n" DEF, X)
 #else
-    #define DBG_RMACHINE_BEGIN(X)
-    #define DBG_RMACHINE_END(X)
+    #define DBG_REGISTER_PRINT()
+    #define DBG_REGISTERS_BEGIN(X)
+    #define DBG_REGISTERS_END(X)
+    #define DBG_REGISTERS_HEAD_NUM(X)
 #endif

@@ -1,15 +1,12 @@
 #include <math.h>
 #include "registers_machine.h"
-#include "registers.h"
 #include "code_generator.h"
-#include "../others/types.h"
 #include "../debugger/debugger.h"
 #include "../debugger/warnings.h"
 #include "../symbol_table/data_manager.h"
 
-/* Kolejka dwukierunkowa rejestrow */
+/* Kolejka cykliczna rejestrow */
 register_type* head;
-register_type* tail;
 
 /* Inicjalizacja rejestrow. Poczatkowo wszystkie rejestry sa wolne
  * oraz nie wskazuja na zadna komorke pamieci. */
@@ -22,59 +19,61 @@ register_type registers[6] = {
     {'f', 5, 0, NULL}
 };
 
+/* Inicjalizuje rejestry oraz kolejke rejestrow. */
+void reg_init() {
+    registers[0].next = &registers[1];
+    registers[1].next = &registers[2];
+    registers[2].next = &registers[3];
+    registers[3].next = &registers[4];
+    registers[4].next = &registers[0];
+    head = &registers[0];
+}
+
 /* Zwraca rejestr z poczatku listy, jesli to konieczne,
  * przerzuca jego zawartosc do pamieci. */
 int reg_get_free() {
-    DBG_REGISTER_GET(head->num);
+    DBG_REGISTERS_BEGIN("reg get free");
+    DBG_REGISTER_PRINT();
+    DBG_REGISTERS_HEAD_NUM(head->num);
+
     register_type* reg = head;
-
-    // zwalnianie rejestru
     if (reg->unit != NULL) {
-        int offset = variable_allocate();   // alokacja pamieci
-        reg_const(SUPER_REGISTER, offset);  // offset do rejestru
-        store(reg->num, SUPER_REGISTER);    // rejestr do pamieci
-        reg->unit->offset = offset;
-        reg->unit->reg = NOTHING;
-        reg->unit = NULL;
+        reg_to_mem(reg->unit, reg->num);
+        reg_disconnect(reg->unit, reg->num);
     }
-
-    // przerzucanie na koniec listy
-    reg->prev = tail;
-    tail->next = reg;
-    tail = reg;
+        
     head = reg->next;
 
-    CHECK_REGISTER_FREE();
+    DBG_REGISTERS_HEAD_NUM(head->num);
+    DBG_REGISTERS_END("reg get free");
     return reg->num;
 }
 
+/* Zwalnia rejestr. */
 void reg_free(int x) {
-    // zwalnianie pamieci
-    register_type* reg = registers+x;
-    reg->unit = NULL;
+    DBG_REGISTERS_BEGIN("reg free");
+    DBG_REGISTERS_HEAD_NUM(head->num);
+    
+    registers[x].unit = NULL;
+    head = &registers[x];
 
-    // przerzucenie na poczatek listy
-    if (reg == head) {
+    DBG_REGISTERS_HEAD_NUM(head->num);
+    DBG_REGISTERS_END("reg free");
+}
 
-    }
-    else if (reg == tail) {
-        head->prev = reg;
-        reg->next = head;
-        tail = reg->prev;
-        head = reg;
-    }
-    else {
-        reg->prev->next = reg->next;
-        reg->next->prev = reg->prev;
-        reg->next = head;
-        head->prev = reg;
-        head = reg;
+/* Sprawdza, czy dane sa w rejestrze,
+ * jesli nie, przerzuca je do rejestru */
+void reg_check(unit_type* unit) {
+    if (unit->reg == NOTHING) {
+        int x = reg_get_free();
+        mem_to_reg(unit, x);
+        reg_connect(unit, x);
     }
 }
 
 /* Umieszcza stala w rejestrze. */
 void reg_const(int x, input_type val) {
-    DBG_RMACHINE_BEGIN("reg_const");
+    DBG_REGISTERS_BEGIN("reg const");
     reset(x);
     if (val != 0) {
         input_type n = (input_type)log2(val) - 1;
@@ -86,24 +85,44 @@ void reg_const(int x, input_type val) {
         }
     }
     DBG_RVAL(x);
-    DBG_RMACHINE_END("reg_const");
+    DBG_REGISTERS_END("reg const");
 }
 
-/* Przerzuca zawartosc pamieci do rejstru,
- * zwraca ten rejestr. */
-int mem_to_reg(input_type offset) {
-    int x = reg_get_free();
-    reg_const(x, offset);   // offset do rejestru
-    load(x,x);              // pamiec do rejestru
-    return x;
+/* Przerzuca dane z rejestru do pamieci */
+inline void reg_to_mem(unit_type* unit, int reg) {
+    int offset = variable_allocate();   // alokacja pamieci
+    reg_const(SUPER_REGISTER, offset);  // offset do rejestru
+    store(reg, SUPER_REGISTER);         // rejestr do pamieci
+    unit->offset = offset;
 }
 
-/* Sprawdza, czy zawartosc jest w rejestrze,
- * jesli nie, przerzuca ja do rejestru */
-void reg_check(unit_type* unit) {
-    if (unit->reg == NOTHING) {
-        int x = mem_to_reg(unit->offset);
-        unit->reg = x;
-        reg_unit(x, unit);
+/* Przerzuca dane z pamieci do rejestru */
+inline void mem_to_reg(unit_type* unit, int reg) {
+    reg_const(reg, unit->offset);       // offset do rejestru
+    load(reg, reg);                     // wartosc do rejestru
+}
+
+/* Laczy rejestr z unity */
+inline void reg_connect(unit_type* unit, int reg) {
+    registers[reg].unit = unit;
+    unit->reg = reg;
+}
+
+/* Odlacza rejestr od unity */
+inline void reg_disconnect(unit_type* unit, int reg) {
+    unit->reg = NOTHING;
+    registers[reg].unit = NULL;
+}
+
+/* Drukuje liste rejestrow */
+void reg_print() {
+    register_type* reg = head;
+    printf("r n reg            next           unit\n");
+    printf("%c %d %p %p %p\n", reg->name, reg->num, reg, reg->next, reg->unit);
+    reg = reg->next;
+
+    while(reg != head) {
+        printf("%c %d %p %p %p\n", reg->name, reg->num, reg, reg->next, reg->unit);
+        reg = reg->next;
     }
 }

@@ -12,3 +12,4 @@ unit_type* get_const(input_type val);                           // DONE
 unit_type* get_variable(char* id, bool type);                   // DONE
 unit_type* get_array_num(char* id, input_type num, bool type);  // DONE
 unit_type* get_array_var(char* id, char* id_var, bool type);    // DONE
+void assign(unit_type* unit1, unit_type* unit2);
