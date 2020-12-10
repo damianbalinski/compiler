@@ -225,6 +225,8 @@ void assign(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("assign");
     // INSTRUKCJE
     reg_check(unit1);
+    reg_check(unit2);
+    store(unit2->reg, unit1->reg);
     
     // ZWALNIANIE
     reg_free(unit1->reg);

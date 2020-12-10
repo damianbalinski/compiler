@@ -45,11 +45,12 @@ WHILE       { DBG_TOKEN("WHILE");    return(WHILE);    }
 WRITE       { DBG_TOKEN("WRITE");    return(WRITE);    }
 {ID}        { DBG_TOKEN("ID");       yylval.id = strdup( yytext); return(ID); }
 \[          { DBG_TOKEN("COMMENT_IN");  BEGIN COMMENT;  }
-<COMMENT>\] { DBG_TOKEN("COMMENT_OUT"); BEGIN INITIAL; }
+<COMMENT>\] { DBG_TOKEN("COMMENT_OUT"); BEGIN INITIAL;  }
+<COMMENT>\[ { DBG_TOKEN("OTHER");    return(yytext[0]); }
 <COMMENT>.  ;
 <COMMENT>\n ;
 [ \t\n]+    ;
-.           { DBG_TOKEN("OTHER");       return(yytext[0]);   }
+.           { DBG_TOKEN("OTHER");    return(yytext[0]); }
 %%
 
 int yywrap() { 

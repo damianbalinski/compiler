@@ -3,7 +3,8 @@
 #include "../others/unit.h"
 
 #define NOTHING -1
-#define MAX_REGISTERS 5
+#define MAX_REGISTERS 6
+#define MAX_REGISTERS_IN_USE 5
 #define SUPER_REGISTER 5
 
 typedef struct register_type{
