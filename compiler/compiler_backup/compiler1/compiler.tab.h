@@ -35,11 +35,11 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_COMP_TAB_H_INCLUDED
-# define YY_YY_COMP_TAB_H_INCLUDED
+#ifndef YY_YY_COMPILER_TAB_H_INCLUDED
+# define YY_YY_COMPILER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -78,13 +78,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 28 "comp.y"
+#line 29 "compiler.y"
 
     int intval;         /* wartosc int */
     char *id;           /* identyfikator */
     struct lbs* lbls;   /* adresy skokow (etykiety) */
 
-#line 88 "comp.tab.h"
+#line 88 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -97,4 +97,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_COMP_TAB_H_INCLUDED  */
+#endif /* !YY_YY_COMPILER_TAB_H_INCLUDED  */

@@ -473,9 +473,9 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "comp.l"
-#line 2 "comp.l"
-    #include "comp.tab.h" /* The tokens */
+#line 1 "compiler.l"
+#line 2 "compiler.l"
+    #include "compiler.tab.h" /* The tokens */
 
     int yywrap();
     int yylex();
@@ -697,7 +697,7 @@ YY_DECL
 		}
 
 	{
-#line 11 "comp.l"
+#line 11 "compiler.l"
 
 #line 703 "lex.yy.c"
 
@@ -758,98 +758,98 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 12 "comp.l"
+#line 12 "compiler.l"
 { return(ASSGNOP); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 13 "comp.l"
+#line 13 "compiler.l"
 { yylval.intval = atoi( yytext ); return(NUMBER);  }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 14 "comp.l"
+#line 14 "compiler.l"
 { return(DO);      }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 15 "comp.l"
+#line 15 "compiler.l"
 { return(ELSE);    }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 16 "comp.l"
+#line 16 "compiler.l"
 { return(END);     }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 17 "comp.l"
+#line 17 "compiler.l"
 { return(FI);      }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 18 "comp.l"
+#line 18 "compiler.l"
 { return(IF);      }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 19 "comp.l"
+#line 19 "compiler.l"
 { return(IN);      }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 20 "comp.l"
+#line 20 "compiler.l"
 { return(INTEGER); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 21 "comp.l"
+#line 21 "compiler.l"
 { return(LET);     }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 22 "comp.l"
+#line 22 "compiler.l"
 { return(READ);    }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 23 "comp.l"
+#line 23 "compiler.l"
 { return(SKIP);    }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 24 "comp.l"
+#line 24 "compiler.l"
 { return(THEN);    }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 25 "comp.l"
+#line 25 "compiler.l"
 { return(WHILE);   }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 26 "comp.l"
+#line 26 "compiler.l"
 { return(WRITE);   }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 27 "comp.l"
+#line 27 "compiler.l"
 { yylval.id = strdup( yytext); return(IDENTIFIER); }
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 28 "comp.l"
+#line 28 "compiler.l"
 /* blank, tab, new line: eat up whitespace */
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 29 "comp.l"
+#line 29 "compiler.l"
 { return(yytext[0]); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 30 "comp.l"
+#line 30 "compiler.l"
 ECHO;
 	YY_BREAK
 #line 856 "lex.yy.c"
@@ -1857,7 +1857,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 30 "comp.l"
+#line 30 "compiler.l"
 
 int yywrap() { return 1; }
 
