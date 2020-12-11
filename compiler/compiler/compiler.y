@@ -28,6 +28,7 @@
 
 %start program
 %nterm <unit> value
+%nterm <unit> valueloc
 %nterm <unit> expression
 %nterm <unit> ridentifier
 %nterm <unit> lidentifier
@@ -67,8 +68,8 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR
 |  FOR ID FROM value DOWNTO value DO commands ENDFOR
-|  READ ridentifier ';'
-|  WRITE value ';'
+|  READ lidentifier ';'                                 { read($2);       }
+|  WRITE valueloc ';'                                   { write($2);      }
 ;
 
 expression: value
@@ -91,14 +92,20 @@ value: NUMBER                        { $$ = get_const($1);                    }
 |  ridentifier                       { $$ = $1;                               }
 ;
 
-ridentifier: ID                      { $$ = get_variable($1,      RVARIABLE); }
-|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, RVARIABLE); }
-|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, RVARIABLE); }
+valueloc: NUMBER
+| ID                                 { $$ = get_variable($1,      LOCATION, INIT);   }
+|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, INIT);   }
+|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, INIT);   }
 ;
 
-lidentifier: ID                      { $$ = get_variable($1,      LVARIABLE); }
-|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LVARIABLE); }
-|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LVARIABLE); }
+ridentifier: ID                      { $$ = get_variable($1,      VALUE, INIT);      }
+|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, VALUE, INIT);      }
+|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, VALUE, INIT);      }
+;
+
+lidentifier: ID                      { $$ = get_variable($1,      LOCATION, NOINIT); }
+|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, NOINIT); }
+|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, NOINIT); }
 %%
 
 int main( int argc, char** argv )
@@ -121,7 +128,7 @@ int main( int argc, char** argv )
     DBG_PARSER_END();
 
     if ((output = fopen(argv[2], "w")) == NULL) {
-        ERR_BAD_FILENAME(argv[1]);
+        ERR_BAD_FILENAME(argv[2]);
         ERR_ADD();
     }
 

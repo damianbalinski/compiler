@@ -20,8 +20,7 @@ unit_type* get_const(input_type val) {
     
     int x = reg_get_free();         // wolny rejestr
     reg_const(x, val);              // stala do rejestru
-    unit->reg = x;
-    reg_unit(x, unit);
+    reg_connect(unit, x);
 
     DBG_INSTRUCTION_END("get_const");
     return unit;
@@ -33,7 +32,7 @@ unit_type* get_const(input_type val) {
  * ERR2 - id nie jest zmienna
  * ERR3 - (RVARIABLE) id nie zostal zainicjalizowany
  */
-unit_type* get_variable(char* id, bool type) {
+unit_type* get_variable(char* id, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_variable");
     symbol* sym = sym_get(id);
     unit_type* unit = unit_alloc();
@@ -46,25 +45,23 @@ unit_type* get_variable(char* id, bool type) {
         ERR_ID_NOT_VARIABLE(id);
         ERR_ADD();
     }
-    else if (type == RVARIABLE && sym->is_init == false) {
+    else if (init == INIT && sym->is_init == false) {
         ERR_ID_NOT_INIT(id);
         ERR_ADD();
     }
-    else if (type == RVARIABLE) {
-        // RVARIABLE
+    else if (type == VALUE) {
+        // VALUE
         int x = reg_get_free();     // wolny rejestr
         reg_const(x, sym->offset);  // stala do rejestru
         load(x, x);                 // wartosc do rejestru
-        reg_unit(x, unit);
-        unit->reg = x;
+        reg_connect(unit, x);
     }
     else {
-        // LVARIABLE
+        // LOCATION
         int x = reg_get_free();     // wolny rejestr
         reg_const(x, sym->offset);  // stala do rejestru
         sym->is_init = true;
-        reg_unit(x, unit);
-        unit->reg = x;
+        reg_connect(unit, x);
     }
 
     DBG_INSTRUCTION_END("get_variable");
@@ -77,7 +74,7 @@ unit_type* get_variable(char* id, bool type) {
  * ERR2 - id nie jest tablica
  * ERR3 - num jest poza zakresem tablicy
  */
-unit_type* get_array_num(char* id, input_type num, bool type) {
+unit_type* get_array_num(char* id, input_type num, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_array_num");
     symbol* sym = sym_get(id);
     unit_type* unit = unit_alloc();
@@ -94,15 +91,15 @@ unit_type* get_array_num(char* id, input_type num, bool type) {
         ERR_ARRAY_INDEX_RANGE(id, num);
         ERR_ADD();
     }
-    else if (type == RVARIABLE) {
-        // RVARIABLE
+    else if (type == VALUE) {
+        // VALUE
         int x = reg_get_free();                         // wolny rejestr
         reg_const(x, sym->offset + num - sym->begin);   // stala do rejestru
         load(x,x);                                      // wartosc do rejestru
         reg_connect(unit, x);
     }
     else {
-        // LVARIABLE
+        // LOCATION
         int x = reg_get_free();                         // wolny rejestr
         reg_const(x, sym->offset + num - sym->begin);   // stala do rejestru
         reg_connect(unit, x);
@@ -121,7 +118,7 @@ unit_type* get_array_num(char* id, input_type num, bool type) {
  * ERR4 - id_var nie jest zmienna
  * ERR5 - id_var nie zostal zainicjalizowany
  */
-unit_type* get_array_var(char* id, char* id_var, bool type) {
+unit_type* get_array_var(char* id, char* id_var, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_array_var");
     symbol* sym = sym_get(id);
     symbol* sym_var = sym_get(id_var);
@@ -148,8 +145,8 @@ unit_type* get_array_var(char* id, char* id_var, bool type) {
         ERR_ID_NOT_INIT(id_var);
         ERR_ADD();
     }
-    else if (type == RVARIABLE) {
-        // RVARIABLE
+    else if (type == VALUE) {
+        // VALUE
         int x = reg_get_free();                         // wolny rejestr
         reg_const(x, sym->offset - sym->begin);         // stala do rejestru
         reg_const(SUPER_REGISTER, sym_var->offset);     // stala do rejestru
@@ -158,7 +155,7 @@ unit_type* get_array_var(char* id, char* id_var, bool type) {
         reg_connect(unit, x);
     }
     else {
-        // LVARIABLE
+        // LOCATION
         int x = reg_get_free();                         // wolny rejestr
         reg_const(x, sym->offset - sym->begin);         // stala do rejestru
         reg_const(SUPER_REGISTER, sym_var->offset);     // stala do rejestru
@@ -240,5 +237,28 @@ void assign(unit_type* unit1, unit_type* unit2) {
 
 /* Drukuje dane na wyjsciu. */
 void write(unit_type* unit) {
+    DBG_INSTRUCTION_BEGIN("write");
+    // INSTRUKCJE
+    reg_check(unit);
+    put(unit->reg);
 
+    // ZWALNIANIE
+    reg_free(unit->reg);
+    unit_free(unit); 
+
+    DBG_INSTRUCTION_END("write");
+}
+
+/* Pobiera dane z wejscia. Zapisuje w pamieci. */
+void read(unit_type* unit) {
+    DBG_INSTRUCTION_BEGIN("read");
+    // INSTRUKCJE
+    reg_check(unit);        // adres zmiennej
+    get(unit->reg);         // pobranie wejscia
+
+    // ZWALNIANIE
+    reg_free(unit->reg);
+    unit_free(unit); 
+
+    DBG_INSTRUCTION_END("read");
 }

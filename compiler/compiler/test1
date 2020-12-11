@@ -1,30 +1,12 @@
-RESET a
-RESET b
-INC b
-SHL b
-SHL b
-INC b
-SHL b
-SHL b
-STORE b a
-RESET b
-RESET c
-INC c
-SHL c
-INC c
-SHL c
-INC c
-SHL c
-INC c
-SHL c
-STORE c b
-RESET c
-RESET d
-INC d
-SHL d
-SHL d
-INC d
-SHL d
-SHL d
-SHL d
-STORE d c
+DECLARE
+    a,b,c
+BEGIN 
+    READ a;
+    WRITE a;
+    
+    READ b;
+    WRITE b;
+
+    READ c;
+    WRITE c;
+END

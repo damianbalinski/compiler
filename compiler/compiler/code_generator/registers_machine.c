@@ -75,15 +75,20 @@ void reg_check(unit_type* unit) {
 void reg_const(int x, input_type val) {
     DBG_REGISTERS_BEGIN("reg const");
     reset(x);
-    if (val != 0) {
-        input_type n = (input_type)log2(val) - 1;
-        inc(x);
+
+    if (val == 0)
+        return;
     
-        for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
-            shl(x);
-            if (mask & val) inc(x);
-        }
+    inc(x);
+    if (val == 1)
+        return;
+    
+    input_type n = (input_type)log2(val) - 1;    
+    for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
+        shl(x);
+        if (mask & val) inc(x);
     }
+
     DBG_RVAL(x);
     DBG_REGISTERS_END("reg const");
 }
