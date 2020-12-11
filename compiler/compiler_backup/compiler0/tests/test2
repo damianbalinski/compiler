@@ -1,1 +1,5 @@
 let
+    integer n.
+in
+    if 1 < 10 then write 1; else write 2; fi;
+end

@@ -39,16 +39,16 @@ unit_type* get_variable(char* id, bool type) {
     unit_type* unit = unit_alloc();
 
     if (sym == NULL) {
-        ERR_ADD();
         ERR_ID_UNDECLARED(id);
+        ERR_ADD();
     }
     else if (sym->type != VARIABLE) {
-        ERR_ADD();
         ERR_ID_NOT_VARIABLE(id);
+        ERR_ADD();
     }
     else if (type == RVARIABLE && sym->is_init == false) {
-        ERR_ADD();
         ERR_ID_NOT_INIT(id);
+        ERR_ADD();
     }
     else if (type == RVARIABLE) {
         // RVARIABLE
@@ -83,16 +83,16 @@ unit_type* get_array_num(char* id, input_type num, bool type) {
     unit_type* unit = unit_alloc();
 
     if (sym == NULL) {
-        ERR_ADD();
         ERR_ID_UNDECLARED(id);
+        ERR_ADD();
     }
     else if (sym->type != ARRAY) {
-        ERR_ADD();
         ERR_ID_NOT_ARRAY(id);
+        ERR_ADD();
     }
     else if (num < sym->begin || num > sym->end) {
-        ERR_ADD();
         ERR_ARRAY_INDEX_RANGE(id, num);
+        ERR_ADD();
     }
     else if (type == RVARIABLE) {
         // RVARIABLE
@@ -128,24 +128,25 @@ unit_type* get_array_var(char* id, char* id_var, bool type) {
     unit_type* unit = unit_alloc();
 
     if (sym == NULL) {
-        ERR_ADD();
         ERR_ID_UNDECLARED(id);
+        ERR_ADD();
     }
     else if (sym->type != ARRAY) {
-        ERR_ADD();
+        
         ERR_ID_NOT_ARRAY(id);
+        ERR_ADD();
     }
     else if (sym_var == NULL) {
-        ERR_ADD();
         ERR_ID_UNDECLARED(id_var);
+        ERR_ADD();
     }
     else if (sym_var->type != VARIABLE) {
-        ERR_ADD();
         ERR_ID_NOT_VARIABLE(id_var);
+        ERR_ADD();
     }
     else if (sym_var->is_init == false) {
-        ERR_ADD();
         ERR_ID_NOT_INIT(id_var);
+        ERR_ADD();
     }
     else if (type == RVARIABLE) {
         // RVARIABLE
@@ -177,8 +178,8 @@ void add_variable(char* id) {
     symbol* sym = sym_get(id);
     
     if (sym != NULL) {
-        ERR_ADD();
         ERR_ID_DECLARED(id);
+        ERR_ADD();
     }
     else {
         sym = sym_put(id);
@@ -200,12 +201,12 @@ void add_array(char* id, input_type begin, input_type end) {
     symbol* sym = sym_get(id);
 
     if (sym != NULL) {
-        ERR_ADD();
         ERR_ID_DECLARED(id);
+        ERR_ADD();
     }
     else if (begin > end) {
-        ERR_ADD();
         ERR_ARRAY_INIT_RANGE(id, begin, end);
+        ERR_ADD();
     } 
     else {
         sym = sym_put(id);
@@ -220,7 +221,7 @@ void add_array(char* id, input_type begin, input_type end) {
 }
 
 
-/* Przypisuje wartosc do zmiennej. Zwalnia pamiec */
+/* Przypisuje wartosc do zmiennej. */
 void assign(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("assign");
     // INSTRUKCJE
@@ -237,14 +238,7 @@ void assign(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_END("assign");
 }
 
+/* Drukuje dane na wyjsciu. */
+void write(unit_type* unit) {
 
-/* Dodaje zawartosc jednego rejestru do drugiego,
- * zwalnia niepotrzebny rejstr, zwraca rejestr z suma. */
-// int sum(int x, int y) {
-//     DBG_INSTRUCTION_BEGIN("add");
-//     add(x,y);
-//     REG_FREE(y);
-
-//     DBG_INSTRUCTION_END("add");
-//     return x;
-// }
+}

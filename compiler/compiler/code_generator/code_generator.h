@@ -1,11 +1,12 @@
 #pragma once
+#include <stdio.h>
 #include "codes.h"
 
 void code_put0(code_type code);
 void code_put1(code_type code, int x);
 void code_put2(code_type code, int x, int y);
-void code_print(code_type code, int x, int y);
-void code_print_all();
+void code_print(FILE* file, code_type code, int x, int y);
+void code_print_all(FILE* file);
 
 void get(int x);
 void put(int x);

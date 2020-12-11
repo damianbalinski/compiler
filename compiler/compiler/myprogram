@@ -1,13 +1,16 @@
 #!/bin/bash
 
 FILES="symbol_table/symbol_table.c code_generator/registers_machine.c code_generator/code_generator.c code_generator/instr_generator.c symbol_table/data_manager.c others/unit.c"
+src=$2
+dest=$2
 
 bison --debug -d $1.y
 flex $1.l
 
 gcc -o temp $FILES $1.tab.c lex.yy.c -lm
 
-./temp ${@:2}
+./temp $src $dest
+maszyna-wirtualna $dest
 
 rm $1.tab.c 
 rm $1.tab.h

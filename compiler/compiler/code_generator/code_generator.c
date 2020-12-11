@@ -52,28 +52,28 @@ void code_put2(code_type code, int x, int y) {
 }
 
 /* drukuje pojedyncza instrukcje */
-void code_print(code_type code, int x, int y) {
+void code_print(FILE* file, code_type code, int x, int y) {
     switch(code) {
-        case GET:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
-        case PUT:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
-        case LOAD:  printf("%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
-        case STORE: printf("%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
-        case ADD:   printf("%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
-        case SUB:   printf("%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
-        case RESET: printf("%s %c\n",    code_names[code], registers[x].name);                     break;
-        case INC:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
-        case DEC:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
-        case SHR:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
-        case SHL:   printf("%s %c\n",    code_names[code], registers[x].name);                     break;
-        case JUMP:  printf("%s %d\n",    code_names[code], x);                                     break;
-        case JZERO: printf("%s %c %d\n", code_names[code], registers[x].name, y);                  break;
-        case JODD:  printf("%s %c %d\n", code_names[code], registers[x].name, y);                  break;
-        case HALT:  printf("%s\n",       code_names[code]);                                        break;
+        case GET:   fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
+        case PUT:   fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
+        case LOAD:  fprintf(file, "%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
+        case STORE: fprintf(file, "%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
+        case ADD:   fprintf(file, "%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
+        case SUB:   fprintf(file, "%s %c %c\n", code_names[code], registers[x].name, registers[y].name);  break;
+        case RESET: fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
+        case INC:   fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
+        case DEC:   fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
+        case SHR:   fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
+        case SHL:   fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
+        case JUMP:  fprintf(file, "%s %d\n",    code_names[code], x);                                     break;
+        case JZERO: fprintf(file, "%s %c %d\n", code_names[code], registers[x].name, y);                  break;
+        case JODD:  fprintf(file, "%s %c %d\n", code_names[code], registers[x].name, y);                  break;
+        case HALT:  fprintf(file, "%s\n",       code_names[code]);                                        break;
     }
 }
 
 /* drukuje wszystkie instrukcje */
-void code_print_all() {
+void code_print_all(FILE* file) {
     for (int i = 0; i < code_counter; i++)
-        code_print(code_table[i].code, code_table[i].x, code_table[i].y);
+        code_print(file, code_table[i].code, code_table[i].x, code_table[i].y);
 }

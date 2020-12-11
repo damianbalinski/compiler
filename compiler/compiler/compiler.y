@@ -6,6 +6,8 @@
     #include "debugger/debugger.h"
     #include "debugger/errors.h"
     #include "code_generator/instr_generator.h"
+    #include "code_generator/code_generator.h"
+    #include "code_generator/registers_machine.h"
 
     extern int yylineno;
     extern char* yytext;
@@ -44,8 +46,8 @@
 %nonassoc ASSIGN                     /* operator przypisania */
 
 %%
-program: DECLARE declarations T_BEGIN commands END
-| T_BEGIN commands END
+program: DECLARE declarations T_BEGIN commands END { halt(); YYACCEPT; }
+| T_BEGIN commands END                             { halt(); YYACCEPT; }
 ;
 
 declarations: declarations ',' ID                  { add_variable($3);      }
@@ -100,21 +102,35 @@ lidentifier: ID                      { $$ = get_variable($1,      LVARIABLE); }
 %%
 
 int main( int argc, char** argv )
-{
-    // TEST
-    // yydebug = 1;
-    
+{ 
     extern FILE *yyin;
-    yyin = fopen(argv[1], "r");
+    FILE* output;
+
+    if (argc != 3) {
+        ERR_BAD_CALL(argv[0]);
+        ERR_ADD();
+    }
+    else if ((yyin = fopen(argv[1], "r")) == NULL) {
+        ERR_BAD_FILENAME(argv[1]);
+        ERR_ADD();
+    }
 
     DBG_PARSER_BEGIN();
     reg_init();
     yyparse();
     DBG_PARSER_END();
+
+    if ((output = fopen(argv[2], "w")) == NULL) {
+        ERR_BAD_FILENAME(argv[1]);
+        ERR_ADD();
+    }
+
+    code_print_all(output);
+    return 0;
 }
 
 void yyerror (char* str)
 {
-    ERR_ADD();
     ERR_SYNTAX();
+    ERR_ADD();
 }
