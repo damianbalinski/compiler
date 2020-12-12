@@ -41,10 +41,10 @@
 %token REPEAT UNTIL
 %token FOR FROM TO ENDFOR DOWNTO
 %token READ WRITE
-%left '-' '+'                        /* operatory arytmetyczne */
-%left '*' '/' '%'
-%nonassoc EQ NE LT LE GT GE          /* operatory porownania */
-%nonassoc ASSIGN                     /* operator przypisania */
+%left '-' '+'                        /* operatory arytmetyczne1 */
+%left '*' '/' '%'                    /* operatory arytmetyczne2 */
+%nonassoc EQ NE LT LE GT GE          /* operatory porownania    */
+%nonassoc ASSIGN                     /* operator przypisania    */
 
 %%
 program: DECLARE declarations T_BEGIN commands END { halt(); YYACCEPT; }
@@ -72,9 +72,9 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
 |  WRITE valueloc ';'                                   { write($2);      }
 ;
 
-expression: value
-|  value '+' value
-|  value '-' value
+expression: value              { $$ = $1;          }
+|  value '+' value             { $$ = sum($1, $3); }
+|  value '-' value             { $$ = dif($1, $3); }
 |  value '*' value
 |  value '/' value
 |  value '%' value
@@ -108,6 +108,11 @@ lidentifier: ID                      { $$ = get_variable($1,      LOCATION, NOIN
 |  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, NOINIT); }
 %%
 
+/* Metoda startowa.
+ * ERR1 - nieprawidlowa liczba argumentow
+ * ERR2 - problem z otwarciem argv[1]
+ * ERR3 - problem z otwarciem argv[2]
+ */
 int main( int argc, char** argv )
 { 
     extern FILE *yyin;

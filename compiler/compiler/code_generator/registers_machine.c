@@ -71,28 +71,6 @@ void reg_check(unit_type* unit) {
     }
 }
 
-/* Umieszcza stala w rejestrze. */
-void reg_const(int x, input_type val) {
-    DBG_REGISTERS_BEGIN("reg const");
-    reset(x);
-
-    if (val == 0)
-        return;
-    
-    inc(x);
-    if (val == 1)
-        return;
-    
-    input_type n = (input_type)log2(val) - 1;    
-    for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
-        shl(x);
-        if (mask & val) inc(x);
-    }
-
-    DBG_RVAL(x);
-    DBG_REGISTERS_END("reg const");
-}
-
 /* Przerzuca dane z rejestru do pamieci */
 inline void reg_to_mem(unit_type* unit, int reg) {
     int offset = variable_allocate();   // alokacja pamieci
@@ -130,4 +108,31 @@ void reg_print() {
         printf("%c %d %p %p %p\n", reg->name, reg->num, reg, reg->next, reg->unit);
         reg = reg->next;
     }
+}
+
+/* Umieszcza stala w rejestrze. */
+void reg_const(int x, input_type val) {
+    DBG_REGISTERS_BEGIN("reg const");
+    reset(x);
+
+    if (val == 0)
+        return;
+    
+    inc(x);
+    if (val == 1)
+        return;
+    
+    input_type n = (input_type)log2(val) - 1;    
+    for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
+        shl(x);
+        if (mask & val) inc(x);
+    }
+
+    DBG_RVAL(x);
+    DBG_REGISTERS_END("reg const");
+}
+
+/* Mnozy rejestr x przez rejestr y, przy pomocy rejestra z. */
+void reg_mul(int x, int y, int z) {
+
 }

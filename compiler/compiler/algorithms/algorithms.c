@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <math.h>
-#include <assert.h>
 #include <stdbool.h>
+#include <assert.h>
+#include <stdlib.h>
 
 int load_const(unsigned int val) {
     int reg = 0;
@@ -23,12 +24,25 @@ int load_const(unsigned int val) {
     return reg;
 }
 
-int main() {
-    // TEST LOAD_CONST 
-    for(int i = 0; i <= 100; i++) {
-        assert(i == load_const(i));
+int mult(int x, int y) {
+    int z = 0;
+    while (true) {
+        if (y & 1)
+            z += x;
+        if (y == 0)
+            break;
+        x <<= 1;
+        y >>= 1;
     }
 
-    printf("%d", 1<<-1);
-    printf("%d", 2<<-1);
+    return z;
+}
+
+int main() {
+    // TEST MULT
+    for(int i = 0; i < 100000000; i++) {
+        int x = rand();
+        int y = rand();
+        assert(mult(x,y) == x*y);
+    }
 }

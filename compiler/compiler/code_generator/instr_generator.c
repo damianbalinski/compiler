@@ -274,3 +274,35 @@ void read(unit_type* unit) {
 
     DBG_INSTRUCTION_END("read");
 }
+
+/* Suma. */
+unit_type* sum(unit_type* unit1, unit_type* unit2) {
+    DBG_INSTRUCTION_BEGIN("sum");
+    // INSTRUKCJE
+    reg_check(unit1);       
+    reg_check(unit2);
+    add(unit1->reg, unit2->reg);
+
+    // ZWALNIANIE
+    reg_free(unit2->reg);
+    unit_free(unit2); 
+
+    DBG_INSTRUCTION_END("sum");
+    return unit1;
+}
+
+/* Roznica. */
+unit_type* dif(unit_type* unit1, unit_type* unit2) {
+    DBG_INSTRUCTION_BEGIN("dif");
+    // INSTRUKCJE
+    reg_check(unit1);       
+    reg_check(unit2);
+    sub(unit1->reg, unit2->reg);
+
+    // ZWALNIANIE
+    reg_free(unit2->reg);
+    unit_free(unit2); 
+
+    DBG_INSTRUCTION_END("dif");
+    return unit1;
+}

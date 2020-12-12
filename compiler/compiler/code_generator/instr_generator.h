@@ -8,8 +8,8 @@
 #define INIT true
 #define NOINIT false
 
-void add_variable(char* id);                                    // DONE
-void add_array(char* id, input_type begin, input_type end);     // DONE
+void add_variable(char* id);
+void add_array(char* id, input_type begin, input_type end);
 
 unit_type* get_const(input_type val, bool type);
 unit_type* get_variable(char* id, bool type, bool init);
@@ -19,3 +19,6 @@ unit_type* get_array_var(char* id, char* id_var, bool type, bool init);
 void assign(unit_type* unit1, unit_type* unit2);
 void write(unit_type* unit);
 void read(unit_type* unit);
+
+unit_type* sum(unit_type* unit1, unit_type* unit2);
+unit_type* dif(unit_type* unit1, unit_type* unit2);
