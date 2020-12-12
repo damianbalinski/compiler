@@ -1,0 +1,19 @@
+DECLARE
+    a,b,c,d,e,f,g,h
+BEGIN
+    READ a;
+    READ b;
+    READ c;
+    READ d;
+    READ e;
+    READ f;
+    READ g;
+    WRITE 000;
+    WRITE a;
+    WRITE b;
+    WRITE c;
+    WRITE d;
+    WRITE e;
+    WRITE f;
+    WRITE g;
+END

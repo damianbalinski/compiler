@@ -115,8 +115,8 @@ inline void reg_connect(unit_type* unit, int reg) {
 
 /* Odlacza rejestr od unity */
 inline void reg_disconnect(unit_type* unit, int reg) {
-    unit->reg = NOTHING;
     registers[reg].unit = NULL;
+    unit->reg = NOTHING;
 }
 
 /* Drukuje liste rejestrow */

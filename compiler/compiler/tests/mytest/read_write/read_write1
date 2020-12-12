@@ -1,0 +1,10 @@
+DECLARE
+    a,b,c
+BEGIN
+    READ a;
+    READ b;
+    READ c;
+    WRITE a;
+    WRITE b;
+    WRITE c;
+END

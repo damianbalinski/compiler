@@ -1,0 +1,19 @@
+DECLARE
+    a, b, c, d, e, f, g 
+BEGIN
+    READ a;
+    b := a;
+    c := b;
+    d := c;
+    e := d;
+    f := e;
+    g := f;
+
+    WRITE a;
+    WRITE b;
+    WRITE c;
+    WRITE d;
+    WRITE e;
+    WRITE f;
+    WRITE g;
+END

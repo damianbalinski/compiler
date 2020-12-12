@@ -1,0 +1,10 @@
+DECLARE
+    a, b, c 
+BEGIN
+    a := 10;
+    b := 20;
+    c := 30;
+    WRITE a;
+    WRITE b;
+    WRITE c;
+END

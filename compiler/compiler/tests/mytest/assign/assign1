@@ -1,0 +1,19 @@
+DECLARE
+    a, b, c, d, e, f, g, h
+BEGIN
+    a := 10;
+    b := 20;
+    c := 30;
+    d := 40;
+    e := 50;
+    f := 60;
+    g := 70;
+
+    WRITE a;
+    WRITE b;
+    WRITE c;
+    WRITE d;
+    WRITE e;
+    WRITE f;
+    WRITE g;
+END

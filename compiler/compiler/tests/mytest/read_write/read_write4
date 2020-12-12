@@ -1,0 +1,13 @@
+DECLARE
+    a(0:10), x, y, z
+BEGIN
+    READ x;
+    READ y;
+    READ z;
+    READ a(x);
+    READ a(y);
+    READ a(z);
+    WRITE a(x);
+    WRITE a(y);
+    WRITE a(z);
+END
