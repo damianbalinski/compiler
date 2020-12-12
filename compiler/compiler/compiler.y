@@ -88,11 +88,11 @@ condition: value EQ value
 |  value GE value
 ;
 
-value: NUMBER                        { $$ = get_const($1);                    }
-|  ridentifier                       { $$ = $1;                               }
+value: NUMBER                        { $$ = get_const($1,         VALUE);            }
+|  ridentifier                       { $$ = $1;                                      }
 ;
 
-valueloc: NUMBER
+valueloc: NUMBER                     { $$ = get_const($1,         LOCATION);         }
 | ID                                 { $$ = get_variable($1,      LOCATION, INIT);   }
 |  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, INIT);   }
 |  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, INIT);   }

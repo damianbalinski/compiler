@@ -14,13 +14,25 @@ extern char* yytext;
 extern register_type registers[6];
 
 /* Pobiera stala. Przechowuje ja w rejestrze. */
-unit_type* get_const(input_type val) {
+unit_type* get_const(input_type val, bool type) {
     DBG_INSTRUCTION_BEGIN("get_const");
     unit_type* unit = unit_alloc();
     
-    int x = reg_get_free();         // wolny rejestr
-    reg_const(x, val);              // stala do rejestru
-    reg_connect(unit, x);
+    if (type == VALUE) {
+        // VALUE
+        int x = reg_get_free();         // wolny rejestr
+        reg_const(x, val);              // stala do rejestru
+        reg_connect(unit, x);
+    }
+    else {
+        // LOCATION
+        int x = reg_get_free();             // wolny rejestr
+        int offset = variable_allocate();   // zmienna tymczasowa
+        reg_const(x, offset);               // stala do rejestru
+        reg_const(SUPER_REGISTER, val);     // stala do rejestru  
+        store(SUPER_REGISTER, x);           // rejestr do pamieci
+        reg_connect(unit, x);
+    }
 
     DBG_INSTRUCTION_END("get_const");
     return unit;
@@ -30,7 +42,7 @@ unit_type* get_const(input_type val) {
  * jako zainicjalizowana.
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest zmienna
- * ERR3 - (RVARIABLE) id nie zostal zainicjalizowany
+ * ERR3 - (INIT) id nie zostal zainicjalizowany
  */
 unit_type* get_variable(char* id, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_variable");
@@ -239,8 +251,8 @@ void assign(unit_type* unit1, unit_type* unit2) {
 void write(unit_type* unit) {
     DBG_INSTRUCTION_BEGIN("write");
     // INSTRUKCJE
-    reg_check(unit);
-    put(unit->reg);
+    reg_check(unit);        // adres zmiennej
+    put(unit->reg);         // zapis na wyjscie
 
     // ZWALNIANIE
     reg_free(unit->reg);
@@ -249,7 +261,7 @@ void write(unit_type* unit) {
     DBG_INSTRUCTION_END("write");
 }
 
-/* Pobiera dane z wejscia. Zapisuje w pamieci. */
+/* Pobiera dane z wejscia. */
 void read(unit_type* unit) {
     DBG_INSTRUCTION_BEGIN("read");
     // INSTRUKCJE
