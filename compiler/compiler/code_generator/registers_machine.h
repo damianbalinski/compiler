@@ -17,3 +17,5 @@ void reg_to_mem(unit_type* unit, int reg);
 void mem_to_reg(unit_type* unit, int reg);
 void reg_connect(unit_type* unit, int reg);
 void reg_disconnect(unit_type* unit, int reg);
+
+void reg_mul(int x, int y, int z);

@@ -1,6 +1,9 @@
 #pragma once
 #include <stdio.h>
 #include "codes.h"
+#include "../others/types.h"
+
+input_type code_get_current();
 
 void code_put0(code_type code);
 void code_put1(code_type code, int x);

@@ -275,7 +275,8 @@ void read(unit_type* unit) {
     DBG_INSTRUCTION_END("read");
 }
 
-/* Suma. */
+/* Suma. 
+ * unit1 = unit1 + unit2 */
 unit_type* sum(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("sum");
     // INSTRUKCJE
@@ -291,7 +292,8 @@ unit_type* sum(unit_type* unit1, unit_type* unit2) {
     return unit1;
 }
 
-/* Roznica. */
+/* Roznica. 
+ * unit1 = unit1 - unit2 */
 unit_type* dif(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("dif");
     // INSTRUKCJE
@@ -304,5 +306,25 @@ unit_type* dif(unit_type* unit1, unit_type* unit2) {
     unit_free(unit2); 
 
     DBG_INSTRUCTION_END("dif");
+    return unit1;
+}
+
+/* Iloczyn.
+ * unit1 = unit1 * unit2 */
+unit_type* mul(unit_type* unit1, unit_type* unit2) {
+    DBG_INSTRUCTION_BEGIN("mul");
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    int z = reg_get_free();
+    reg_mul(unit1->reg, unit2->reg, z);
+
+    // ZWALNIANIE
+    reg_free(unit1->reg);
+    unit1->reg = z;
+    reg_free(unit2->reg);
+    unit_free(unit2);
+
+    DBG_INSTRUCTION_END("mul");
     return unit1;
 }

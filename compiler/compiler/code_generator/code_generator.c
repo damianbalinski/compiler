@@ -6,7 +6,7 @@
 
 extern register_type registers[6];
 instr_type code_table[MAX_CODES_TABLE];
-int code_counter = 0;
+input_type code_counter = 0;
 
 void get(int x)          { code_put1(GET, x);      }
 void put(int x)          { code_put1(PUT, x);      }
@@ -51,7 +51,12 @@ void code_put2(code_type code, int x, int y) {
     code_table[code_counter++].y = y;
 }
 
-/* drukuje pojedyncza instrukcje */
+/* Zwraca bierzaca pozycje w tablicy kodow. */
+input_type code_get_current() {
+    return code_counter;
+}
+
+/* Drukuje pojedyncza instrukcje. */
 void code_print(FILE* file, code_type code, int x, int y) {
     switch(code) {
         case GET:   fprintf(file, "%s %c\n",    code_names[code], registers[x].name);                     break;
@@ -72,7 +77,7 @@ void code_print(FILE* file, code_type code, int x, int y) {
     }
 }
 
-/* drukuje wszystkie instrukcje */
+/* Drukuje wszystkie instrukcje. */
 void code_print_all(FILE* file) {
     for (int i = 0; i < code_counter; i++)
         code_print(file, code_table[i].code, code_table[i].x, code_table[i].y);

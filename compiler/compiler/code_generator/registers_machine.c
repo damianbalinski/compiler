@@ -132,7 +132,19 @@ void reg_const(int x, input_type val) {
     DBG_REGISTERS_END("reg const");
 }
 
-/* Mnozy rejestr x przez rejestr y, przy pomocy rejestra z. */
+/* Mnozenie, z = x * y. */
 void reg_mul(int x, int y, int z) {
+    DBG_REGISTERS_BEGIN("reg mul");
+    reset(z);
 
+    jodd(y, 2);
+    jump(2);
+    add(z,x);
+    jzero(y,4);
+    shl(x);
+    shr(y);
+    jump(-6);
+
+    DBG_RVAL(z);
+    DBG_REGISTERS_END("reg mul");
 }

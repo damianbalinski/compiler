@@ -75,7 +75,7 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
 expression: value              { $$ = $1;          }
 |  value '+' value             { $$ = sum($1, $3); }
 |  value '-' value             { $$ = dif($1, $3); }
-|  value '*' value
+|  value '*' value             { $$ = mul($1, $3); }
 |  value '/' value
 |  value '%' value
 ;

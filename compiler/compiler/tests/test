@@ -1,0 +1,12 @@
+DECLARE
+    a
+BEGIN
+    a := 2;
+    a := a * a;
+    a := a * a;
+    a := a * a;
+    a := a * a;
+    a := a * a;
+
+    WRITE a;
+END

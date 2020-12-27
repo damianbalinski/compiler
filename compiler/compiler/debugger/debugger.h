@@ -8,8 +8,8 @@
     //#define DEBUG_TOKENS
     //#define DEBUG_PARSER
     //#define DEBUG_SYMBOL_TABLE
-    //#define DEBUG_REGISTERS
-    //#define DEBUG_REGISTER_OPERATIONS
+    #define DEBUG_REGISTERS
+    #define DEBUG_REGISTER_OPERATIONS
     //#define DEBUG_CODES
     //#define DEBUG_INSTRUCTIONS
     //#define DEBUG_DATA_MANAGER
