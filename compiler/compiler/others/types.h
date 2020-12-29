@@ -5,6 +5,7 @@ typedef unsigned long long input_type;
 
 typedef struct {
     input_type label_cmd;
+    input_type label_else;
     input_type label_cond;
     input_type label_end;
 

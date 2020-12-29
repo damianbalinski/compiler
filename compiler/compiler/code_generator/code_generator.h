@@ -10,6 +10,7 @@ void code_put1(code_type code, int x);
 void code_put2(code_type code, int x, int y);
 input_type code_jump1(code_type code, int x);
 input_type code_jump2(code_type code, int x, int y);
+void code_modif(input_type offset, int val);
 void code_print(FILE* file, code_type code, int x, int y);
 void code_print_all(FILE* file);
 

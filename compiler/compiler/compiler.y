@@ -65,11 +65,33 @@ commands: commands command
 ;
 
 command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
-|  IF condition THEN commands ELSE commands ENDIF
-|  IF condition 
-        THEN         { $1.jump_first = jzero}
-        commands 
+|  IF
+        condition
+        THEN
+        commands
+        ELSE
+        commands
         ENDIF
+
+| IF 
+        condition THEN  {
+                            reg_check($2);
+                            $1.jump_first = jzero($2->reg, 0);
+                            if ($2->type) $1.jump_end = jump(0);
+                            $1.label_cmd = code_get_label();
+                        }
+        commands 
+        ENDIF         /* { $1.label_end = code_get_label();
+                        if ($2->type) {
+                            code_modif($1.jump_first, $1.label_cmd-$1.jump_first);
+                            code_modif($1.jump_end, $1.label_end-$1.jump_end);
+                        } 
+                        else {
+                            code_modif($1.jump_first, $1.label_end-$1.jump_first);
+                        }
+                        reg_free($2->reg);
+                        unit_free($2);
+                      } */
 |  WHILE condition DO commands ENDWHILE
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR

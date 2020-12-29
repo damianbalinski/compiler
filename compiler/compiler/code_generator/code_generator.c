@@ -71,6 +71,14 @@ input_type code_jump2(code_type code, int x, int y) {
     return code_counter++;
 }
 
+void code_modif(input_type offset, int val) {
+    CHECK_JUMP(code_table[offset].code);
+    if (code_table[offset].code == JUMP)
+        code_table[offset].x = val;
+    else
+        code_table[offset].y = val;
+}
+
 /* Zwraca bierzaca pozycje w tablicy kodow. */
 input_type code_get_label() {
     return code_counter;
