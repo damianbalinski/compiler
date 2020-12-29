@@ -24,18 +24,21 @@
     input_type val;      /* wartosc i rejestr */
     unit_type* unit;     /* pamiec i rejestr */
     char *id;            /* identyfikator */
+    cond_type cond;
 }
 
 %start program
 %nterm <unit> value
 %nterm <unit> valueloc
 %nterm <unit> expression
+%nterm <unit> condition
 %nterm <unit> ridentifier
 %nterm <unit> lidentifier
 %token <val> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
-%token IF THEN ELSE ENDIF
+%token <cond> IF
+%token THEN ELSE ENDIF
 %token DO
 %token WHILE ENDWHILE
 %token REPEAT UNTIL
@@ -63,7 +66,10 @@ commands: commands command
 
 command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
 |  IF condition THEN commands ELSE commands ENDIF
-|  IF condition THEN commands ENDIF
+|  IF condition 
+        THEN         { $1.jump_first = jzero}
+        commands 
+        ENDIF
 |  WHILE condition DO commands ENDWHILE
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR
@@ -80,16 +86,16 @@ expression: value              { $$ = $1;          }
 |  value '%' value
 ;
 
-condition: value EQ value
-|  value NE value
-|  value LT value
-|  value GT value
-|  value LE value
-|  value GE value
+condition: value EQ value            { $$ = eq_ne($1, $3, EQUAL);         }
+|  value NE value                    { $$ = eq_ne($1, $3, NOT_EQUAL);     }
+|  value LT value                    { $$ = lt_ge($1, $3, LESS);          }
+|  value GT value                    { $$ = gt_le($1, $3, GREATER);       }
+|  value LE value                    { $$ = gt_le($1, $3, LESS_EQUAL);    }
+|  value GE value                    { $$ = lt_ge($1, $3, GREATER_EQUAL); }
 ;
 
-value: NUMBER                        { $$ = get_const($1,         VALUE);            }
-|  ridentifier                       { $$ = $1;                                      }
+value: NUMBER                        { $$ = get_const($1,         VALUE); }
+|  ridentifier                       { $$ = $1;                           }
 ;
 
 valueloc: NUMBER                     { $$ = get_const($1,         LOCATION);         }

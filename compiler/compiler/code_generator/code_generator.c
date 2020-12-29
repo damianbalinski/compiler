@@ -19,10 +19,10 @@ void inc(int x)          { code_put1(INC, x);      DBG_RINC(x);   }
 void dec(int x)          { code_put1(DEC, x);      DBG_RDEC(x);   }
 void shr(int x)          { code_put1(SHR, x);      DBG_RSHR(x);   }
 void shl(int x)          { code_put1(SHL, x);      DBG_RSHL(x);   }
-void jump(int x)         { code_put1(JUMP, x);     }
-void jzero(int x, int y) { code_put2(JZERO, x, y); }
-void jodd(int x, int y)  { code_put2(JODD, x, y);  }
-void halt()              { code_put0(HALT);        }
+void halt()              { code_put0(HALT);                       }
+input_type jump(int x)         { return code_jump1(JUMP, x);      }
+input_type jzero(int x, int y) { return code_jump2(JZERO, x, y);  }
+input_type jodd(int x, int y)  { return code_jump2(JODD, x, y);   }
 
 void code_put0(code_type code) {
     CHECK_CODE(code);
@@ -51,8 +51,28 @@ void code_put2(code_type code, int x, int y) {
     code_table[code_counter++].y = y;
 }
 
+input_type code_jump1(code_type code, int x) {
+    CHECK_CODE(code);
+    CHECK_INSTRUCTION(code_counter);
+    DBG_CODE1(code_counter, code, j);
+    code_table[code_counter].code = code;
+    code_table[code_counter].x = x;
+    return code_counter++;
+}
+
+input_type code_jump2(code_type code, int x, int y) {
+    CHECK_CODE(code);
+    CHECK_INSTRUCTION(code_counter);
+    CHECK_REGISTER(x);
+    DBG_CODE2(code_counter, code, x, y);
+    code_table[code_counter].code = code;
+    code_table[code_counter].x = x;
+    code_table[code_counter].y = y;
+    return code_counter++;
+}
+
 /* Zwraca bierzaca pozycje w tablicy kodow. */
-input_type code_get_current() {
+input_type code_get_label() {
     return code_counter;
 }
 

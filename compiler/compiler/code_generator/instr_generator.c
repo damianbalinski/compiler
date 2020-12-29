@@ -328,3 +328,66 @@ unit_type* mul(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_END("mul");
     return unit1;
 }
+
+/* Rowne/Rozne.
+ * type=true    unit1 = (unit1 == unit2)
+ * typ2=false   unit1 = (unit1 != unit2) */
+unit_type* eq_ne(unit_type* unit1, unit_type* unit2, bool type) {
+    DBG_INSTRUCTION_BEGIN("eq_ne");
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    unit1->type = type;
+
+    reset(SUPER_REGISTER);
+    add(SUPER_REGISTER, unit2->reg);
+    sub(unit2->reg, unit1->reg);
+    sub(unit1->reg, SUPER_REGISTER);
+    add(unit1->reg, unit2->reg);
+
+    // ZWALNIANIE
+    reg_free(unit2->reg);
+    unit_free(unit2);
+
+    DBG_INSTRUCTION_END("eq_ne");
+    return unit1;
+}
+
+
+/* Mniejsze/Wieksze rowne.
+ * type=false    unit2 = (unit1 < unit2)
+ * typ2=true     unit2 = (unit1 >= unit2) */
+unit_type* lt_ge(unit_type* unit1, unit_type* unit2, bool type) {
+    DBG_INSTRUCTION_BEGIN("lt_ge");
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    unit2->type = type;
+    sub(unit2->reg, unit1->reg);
+
+    // ZWALNIANIE
+    reg_free(unit1->reg);
+    unit_free(unit1);
+
+    DBG_INSTRUCTION_END("lt_ge");
+    return unit2;
+}
+
+/* Wieksze/Mniejsze rowne.
+ * type=false   unit1 = (unit1 > unit2)
+ * type=true    unit1 = (unit1 <= unit2) */
+unit_type* gt_le(unit_type* unit1, unit_type* unit2, bool type) {
+    DBG_INSTRUCTION_BEGIN("gt_le");
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    unit1->type = type;
+    sub(unit1->reg, unit2->reg);
+
+    // ZWALNIANIE
+    reg_free(unit2->reg);
+    unit_free(unit2);
+
+    DBG_INSTRUCTION_END("gt_le");
+    return unit1;
+}

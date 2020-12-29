@@ -38,11 +38,79 @@ int mult(int x, int y) {
     return z;
 }
 
-int main() {
-    // TEST MULT
-    for(int i = 0; i < 100000000; i++) {
-        int x = rand();
-        int y = rand();
-        assert(mult(x,y) == x*y);
+/* dzielenie: 1
+ * rejestrow: 5
+ * zlozonosc: --
+ */
+void division1(int m, int n) {
+    printf("%d / %d = ", m, n);
+
+    int q = 0;
+
+    int x = n;
+    int y = 1;
+    do {
+        x <<= 1;
+        y <<= 1;
+    } while(x <= m);
+
+    x >>= 1;
+    y >>= 1;
+
+    while(x >= n) {
+        if (x <= m) {
+            q += y;
+            m -= x;
+        }
+        x >>= 1;
+        y >>= 1;
     }
+
+    printf("(%d,%d)\n", q, m);
+}
+
+/* dzielenie: 2
+ * rejestrow: --
+ * zlozonosc: --
+ */
+void division2(int n, int d) {
+    int r = n;
+    int k = 1;
+    int q = 0;
+
+    do {
+        d <<= 1;
+        k <<= 1;
+    } while (k <= n);
+    // d >>= 1;
+    // k >>= 1;
+
+    while (k > 0) {
+
+        // printf("k = %d\n", k);
+        // printf("r = %d\n", r);
+        // printf("d = %d\n", r);
+        // printf("\n");
+
+        r <<= 1;
+        if (r-d >= 0) {
+            q += k;
+            r -= d;
+        }
+        k >>= 1;   
+    }
+
+    printf("(%d)\n", q);
+}
+
+
+/* dzielenie:  --
+ * rejestrow: --
+ * zlozonosc: --
+ */
+int main() {
+    // TEST DIV
+    division2(23, 6);
+    division2(24, 6);
+    division2(25, 6);
 }

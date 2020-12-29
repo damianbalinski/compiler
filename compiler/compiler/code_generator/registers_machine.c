@@ -132,7 +132,7 @@ void reg_const(int x, input_type val) {
     DBG_REGISTERS_END("reg const");
 }
 
-/* Mnozenie, z = x * y. */
+/* Mnozenie. z = x * y. */
 void reg_mul(int x, int y, int z) {
     DBG_REGISTERS_BEGIN("reg mul");
     reset(z);
