@@ -13,36 +13,42 @@
     extern char* yytext;
     int yylex();
     void yyerror( char *str );
+
+    cond_type* cond_alloc();
+
+// TODO DELETE
+        struct  lbs {
+        int for_goto;
+        int for_jmp_false;
+    };
 %}
 
 %code requires {
     #include "others/types.h"
     #include "others/unit.h"
+    #include <stdlib.h>
 }
 
 %union{
     input_type val;      /* wartosc i rejestr */
     unit_type* unit;     /* pamiec i rejestr */
     char *id;            /* identyfikator */
-    cond_type cond;
+    cond_type* cond;
 }
 
 %glr-parser
-
 %start program
 %nterm <unit> value
 %nterm <unit> valueloc
 %nterm <unit> expression
-%nterm <unit> condition
+%type <unit> condition
 %nterm <unit> ridentifier
 %nterm <unit> lidentifier
 %token <val> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
 %token <cond> IF
-%token THEN
-%nonassoc ELSE
-%nonassoc ENDIF
+%token THEN ELSE ENDIF
 %token DO
 %token WHILE ENDWHILE
 %token REPEAT UNTIL
@@ -69,19 +75,35 @@ commands: commands command
 ;
 
 command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
-|   IF              { printf("if_0\n"); }
-        condition   { printf("if_1\n"); }
+|   IF              { ; }
+        condition   { $1 = (cond_type*)20; printf("if_1\n"); }
     THEN            { printf("if_2\n"); }
         commands    { printf("if_3\n"); }
     ELSE            { printf("if_4\n"); }
         commands    { printf("if_5\n"); }
     ENDIF           { printf("if_6\n"); }
-    
-|   IF              { printf("fi_0\n"); }
-        condition   { printf("fi_1\n"); }
-    THEN            { printf("fi_2\n"); }
-        commands    { printf("fi_3\n"); }
-    ENDIF           { printf("fi_4\n"); }
+
+|   IF              { printf("%p\n", $1); }
+    condition       /*{
+                        $1 = (cond_type*)malloc(sizeof(cond_type));
+                        reg_check($3);
+                        $1->jump_first = jzero($3->reg, 0);
+                        if ($3->type)
+                            $1->jump_end = jump(0);
+                        $1->label_cmd = code_get_label();
+                    } */
+    THEN commands    
+    ENDIF           /*{   $1->label_end = code_get_label();
+                        if ($3->type) {
+                            code_modif($1->jump_first, $1->label_cmd-$1->jump_first);
+                            code_modif($1->jump_end, $1->label_end-$1->jump_end);
+                        } 
+                        else {
+                            code_modif($1->jump_first, $1->label_end-$1->jump_first);
+                        }
+                        reg_free($3->reg);
+                        unit_free($3);
+                    }*/
 
 |  WHILE condition DO commands ENDWHILE
 |  REPEAT commands UNTIL condition ';'
@@ -126,6 +148,10 @@ lidentifier: ID                      { $$ = get_variable($1,      LOCATION, NOIN
 |  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, NOINIT); }
 |  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, NOINIT); }
 %%
+
+cond_type* cond_alloc() {
+    return malloc(sizeof(cond_type));
+}
 
 /* Metoda startowa.
  * ERR1 - nieprawidlowa liczba argumentow

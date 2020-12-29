@@ -13,7 +13,7 @@ gcc -o temp $FILES $1.tab.c lex.yy.c -lm
 ./temp $src $dest
 maszyna-wirtualna-cln $dest
 
-rm $1.tab.c 
-rm $1.tab.h
-rm lex.yy.c
-rm temp
+# rm $1.tab.c 
+# rm $1.tab.h
+# rm lex.yy.c
+# rm temp
