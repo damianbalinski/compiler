@@ -54,7 +54,7 @@ void code_put2(code_type code, int x, int y) {
 input_type code_jump1(code_type code, int x) {
     CHECK_CODE(code);
     CHECK_INSTRUCTION(code_counter);
-    DBG_CODE1(code_counter, code, j);
+    DBG_CODE1(code_counter, code, x);
     code_table[code_counter].code = code;
     code_table[code_counter].x = x;
     return code_counter++;

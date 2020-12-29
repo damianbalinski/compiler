@@ -5,15 +5,15 @@
 #define DEBUG_MODE
 
 #ifdef DEBUG_MODE
-    //#define DEBUG_TOKENS
-    //#define DEBUG_PARSER
-    //#define DEBUG_SYMBOL_TABLE
-    //#define DEBUG_REGISTERS
-    //#define DEBUG_REGISTER_OPERATIONS
-    //#define DEBUG_CODES
-    //#define DEBUG_INSTRUCTIONS
-    //#define DEBUG_DATA_MANAGER
-    //#define DEBUG_UNIT
+    #define DEBUG_TOKENS
+    // #define DEBUG_PARSER
+    // #define DEBUG_SYMBOL_TABLE
+    // #define DEBUG_REGISTERS
+    // #define DEBUG_REGISTER_OPERATIONS
+    // #define DEBUG_CODES
+    // #define DEBUG_INSTRUCTIONS
+    // #define DEBUG_DATA_MANAGER
+    // #define DEBUG_UNIT
 #endif
 
 // TOKENS
@@ -45,9 +45,9 @@
 
 // CODES
 #ifdef DEBUG_CODES
-    #define DBG_CODE0(C,I)     printf(BLUE "code [ (%d) %s ]\n"       DEF, C, code_names[I])
-    #define DBG_CODE1(C,I,X)   printf(BLUE "code [ (%d) %s %d ]\n"    DEF, C, code_names[I], X)
-    #define DBG_CODE2(C,I,X,Y) printf(BLUE "code [ (%d) %s %d %d ]\n" DEF, C, code_names[I], X, Y)         
+    #define DBG_CODE0(C,I)     printf(BLUE "code [ (%lld) %s ]\n"       DEF, C, code_names[I])
+    #define DBG_CODE1(C,I,X)   printf(BLUE "code [ (%lld) %s %d ]\n"    DEF, C, code_names[I], X)
+    #define DBG_CODE2(C,I,X,Y) printf(BLUE "code [ (%lld) %s %d %d ]\n" DEF, C, code_names[I], X, Y)         
 #else
     #define DBG_CODE0(C,I)
     #define DBG_CODE1(C,I,X)

@@ -27,6 +27,8 @@
     cond_type cond;
 }
 
+%glr-parser
+
 %start program
 %nterm <unit> value
 %nterm <unit> valueloc
@@ -38,7 +40,9 @@
 %token <id> ID
 %token DECLARE T_BEGIN END
 %token <cond> IF
-%token THEN ELSE ENDIF
+%token THEN
+%nonassoc ELSE
+%nonassoc ENDIF
 %token DO
 %token WHILE ENDWHILE
 %token REPEAT UNTIL
@@ -65,33 +69,20 @@ commands: commands command
 ;
 
 command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
-|  IF
-        condition
-        THEN
-        commands
-        ELSE
-        commands
-        ENDIF
+|   IF              { printf("if_0\n"); }
+        condition   { printf("if_1\n"); }
+    THEN            { printf("if_2\n"); }
+        commands    { printf("if_3\n"); }
+    ELSE            { printf("if_4\n"); }
+        commands    { printf("if_5\n"); }
+    ENDIF           { printf("if_6\n"); }
+    
+|   IF              { printf("fi_0\n"); }
+        condition   { printf("fi_1\n"); }
+    THEN            { printf("fi_2\n"); }
+        commands    { printf("fi_3\n"); }
+    ENDIF           { printf("fi_4\n"); }
 
-| IF 
-        condition THEN  {
-                            reg_check($2);
-                            $1.jump_first = jzero($2->reg, 0);
-                            if ($2->type) $1.jump_end = jump(0);
-                            $1.label_cmd = code_get_label();
-                        }
-        commands 
-        ENDIF         /* { $1.label_end = code_get_label();
-                        if ($2->type) {
-                            code_modif($1.jump_first, $1.label_cmd-$1.jump_first);
-                            code_modif($1.jump_end, $1.label_end-$1.jump_end);
-                        } 
-                        else {
-                            code_modif($1.jump_first, $1.label_end-$1.jump_first);
-                        }
-                        reg_free($2->reg);
-                        unit_free($2);
-                      } */
 |  WHILE condition DO commands ENDWHILE
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR
