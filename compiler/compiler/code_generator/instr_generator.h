@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include "../others/types.h"
 #include "../others/unit.h"
+#include "../others/cond.h"
 
 #define VALUE true
 #define LOCATION false
@@ -10,6 +11,15 @@
 
 void add_variable(char* id);
 void add_array(char* id, input_type begin, input_type end);
+
+void jumps_begin(cond_type* cond, unit_type* condition);
+void jumps_modif_true_false(cond_type* cond, unit_type* condition);
+void jumps_modif_end(cond_type* cond, unit_type* condition);
+void jumps_modif_cmd(cond_type* cond, unit_type* condition);
+void jumps_modif_cond(cond_type* cond, unit_type* condition);
+void jumps_modif_else(cond_type* cond, unit_type* condition);
+void jumps_end(cond_type* cond, unit_type* condition);
+void jumps_debug(cond_type* cond);
 
 unit_type* get_const(input_type val, bool type);
 unit_type* get_variable(char* id, bool type, bool init);

@@ -17,6 +17,8 @@
                                         fprintf(stderr, RED "Ostrzezenie: Kod %d poza zakresem\n" DEF, X)
     #define CHECK_UNIT(X)           if (X == NULL) \
                                         fprintf(stderr, RED "Ostrzezenie: Problem z alokacja unit" DEF)
+    #define CHECK_COND(X)           if (X == NULL) \
+                                        fprintf(stderr, RED "Ostrzezenie: Problem z alokacja cond" DEF)
     #define CHECK_JUMP(X)           if (X != JUMP && X != JZERO && X != JODD) \
                                         fprintf(stderr, RED "Ostrzezenie: Proba modyfikacji kodu, ktory nie jest skokiem" DEF)
 #else

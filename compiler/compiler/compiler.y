@@ -18,6 +18,7 @@
 %code requires {
     #include "others/types.h"
     #include "others/unit.h"
+    #include "others/cond.h"
 }
 
 %union{
@@ -67,31 +68,26 @@ commands: commands command
 
 command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
 
-|   IF              {   $1 = (cond_type*)malloc(sizeof(cond_type)); }
-        condition   {   reg_check($3); 
-                        $1->jump_first = jzero($3->reg, 0);
-                        if ($3->type)
-                            $1->jump_end = jump(0);
-                        $1->label_cmd = code_get_label();
-                    }
-    THEN commands    
+|   IF              {   $1 = cond_alloc();                  }
+    condition       {   jumps_begin($1, $3);                }
+    THEN            {   $1->label_cmd = code_get_label();   }
+    commands    
     ENDIF           {   $1->label_end = code_get_label();
-                        if ($3->type) {
-                            code_modif($1->jump_first, $1->label_cmd-$1->jump_first);
-                            code_modif($1->jump_end, $1->label_end-$1->jump_end);
-                        } 
-                        else {
-                            code_modif($1->jump_first, $1->label_end-$1->jump_first);
-                        }
-                        reg_free($3->reg);
-                        unit_free($3);
-                    }
+                        jumps_modif_true_false($1, $3);
+                        jumps_modif_end($1, $3);
+                        jumps_end($1, $3);                  }
 
-|   WHILE
-    condition
-    DO
-    commands
-    ENDWHILE
+|   WHILE           {   $1 = cond_alloc();                    
+                        $1->label_cond = code_get_label();  }  
+    condition       {   jumps_begin($1, $3);                }
+    DO              {   $1->label_cmd = code_get_label();   }
+    commands        {   $1->jump_cond = jump(0);            }
+    ENDWHILE        {   $1->label_end = code_get_label();
+                        jumps_debug($1);
+                        jumps_modif_true_false($1, $3);
+                        jumps_modif_end($1, $3);
+                        jumps_modif_cond($1, $3);
+                        /*jumps_end($1, $3); */             }
                     
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR

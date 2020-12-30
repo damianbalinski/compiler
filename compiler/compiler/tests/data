@@ -18,10 +18,15 @@ LOAD b b
 RESET c
 INC c
 SHL c
+INC c
+SHL c
+SHL c
 SHL c
 INC c
 SHL c
+SHL c
 SUB c b
+JZERO c 15
 RESET b
 PUT b
 RESET b
@@ -35,6 +40,7 @@ RESET d
 INC d
 ADD c d
 STORE c b
+JUMP -27
 RESET c
 INC c
 SHL c
