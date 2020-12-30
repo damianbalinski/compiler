@@ -1,26 +1,52 @@
 RESET a
-INC a
-SHL a
-SHL a
-INC a
-SHL a
+RESET b
+STORE b a
 RESET b
 INC b
-SHL b
-SHL b
-INC b
-SHL b
-SHL b
-SUB b a
-RESET a
-INC a
 RESET f
 INC f
 SHL f
+INC f
 SHL f
 INC f
 SHL f
+INC f
+STORE f b
+PUT b
+RESET b
+LOAD b b
+RESET c
+INC c
+SHL c
+SHL c
+INC c
+SHL c
+SUB c b
+RESET b
+PUT b
+RESET b
+RESET f
+INC f
 SHL f
-STORE f a
-PUT a
+STORE c f
+RESET c
+LOAD c c
+RESET d
+INC d
+ADD c d
+STORE c b
+RESET c
+INC c
+SHL c
+INC c
+RESET f
+INC f
+SHL f
+INC f
+SHL f
+INC f
+SHL f
+INC f
+STORE f c
+PUT c
 HALT

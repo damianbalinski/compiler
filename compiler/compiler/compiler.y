@@ -13,20 +13,11 @@
     extern char* yytext;
     int yylex();
     void yyerror( char *str );
-
-    cond_type* cond_alloc();
-
-// TODO DELETE
-        struct  lbs {
-        int for_goto;
-        int for_jmp_false;
-    };
 %}
 
 %code requires {
     #include "others/types.h"
     #include "others/unit.h"
-    #include <stdlib.h>
 }
 
 %union{
@@ -36,7 +27,7 @@
     cond_type* cond;
 }
 
-%glr-parser
+//%glr-parser
 %start program
 %nterm <unit> value
 %nterm <unit> valueloc
@@ -47,10 +38,10 @@
 %token <val> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
-%token <cond> IF
+%token <cond> IF WHILE
 %token THEN ELSE ENDIF
 %token DO
-%token WHILE ENDWHILE
+%token ENDWHILE
 %token REPEAT UNTIL
 %token FOR FROM TO ENDFOR DOWNTO
 %token READ WRITE
@@ -75,25 +66,16 @@ commands: commands command
 ;
 
 command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
-|   IF              { ; }
-        condition   { $1 = (cond_type*)20; printf("if_1\n"); }
-    THEN            { printf("if_2\n"); }
-        commands    { printf("if_3\n"); }
-    ELSE            { printf("if_4\n"); }
-        commands    { printf("if_5\n"); }
-    ENDIF           { printf("if_6\n"); }
 
-|   IF              { printf("%p\n", $1); }
-    condition       /*{
-                        $1 = (cond_type*)malloc(sizeof(cond_type));
-                        reg_check($3);
+|   IF              {   $1 = (cond_type*)malloc(sizeof(cond_type)); }
+        condition   {   reg_check($3); 
                         $1->jump_first = jzero($3->reg, 0);
                         if ($3->type)
                             $1->jump_end = jump(0);
                         $1->label_cmd = code_get_label();
-                    } */
+                    }
     THEN commands    
-    ENDIF           /*{   $1->label_end = code_get_label();
+    ENDIF           {   $1->label_end = code_get_label();
                         if ($3->type) {
                             code_modif($1->jump_first, $1->label_cmd-$1->jump_first);
                             code_modif($1->jump_end, $1->label_end-$1->jump_end);
@@ -103,9 +85,14 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         }
                         reg_free($3->reg);
                         unit_free($3);
-                    }*/
+                    }
 
-|  WHILE condition DO commands ENDWHILE
+|   WHILE
+    condition
+    DO
+    commands
+    ENDWHILE
+                    
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR
 |  FOR ID FROM value DOWNTO value DO commands ENDFOR
@@ -148,10 +135,6 @@ lidentifier: ID                      { $$ = get_variable($1,      LOCATION, NOIN
 |  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, NOINIT); }
 |  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, NOINIT); }
 %%
-
-cond_type* cond_alloc() {
-    return malloc(sizeof(cond_type));
-}
 
 /* Metoda startowa.
  * ERR1 - nieprawidlowa liczba argumentow

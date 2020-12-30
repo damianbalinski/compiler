@@ -40,3 +40,35 @@
     THEN            {printf("fi_2\n"); }
         commands    {printf("fi_3\n"); }
     ENDIF           {printf("fi_4\n"); }
+
+
+    |   /*IF             { printf("asd"); }
+        condition   { $1 = (struct lbs *) newlblrec(); }
+    THEN            { printf("if_2\n"); }
+        commands    { printf("if_3\n"); }
+    ELSE            { printf("if_4\n"); }
+        commands    { printf("if_5\n"); }
+    ENDIF           { printf("if_6\n"); } */
+
+
+|   IF              { $1 = (cond_type*)malloc(sizeof(cond_type)); }
+    condition       {
+                        reg_check($3);
+                        $1->jump_first = jzero($3->reg, 0);
+                        if ($3->type)
+                            $1->jump_end = jump(0);
+                        $1->label_cmd = code_get_label();
+                    } 
+    THEN commands    
+    ENDIF           {   $1->label_end = code_get_label();
+    ENDIF           {   $1->label_end = code_get_label();
+                        if ($3->type) {
+                            code_modif($1->jump_first, $1->label_cmd-$1->jump_first);
+                            code_modif($1->jump_end, $1->label_end-$1->jump_end);
+                        } 
+                        else {
+                            code_modif($1->jump_first, $1->label_end-$1->jump_first);
+                        }
+                        reg_free($3->reg);
+                        unit_free($3);
+                    }

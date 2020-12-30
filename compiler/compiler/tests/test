@@ -1,8 +1,11 @@
 DECLARE
     a
 BEGIN
-    IF 10 < 20
-    THEN
-        WRITE 20;
-    ENDIF
+    a := 0;
+    WRITE 15;
+    WHILE a < 10 DO
+        WRITE a;
+        a := a + 1;
+    ENDWHILE
+    WRITE 15;
 END

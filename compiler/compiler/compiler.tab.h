@@ -1,8 +1,9 @@
 /* A Bison parser, made by GNU Bison 3.7.3.  */
 
-/* Skeleton interface for Bison GLR parsers in C
+/* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 2002-2015, 2018-2020 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +31,10 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
+
 #ifndef YY_YY_COMPILER_TAB_H_INCLUDED
 # define YY_YY_COMPILER_TAB_H_INCLUDED
 /* Debug traces.  */
@@ -40,13 +45,12 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 20 "compiler.y"
+#line 18 "compiler.y"
 
     #include "others/types.h"
     #include "others/unit.h"
-    #include <stdlib.h>
 
-#line 50 "compiler.tab.h"
+#line 54 "compiler.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -63,11 +67,11 @@ extern int yydebug;
     T_BEGIN = 261,                 /* T_BEGIN  */
     END = 262,                     /* END  */
     IF = 263,                      /* IF  */
-    THEN = 264,                    /* THEN  */
-    ELSE = 265,                    /* ELSE  */
-    ENDIF = 266,                   /* ENDIF  */
-    DO = 267,                      /* DO  */
-    WHILE = 268,                   /* WHILE  */
+    WHILE = 264,                   /* WHILE  */
+    THEN = 265,                    /* THEN  */
+    ELSE = 266,                    /* ELSE  */
+    ENDIF = 267,                   /* ENDIF  */
+    DO = 268,                      /* DO  */
     ENDWHILE = 269,                /* ENDWHILE  */
     REPEAT = 270,                  /* REPEAT  */
     UNTIL = 271,                   /* UNTIL  */
@@ -93,14 +97,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 26 "compiler.y"
+#line 23 "compiler.y"
 
     input_type val;      /* wartosc i rejestr */
     unit_type* unit;     /* pamiec i rejestr */
     char *id;            /* identyfikator */
     cond_type* cond;
 
-#line 104 "compiler.tab.h"
+#line 108 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

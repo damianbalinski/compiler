@@ -1,0 +1,17 @@
+BEGIN
+    WRITE 10;
+
+    IF 2 = 3 THEN
+        WRITE 1;
+    ENDIF
+
+    IF 3 = 3 THEN
+        WRITE 2;
+    ENDIF
+
+    IF 3 = 2 THEN
+        WRITE 3;
+    ENDIF
+
+    WRITE 30;
+END

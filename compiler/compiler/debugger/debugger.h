@@ -5,7 +5,7 @@
 #define DEBUG_MODE
 
 #ifdef DEBUG_MODE
-    #define DEBUG_TOKENS
+    // #define DEBUG_TOKENS
     // #define DEBUG_PARSER
     // #define DEBUG_SYMBOL_TABLE
     // #define DEBUG_REGISTERS
