@@ -81,13 +81,14 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         $1->label_cond = code_get_label();  }  
     condition       {   jumps_begin($1, $3);                }
     DO              {   $1->label_cmd = code_get_label();   }
-    commands        {   $1->jump_cond = jump(0);            }
+    commands        {   reg_check($3);
+                        $1->jump_cond = jump(0);            }
     ENDWHILE        {   $1->label_end = code_get_label();
                         jumps_debug($1);
                         jumps_modif_true_false($1, $3);
                         jumps_modif_end($1, $3);
                         jumps_modif_cond($1, $3);
-                        /*jumps_end($1, $3); */             }
+                        jumps_end($1, $3);                  }
                     
 |  REPEAT commands UNTIL condition ';'
 |  FOR ID FROM value TO value DO commands ENDFOR

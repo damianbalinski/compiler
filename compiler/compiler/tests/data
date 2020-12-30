@@ -2,45 +2,42 @@ RESET a
 RESET b
 STORE b a
 RESET b
-INC b
-RESET f
-INC f
-SHL f
-INC f
-SHL f
-INC f
-SHL f
-INC f
-STORE f b
-PUT b
-RESET b
 LOAD b b
 RESET c
 INC c
 SHL c
-INC c
-SHL c
-SHL c
 SHL c
 INC c
-SHL c
-SHL c
 SUB c b
-JZERO c 15
+JZERO c 90
 RESET b
-PUT b
-RESET b
+INC b
 RESET f
 INC f
 SHL f
 STORE c f
 RESET c
+INC c
+SHL c
+SHL c
+INC c
+STORE c b
+RESET c
+INC c
 LOAD c c
 RESET d
 INC d
-ADD c d
-STORE c b
-JUMP -27
+SHL d
+SHL d
+INC d
+SHL d
+SUB d c
+JZERO d 55
+RESET c
+PUT c
+RESET c
+INC c
+PUT c
 RESET c
 INC c
 SHL c
@@ -50,9 +47,56 @@ INC f
 SHL f
 INC f
 SHL f
+SHL f
+SHL f
+SHL f
+SHL f
 INC f
 SHL f
 INC f
+SHL f
+SHL f
+INC f
+SHL f
+SHL f
+INC f
+SHL f
+SHL f
+SHL f
+SHL f
+SHL f
 STORE f c
 PUT c
+RESET c
+INC c
+RESET f
+INC f
+SHL f
+SHL f
+STORE d f
+RESET d
+INC d
+LOAD d d
+RESET e
+INC e
+ADD d e
+STORE d c
+RESET d
+INC d
+SHL d
+SHL d
+LOAD d d
+JUMP -64
+RESET d
+RESET e
+LOAD e e
+RESET a
+INC a
+ADD e a
+STORE e d
+RESET e
+INC e
+SHL e
+LOAD e e
+JUMP -97
 HALT
