@@ -14,7 +14,8 @@
     // #define DEBUG_INSTRUCTIONS
     // #define DEBUG_DATA_MANAGER
     // #define DEBUG_UNIT
-    // # define DEBUG_COND
+    // #define DEBUG_COND
+    // #define DEBUG_JUMPS
 #endif
 
 // TOKENS
@@ -123,4 +124,14 @@
     #define DBG_REGISTERS_BEGIN(X)
     #define DBG_REGISTERS_END(X)
     #define DBG_REGISTERS_HEAD_NUM(X)
+#endif
+
+// JUMPS
+#ifdef DEBUG_JUMPS
+    #define DBG_JUMPS(X)        printf("labels:  cmd(%lld)  cond(%lld)  else(%lld)  end(%lld)\n", \
+                                X->label_cmd, X->label_cond, X->label_else, X->label_end); \
+                                printf("jumps :  cmd(%lld)  cond(%lld)  else(%lld)  end(%lld)  tru_fal(%lld)  \n", \
+                                X->jump_cmd, X->jump_cond, X->jump_else, X->jump_end, X->jump_true_false);
+#else
+    #define DBG_JUMPS(X)
 #endif

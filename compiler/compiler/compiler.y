@@ -76,7 +76,7 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
     ENDIF           {   $1->label_end = code_get_label();
                         jump_true_false($1, $3, FINISH);
                         jump_end($1, $3, FINISH);
-                        jumps_debug($1);
+                        DBG_JUMPS($1);
                         jumps_free($1, $3);                 }
 
 |   WHILE           {   $1 = cond_alloc();                    
@@ -89,13 +89,20 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         jump_true_false($1, $3, FINISH);
                         jump_end($1, $3, FINISH);
                         jump_cond($1, $3, FINISH);
-                        jumps_debug($1);
+                        DBG_JUMPS($1);
                         jumps_free($1, $3);                 }
                     
-|   REPEAT          {   $1 = cond_alloc();                  }
+|   REPEAT          {   $1 = cond_alloc();                 
+                        $1->label_cmd = code_get_label();   }
     commands
     UNTIL
-    condition ';'   {   }
+    condition       {   jump_true_false($1, $5, INIT);
+                        jump_cmd($1, $5, INIT);             }
+    ';'             {   $1->label_end = code_get_label();
+                        jump_true_false($1, $5, FINISH);
+                        jump_cmd($1, $5, FINISH);
+                        DBG_JUMPS($1);
+                        jumps_free($1, $5);                 }
 
 |  FOR ID FROM value TO value DO commands ENDFOR
 |  FOR ID FROM value DOWNTO value DO commands ENDFOR

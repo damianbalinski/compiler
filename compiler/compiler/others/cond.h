@@ -15,8 +15,6 @@ typedef struct {
     input_type jump_cond;
     input_type jump_else;
     input_type jump_end;
-    input_type jump_true;
-    input_type jump_false;
 
 } cond_type;
 

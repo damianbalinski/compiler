@@ -1,0 +1,11 @@
+DECLARE
+    a
+BEGIN
+    a := 0;
+    
+    REPEAT
+        WRITE a;
+        a := a + 1;
+    UNTIL a < 10;
+    
+END

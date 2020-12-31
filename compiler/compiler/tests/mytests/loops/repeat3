@@ -1,0 +1,49 @@
+DECLARE
+    a, b, c, d, e, f, g
+BEGIN
+    a := 0;
+    REPEAT
+
+        b := 0;
+        REPEAT
+            
+            c := 0;
+            REPEAT
+
+                d := 0;
+                REPEAT
+
+                    e := 0;
+                    REPEAT
+
+                        f := 0;
+                        REPEAT
+
+                            g := 0;
+                            REPEAT
+
+                                WRITE a;
+                                WRITE b;
+                                WRITE c;
+                                WRITE d;
+                                WRITE e;
+                                WRITE f;
+                                WRITE g;
+                                WRITE 1000;
+
+                                g := g + 1;
+                            UNTIL g < 5;
+                            f := f + 1;
+                        UNTIL f < 5;
+                        e := e + 1;
+                    UNTIL e < 5;
+                    d := d + 1;
+                UNTIL d < 5;
+                c := c + 1;
+            UNTIL c < 5;
+            b := b + 1;
+        UNTIL b < 5;
+        a := a + 1;
+    UNTIL a < 5;
+    
+END
