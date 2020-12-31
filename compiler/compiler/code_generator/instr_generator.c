@@ -89,12 +89,12 @@ void jump_cmd(cond_type* cond, unit_type* condition, bool type) {
 
 /* Zwalnianie pamieci po skokach. */
 void jumps_free(cond_type* cond, unit_type* condition) {
-    DBG_INSTRUCTION_BEGIN("jumps_end");
+    DBG_INSTRUCTION_BEGIN("jumps_free");
     // ZWALNIANIE
     cond_free(cond);
     reg_free(condition->reg);
     unit_free(condition);
-    DBG_INSTRUCTION_END("jumps_end");
+    DBG_INSTRUCTION_END("jumps_free");
 }
 
 /*************************************************/

@@ -32,7 +32,7 @@ void reg_init() {
 /* Zwraca rejestr z poczatku listy, jesli to konieczne,
  * przerzuca jego zawartosc do pamieci. */
 int reg_get_free() {
-    DBG_REGISTERS_BEGIN("reg get free");
+    DBG_REGISTERS_BEGIN("reg_get_free");
     DBG_REGISTER_PRINT();
     DBG_REGISTERS_HEAD_NUM(head->num);
 
@@ -45,20 +45,20 @@ int reg_get_free() {
     head = reg->next;
 
     DBG_REGISTERS_HEAD_NUM(head->num);
-    DBG_REGISTERS_END("reg get free");
+    DBG_REGISTERS_END("reg_get_free");
     return reg->num;
 }
 
 /* Zwalnia rejestr. */
 void reg_free(int x) {
-    DBG_REGISTERS_BEGIN("reg free");
+    DBG_REGISTERS_BEGIN("reg_free");
     DBG_REGISTERS_HEAD_NUM(head->num);
     
     registers[x].unit = NULL;
     head = &registers[x];
 
     DBG_REGISTERS_HEAD_NUM(head->num);
-    DBG_REGISTERS_END("reg free");
+    DBG_REGISTERS_END("reg_free");
 }
 
 /* Sprawdza, czy dane sa w rejestrze,
@@ -112,7 +112,7 @@ void reg_print() {
 
 /* Umieszcza stala w rejestrze. */
 void reg_const(int x, input_type val) {
-    DBG_REGISTERS_BEGIN("reg const");
+    DBG_REGISTERS_BEGIN("reg_const");
     reset(x);
 
     if (val == 0)
@@ -129,12 +129,13 @@ void reg_const(int x, input_type val) {
     }
 
     DBG_RVAL(x);
-    DBG_REGISTERS_END("reg const");
+    DBG_REGISTERS_END("reg_const");
 }
 
-/* Mnozenie. z = x * y. */
+/* Mnozenie.
+ * z = x * y. */
 void reg_mul(int x, int y, int z) {
-    DBG_REGISTERS_BEGIN("reg mul");
+    DBG_REGISTERS_BEGIN("reg_mul");
     reset(z);
 
     jodd(y, 2);
@@ -146,5 +147,5 @@ void reg_mul(int x, int y, int z) {
     jump(-6);
 
     DBG_RVAL(z);
-    DBG_REGISTERS_END("reg mul");
+    DBG_REGISTERS_END("reg_mul");
 }
