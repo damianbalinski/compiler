@@ -13,6 +13,81 @@ extern int yylineno;
 extern char* yytext;
 extern register_type registers[6];
 
+
+
+/****************** SKOKI ************************/
+void jump_true_false(cond_type* cond, unit_type* condition, bool type) {
+    DBG_INSTRUCTION_BEGIN("jump_true_false");
+    if (type == INIT) {
+        // JUMP TRUE_FALSE - INIT
+        reg_check(condition);
+        cond->jump_true_false = jzero(condition->reg, 0);
+    }
+    else if (condition->type) {
+        // JUMP TRUE - FINISH
+        code_modif(cond->jump_true_false, cond->label_cmd - cond->jump_true_false);
+    }
+    else {
+        // JUMP FALSE - FINISH
+        code_modif(cond->jump_true_false, cond->label_end - cond->jump_true_false);
+    }
+
+    DBG_INSTRUCTION_END("jump_true_false");
+}
+
+void jump_end(cond_type* cond, unit_type* condition, bool type) {
+    DBG_INSTRUCTION_BEGIN("jump_end");
+    if (type == INIT && condition->type) {
+        // JUMP END - INIT
+         cond->jump_end = jump(0);
+    }
+    else if (type == INIT) {
+        // NOTHING
+    }
+    else if (condition->type) {
+        // JUMP END - FINISH
+        code_modif(cond->jump_end, cond->label_end - cond->jump_end);
+    }
+    else {
+        // NOTHING
+    }
+    DBG_INSTRUCTION_END("jump_end");
+}
+
+void jump_cond(cond_type* cond, unit_type* condition, bool type) {
+    DBG_INSTRUCTION_BEGIN("jump_cond");
+    if (type == INIT) {
+        // JUMP_COND - INIT
+        reg_check(condition);
+        cond->jump_cond = jump(0);
+    }
+    else {
+        // JUMP_COND - FINISH
+        code_modif(cond->jump_cond, cond->label_cond - cond->jump_cond);
+    }
+    DBG_INSTRUCTION_END("jump_cond");
+}
+
+/* Zwalnianie pamieci po skokach. */
+void jumps_free(cond_type* cond, unit_type* condition) {
+    DBG_INSTRUCTION_BEGIN("jumps_end");
+    // ZWALNIANIE
+    cond_free(cond);
+    reg_free(condition->reg);
+    unit_free(condition);
+    DBG_INSTRUCTION_END("jumps_end");
+}
+
+void jumps_debug(cond_type* cond) {
+    printf("labels:  cmd(%lld)  cond(%lld)  else(%lld)  end(%lld)\n",
+        cond->label_cmd, cond->label_cond, cond->label_else, cond->label_end);
+
+    printf("jumps :  cmd(%lld)  cond(%lld)  else(%lld)  end(%lld)  true(%lld)  false(%lld)\n",
+        cond->jump_cmd, cond->jump_cond, cond->jump_else, cond->jump_end, cond->jump_true, cond->jump_false);
+}
+
+/*************************************************/
+
 /* Poczatek skokow warunkowych. */
 void jumps_begin(cond_type* cond, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("jumps_begin");
@@ -28,6 +103,56 @@ void jumps_begin(cond_type* cond, unit_type* condition) {
         cond->jump_false = jzero(condition->reg, 0);
     }
     DBG_INSTRUCTION_END("jumps_begin");
+}
+
+/* Poczatek skoku warunkowego. */
+void jump_begin_true_false(cond_type* cond, unit_type* condition) {
+    DBG_INSTRUCTION_BEGIN("jump_begin_true_false");
+    if (condition->type) {
+        // JUMP TRUE
+        reg_check(condition);
+        cond->jump_true = jzero(condition->reg, 0);
+    }
+    else {
+        // JUMP FALSE
+        reg_check(condition);
+        cond->jump_false = jzero(condition->reg, 0);
+    }
+    DBG_INSTRUCTION_END("jump_begin_true_false");
+}
+
+/* Poczatek skoku jump_end. */
+void jump_init_end(cond_type* cond, unit_type* condition) {
+    DBG_INSTRUCTION_BEGIN("jump_init_end");
+    if (condition->type) {
+        // JUMP END
+        cond->jump_end = jump(0);
+    }
+    else {
+        // NOTHING
+    }
+    DBG_INSTRUCTION_END("jump_init_end");
+}
+
+/* Poczatek skoku jump_cond */
+void jump_init_cond(cond_type* cond, unit_type* condition) {
+    DBG_INSTRUCTION_BEGIN("jump_init_cond");
+    cond->jump_cond = jump(0);
+    DBG_INSTRUCTION_END("jump_init_cond");
+}
+
+/* Poczatek skoku jump_cmd */
+void jump_init_cmd(cond_type* cond, unit_type* condition) {
+    DBG_INSTRUCTION_BEGIN("jump_init_cmd");
+    if (condition->type) {
+        // NOTHING
+    }
+    else {
+        // JUMP CMD
+        cond->jump_cmd = jump(0);
+    }
+    
+    DBG_INSTRUCTION_END("jump_init_cmd");
 }
 
 /* Modyfikacja skokow warunkowych. */
@@ -82,25 +207,6 @@ void jumps_modif_else(cond_type* cond, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("jumps_modif_else");
     code_modif(cond->jump_else, cond->label_else - cond->jump_else);
     DBG_INSTRUCTION_END("jumps_modif_else");
-}
-
-/* Koniec skokow warunkowych. */
-void jumps_end(cond_type* cond, unit_type* condition) {
-    DBG_INSTRUCTION_BEGIN("jumps_end");
-    // ZWALNIANIE
-    cond_free(cond);
-    reg_free(condition->reg);
-    unit_free(condition);
-
-    DBG_INSTRUCTION_END("jumps_end");
-}
-
-void jumps_debug(cond_type* cond) {
-    printf("labels:  cmd(%lld)  cond(%lld)  else(%lld)  end(%lld)\n",
-        cond->label_cmd, cond->label_cond, cond->label_else, cond->label_end);
-
-    printf("jumps :  cmd(%lld)  cond(%lld)  else(%lld)  end(%lld)  true(%lld)  false(%lld)\n",
-        cond->jump_cmd, cond->jump_cond, cond->jump_else, cond->jump_end, cond->jump_true, cond->jump_false);
 }
 
 /* Pobiera stala. Przechowuje ja w rejestrze. */

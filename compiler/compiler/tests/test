@@ -1,27 +1,11 @@
 DECLARE
-    a, b, c
+    a
 BEGIN
     a := 0;
-    b := 0;
-    c := 0;
-
-    WRITE 1000;
-    WHILE a < 10 DO
+    
+    REPEAT
         WRITE a;
         a := a + 1;
-    ENDWHILE
-
-    WRITE 1000;
-    WHILE b < 10 DO
-        WRITE b;
-        b:= b + 1;
-    ENDWHILE
-
-    WRITE 1000;
-    WHILE c < 10 DO
-        WRITE c;
-        c := c + 1;
-    ENDWHILE
-
-    WRITE 1000;
+    UNTIL a < 10;
+    
 END
