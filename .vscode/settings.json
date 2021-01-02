@@ -19,6 +19,14 @@
     },
     "explorerExclude.backup": null,
     "files.associations": {
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "sstream": "cpp",
+        "streambuf": "cpp",
+        "system_error": "cpp",
+        "array": "cpp"
     }
 }

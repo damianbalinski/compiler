@@ -1,10 +1,15 @@
 #pragma once
 #include "types.h"
+#include "unit.h"
 
 #define INIT true
 #define FINISH false
 
 typedef struct {
+
+    unit_type* iter;
+    unit_type* cond;
+
     input_type label_cmd;
     input_type label_cond;
     input_type label_else;

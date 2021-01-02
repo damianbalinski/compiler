@@ -39,12 +39,12 @@
 %token <val> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
-%token <cond> IF WHILE REPEAT
+%token <cond> IF WHILE REPEAT FOR
 %token THEN ELSE ENDIF
 %token DO
 %token ENDWHILE
 %token UNTIL
-%token FOR FROM TO ENDFOR DOWNTO
+%token FROM TO ENDFOR DOWNTO
 %token READ WRITE
 %left '-' '+'                        /* operatory arytmetyczne1 */
 %left '*' '/' '%'                    /* operatory arytmetyczne2 */
@@ -104,10 +104,28 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         DBG_JUMPS($1);
                         jumps_free($1, $5);                 }
 
-|  FOR ID FROM value TO value DO commands ENDFOR
-|  FOR ID FROM value DOWNTO value DO commands ENDFOR
-|  READ lidentifier ';'                                 { read($2);       }
-|  WRITE valueloc ';'                                   { write($2);      }
+|   FOR             {   $1 = cond_alloc();                          }
+    ID              {   add_iterator($3);
+                        $1->iter = get_iterator($3);                }
+    FROM
+    value           {   for_init($1->iter, $6);                     }
+    TO
+    value
+    DO              {   $1->label_cond = code_get_label();
+                        $1->cond = for_cond($6, $9, FOR_DO);
+                        jump_true_false($1, $1->cond, INIT);
+                        jump_end($1, $1->cond, INIT);        
+                        $1->label_cmd = code_get_label();           }
+    commands        {   for_step($1->iter, $6, FOR_DO);
+                        jump_cond($1, $1->cond, INIT);                          }
+    ENDFOR          {   $1->label_end = code_get_label();
+                        jump_true_false($1, $1->cond, FINISH);
+                        jump_end($1, $1->cond, FINISH);
+                        jump_cond($1, $1->cond, FINISH);
+                        remove_iterator($3);                        }
+
+|  READ lidentifier ';'        { read($2);         }
+|  WRITE valueloc ';'          { write($2);        }
 ;
 
 expression: value              { $$ = $1;          }

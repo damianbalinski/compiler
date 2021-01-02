@@ -1,0 +1,8 @@
+DECLARE
+    a, b(5:7)
+BEGIN
+    FOR i
+    FROM 5 TO 67 DO
+        WRITE i;
+    ENDFOR
+END

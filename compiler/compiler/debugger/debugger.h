@@ -36,12 +36,14 @@
 
 // SYMBOL TABLE
 #ifdef DEBUG_SYMBOL_TABLE
-    #define DBG_SYMBOL_PUT(X)  printf(GREEN "symbol table [ new symbol %s]\n" DEF, X)
-    #define DBG_SYMBOL_GET(X)  printf(GREEN "symbol table [ get symbol %s]\n" DEF, X)
-    #define DBG_SYMBOL_PRINT() sym_print()
+    #define DBG_SYMBOL_PUT(X)     printf(GREEN "symbol table [ new symbol %s]\n" DEF, X)
+    #define DBG_SYMBOL_GET(X)     printf(GREEN "symbol table [ get symbol %s]\n" DEF, X)
+    #define DBG_SYMBOL_REMOVE(X)  printf(GREEN "symbol table [ remove symbol %s]\n" DEF, X)
+    #define DBG_SYMBOL_PRINT()    sym_print()
 #else
     #define DBG_SYMBOL_PUT(X)
     #define DBG_SYMBOL_GET(X)
+    #define DBG_SYMBOL_REMOVE(X)
     #define DBG_SYMBOL_PRINT()
 #endif
 

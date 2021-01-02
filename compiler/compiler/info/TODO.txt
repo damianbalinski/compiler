@@ -72,3 +72,14 @@
                         reg_free($3->reg);
                         unit_free($3);
                     }
+
+
+|   IF              {   $1 = cond_alloc();                  }
+    condition
+    THEN
+    commands
+    ELSE
+    commands
+    ENDIF
+
+|  FOR ID FROM value DOWNTO value DO commands ENDFOR

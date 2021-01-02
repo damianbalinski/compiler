@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "symbol_table.h"
 #include "../debugger/debugger.h"
+#include "../debugger/warnings.h"
 
 symbol* sym_table = NULL;
 
@@ -16,6 +17,15 @@ symbol* sym_put(char *id) {
     ptr->next = sym_table;
     sym_table = ptr;
     return ptr;
+}
+
+/* usuwa symbol z poczatku listy. */
+void sym_pop(char* id) {
+    DBG_SYMBOL_REMOVE(id);
+    CHECK_ITERATOR(sym_table->id, id);
+    symbol* sym = sym_table;
+    sym_table = sym_table->next;
+    free(sym);
 }
 
 /* zwraca symbol o podanej nazwie lub NULL,

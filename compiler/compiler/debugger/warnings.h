@@ -19,6 +19,8 @@
                                         fprintf(stderr, RED "Ostrzezenie: Problem z alokacja unit" DEF)
     #define CHECK_COND(X)           if (X == NULL) \
                                         fprintf(stderr, RED "Ostrzezenie: Problem z alokacja cond" DEF)
+    #define CHECK_ITERATOR(X, Y)    if (strcmp(X, Y) != 0) \
+                                        fprintf(stderr, RED "Ostrzezenie: Iterator nie znajduje sie na poczatku listy" DEF)
     #define CHECK_JUMP(X)           if (X != JUMP && X != JZERO && X != JODD) \
                                         fprintf(stderr, RED "Ostrzezenie: Proba modyfikacji kodu, ktory nie jest skokiem" DEF)
 #else

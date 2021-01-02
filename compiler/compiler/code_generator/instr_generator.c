@@ -136,6 +136,7 @@ unit_type* get_const(input_type val, bool type) {
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest zmienna
  * ERR3 - (INIT) id nie zostal zainicjalizowany
+ * ERR4 - (NOINIT) id jest stala
  */
 unit_type* get_variable(char* id, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_variable");
@@ -152,6 +153,10 @@ unit_type* get_variable(char* id, bool type, bool init) {
     }
     else if (init == INIT && sym->is_init == false) {
         ERR_ID_NOT_INIT(id);
+        ERR_ADD();
+    }
+    else if (init == NOINIT && sym->is_const) {
+        ERR_ID_CONST(id);
         ERR_ADD();
     }
     else if (type == VALUE) {
@@ -272,6 +277,42 @@ unit_type* get_array_var(char* id, char* id_var, bool type, bool init) {
     return unit;
 }
 
+/* Dodaje iterator, przydziela mu pamiec. */
+void add_iterator(char* id) {
+    DBG_INSTRUCTION_BEGIN("add_iterator");
+    symbol* sym;
+    sym = sym_put(id);
+    sym->type = VARIABLE;
+    sym->is_init = false;
+    sym->is_const = true;
+    sym->offset = variable_allocate();
+
+    DBG_INSTRUCTION_END("add_iterator");
+    DBG_SYMBOL_PRINT();
+}
+
+/* Pobiera lokalizacje iteratora. */
+unit_type* get_iterator(char* id) {
+    DBG_INSTRUCTION_BEGIN("get_iterator");
+    symbol* sym = sym_get(id);
+    unit_type* unit = unit_alloc();
+    int x = reg_get_free();         // wolny rejestr
+    reg_const(x, sym->offset);      // stala do rejestru
+    sym->is_init = true;
+    reg_connect(unit, x);
+
+    DBG_INSTRUCTION_END("get_iterator");
+    return unit;
+}
+
+/* Usuwa iterator. */
+void remove_iterator(char* id) {
+    DBG_INSTRUCTION_BEGIN("remove_iterator");
+    sym_pop(id);
+    DBG_INSTRUCTION_END("remove_iterator");
+    DBG_SYMBOL_PRINT();
+}
+
 /* Dodaje nowa zmienna, przydziela jej pamiec.
  * ERR1 - id zostal zadeklarowany
  */
@@ -287,6 +328,7 @@ void add_variable(char* id) {
         sym = sym_put(id);
         sym->type = VARIABLE;
         sym->is_init = false;
+        sym->is_const = false;
         sym->offset = variable_allocate();
     }
 
@@ -483,4 +525,60 @@ unit_type* gt_le(unit_type* unit1, unit_type* unit2, bool type) {
 
     DBG_INSTRUCTION_END("gt_le");
     return unit1;
+}
+
+unit_type* for_cond(unit_type* unit1, unit_type* unit2, bool type) {
+    DBG_INSTRUCTION_BEGIN("for_cond");
+    unit_type* unit = unit_alloc();
+
+    if (type == FOR_DO) {
+        // FOR DO
+        reg_check(unit1);
+        reg_check(unit2);
+        reset(SUPER_REGISTER);
+        add(SUPER_REGISTER, unit1->reg);
+        sub(SUPER_REGISTER, unit2->reg);
+        unit->reg = SUPER_REGISTER;
+        unit->type = LESS_EQUAL;
+    }
+    else {
+        // FOR DOWNTO
+        reg_check(unit1);
+        reg_check(unit2);
+        reset(SUPER_REGISTER);
+        add(SUPER_REGISTER, unit2->reg);
+        sub(SUPER_REGISTER, unit1->reg);
+        unit->reg = SUPER_REGISTER;
+        unit->type = GREATER_EQUAL;
+    }
+    DBG_INSTRUCTION_END("for_cond");
+    return unit;
+}
+
+void for_init(unit_type* unit1, unit_type* unit2) {
+    DBG_INSTRUCTION_BEGIN("for_init");
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    store(unit2->reg, unit1->reg);
+    DBG_INSTRUCTION_END("for_init");
+}
+
+void for_step(unit_type* unit1, unit_type* unit2, bool type) {
+    DBG_INSTRUCTION_BEGIN("for_step");
+    if (type == FOR_DO) {
+        // FOR DO
+        reg_check(unit1);
+        reg_check(unit2);
+        inc(unit2->reg);
+        store(unit2->reg, unit1->reg);
+    }
+    else {
+        // FOR DOWNTO
+        reg_check(unit1);
+        reg_check(unit2);
+        dec(unit2->reg);
+        store(unit2->reg, unit1->reg);
+    }
+    DBG_INSTRUCTION_END("for_step");
 }

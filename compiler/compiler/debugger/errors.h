@@ -9,6 +9,7 @@
 #define ERR_ID_NOT_INIT(X)     fprintf(stderr, RED "Blad linia %d: Zmienna %s nie zostala zainicjalizowana\n" DEF, yylineno, X)
 #define ERR_ID_NOT_VARIABLE(X) fprintf(stderr, RED "Blad linia %d: Zmienna %s nie jest typu zwyklego\n"       DEF, yylineno, X)
 #define ERR_ID_NOT_ARRAY(X)    fprintf(stderr, RED "Blad linia %d: Zmienna %s nie jest typu tablicowego\n"    DEF, yylineno, X)
+#define ERR_ID_CONST(X)        fprintf(stderr, RED "Blad linia %d: Zmienna %s jest niemodyfikowalna\n"        DEF, yylineno, X)
 #define ERR_ARRAY_INIT_RANGE(X,Y,Z) fprintf(stderr, RED "Blad linia %d: Nieprawidlowy zakres tablicy %s(%lld:%lld)\n" DEF, yylineno, X, Y, Z)
 #define ERR_ARRAY_INDEX_RANGE(X,Y)  fprintf(stderr, RED "Blad linia %d: Indeksowanie tablicy poza zakresem %s(%lld)\n" DEF, yylineno, X, Y)
 #define ERR_BAD_FILENAME(X)    fprintf(stderr, RED "Problem z otwarciem pliku %s\n"                           DEF, X)
