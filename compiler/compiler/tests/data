@@ -7,17 +7,15 @@ INC b
 SHL b
 SHL b
 INC b
+SHL b
 STORE b a
 RESET c
 INC c
 SHL c
 SHL c
-SHL c
-SHL c
-SHL c
 INC c
 SHL c
-INC c
+SHL c
 RESET f
 ADD f b
 SUB f c

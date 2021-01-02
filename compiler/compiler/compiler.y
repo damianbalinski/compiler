@@ -22,20 +22,22 @@
 }
 
 %union{
-    input_type val;      /* wartosc i rejestr */
+    input_type val;      /* wartosc          */
     unit_type* unit;     /* pamiec i rejestr */
-    char *id;            /* identyfikator */
-    cond_type* cond;
+    char *id;            /* identyfikator    */
+    bool type;           /* wartosc logiczna */
+    cond_type* cond;     /* skoki warunkowe  */
 }
 
 //%glr-parser
 %start program
-%nterm <unit> value
-%nterm <unit> valueloc
-%nterm <unit> expression
+%type <unit> value
+%type <unit> valueloc
+%type <unit> expression
 %type <unit> condition
-%nterm <unit> ridentifier
-%nterm <unit> lidentifier
+%type <unit> ridentifier
+%type <unit> lidentifier
+%type <type> to_downto
 %token <val> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
@@ -109,15 +111,15 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         $1->iter = get_iterator($3);                }
     FROM
     value           {   for_init($1->iter, $6);                     }
-    TO
+    to_downto
     value
     DO              {   $1->label_cond = code_get_label();
-                        $1->cond = for_cond($6, $9, FOR_DO);
+                        $1->cond = for_cond($6, $9, $8);
                         jump_true_false($1, $1->cond, INIT);
                         jump_end($1, $1->cond, INIT);        
                         $1->label_cmd = code_get_label();           }
-    commands        {   for_step($1->iter, $6, FOR_DO);
-                        jump_cond($1, $1->cond, INIT);                          }
+    commands        {   for_step($1->iter, $6, $8);
+                        jump_cond($1, $1->cond, INIT);              }
     ENDFOR          {   $1->label_end = code_get_label();
                         jump_true_false($1, $1->cond, FINISH);
                         jump_end($1, $1->cond, FINISH);
@@ -127,6 +129,9 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
 |  READ lidentifier ';'        { read($2);         }
 |  WRITE valueloc ';'          { write($2);        }
 ;
+
+to_downto: TO                  { $$ = FOR_TO;      }
+|  DOWNTO                      { $$ = FOR_DOWNTO;  }
 
 expression: value              { $$ = $1;          }
 |  value '+' value             { $$ = sum($1, $3); }

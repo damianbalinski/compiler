@@ -10,7 +10,7 @@
 #define INIT true
 #define NOINIT false
 
-#define FOR_DO true
+#define FOR_TO true
 #define FOR_DOWNTO false
 
 void add_variable(char* id);

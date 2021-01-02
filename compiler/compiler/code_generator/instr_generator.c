@@ -531,8 +531,8 @@ unit_type* for_cond(unit_type* unit1, unit_type* unit2, bool type) {
     DBG_INSTRUCTION_BEGIN("for_cond");
     unit_type* unit = unit_alloc();
 
-    if (type == FOR_DO) {
-        // FOR DO
+    if (type == FOR_TO) {
+        // FOR TO
         reg_check(unit1);
         reg_check(unit2);
         reset(SUPER_REGISTER);
@@ -557,7 +557,6 @@ unit_type* for_cond(unit_type* unit1, unit_type* unit2, bool type) {
 
 void for_init(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("for_init");
-    // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);
     store(unit2->reg, unit1->reg);
@@ -566,8 +565,8 @@ void for_init(unit_type* unit1, unit_type* unit2) {
 
 void for_step(unit_type* unit1, unit_type* unit2, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");
-    if (type == FOR_DO) {
-        // FOR DO
+    if (type == FOR_TO) {
+        // FOR TO
         reg_check(unit1);
         reg_check(unit2);
         inc(unit2->reg);
