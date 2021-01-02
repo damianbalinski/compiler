@@ -527,32 +527,27 @@ unit_type* gt_le(unit_type* unit1, unit_type* unit2, bool type) {
     return unit1;
 }
 
-unit_type* for_cond(unit_type* unit1, unit_type* unit2, bool type) {
+void for_cond(unit_type* unit1, unit_type* unit2, bool type) {
     DBG_INSTRUCTION_BEGIN("for_cond");
-    unit_type* unit = unit_alloc();
-
+    reg_check(unit1);
+    reg_check(unit2);
+    unit2->type = GREATER;
     if (type == FOR_TO) {
         // FOR TO
-        reg_check(unit1);
-        reg_check(unit2);
-        reset(SUPER_REGISTER);
-        add(SUPER_REGISTER, unit1->reg);
-        sub(SUPER_REGISTER, unit2->reg);
-        unit->reg = SUPER_REGISTER;
-        unit->type = LESS_EQUAL;
+        inc(unit2->reg);
+        sub(unit2->reg, unit1->reg);
     }
     else {
         // FOR DOWNTO
-        reg_check(unit1);
-        reg_check(unit2);
-        reset(SUPER_REGISTER);
-        add(SUPER_REGISTER, unit2->reg);
-        sub(SUPER_REGISTER, unit1->reg);
-        unit->reg = SUPER_REGISTER;
-        unit->type = GREATER_EQUAL;
+        int x = reg_get_free();
+        reset(x);
+        add(x, unit1->reg);
+        inc(x);
+        sub(x, unit2->reg);
+        reg_free(unit2->reg);
+        reg_connect(unit2, x);
     }
     DBG_INSTRUCTION_END("for_cond");
-    return unit;
 }
 
 void for_init(unit_type* unit1, unit_type* unit2) {
@@ -563,21 +558,38 @@ void for_init(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_END("for_init");
 }
 
-void for_step(unit_type* unit1, unit_type* unit2, bool type) {
+void for_step(unit_type* iterator, unit_type* value, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");
+    reg_check_log(iterator);
+    reg_check_log(value);
+    reg_check_log(condition);
+
     if (type == FOR_TO) {
         // FOR TO
-        reg_check(unit1);
-        reg_check(unit2);
-        inc(unit2->reg);
-        store(unit2->reg, unit1->reg);
+        inc(value->reg);
+        store(value->reg, iterator->reg);
+        dec(condition->reg);
     }
     else {
         // FOR DOWNTO
-        reg_check(unit1);
-        reg_check(unit2);
-        dec(unit2->reg);
-        store(unit2->reg, unit1->reg);
+        dec(value->reg);
+        store(value->reg, iterator->reg);
+        dec(condition->reg);
     }
+    
     DBG_INSTRUCTION_END("for_step");
+}
+
+/* Zwalnianie pamieci po petli for. */
+void for_free(cond_type* cond, unit_type* condition, unit_type* iterator, unit_type* value) {
+    DBG_INSTRUCTION_BEGIN("for_free");
+    // ZWALNIANIE
+    cond_free(cond);
+    reg_free(condition->reg);
+    unit_free(condition);
+    reg_free(iterator->reg);
+    unit_free(iterator);
+    reg_free(value->reg);
+    unit_free(value);
+    DBG_INSTRUCTION_END("for_free");
 }

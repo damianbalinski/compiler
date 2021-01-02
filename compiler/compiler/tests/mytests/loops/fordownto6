@@ -1,0 +1,38 @@
+BEGIN
+    WRITE 1000;
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+
+    WRITE 1000;
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+
+    WRITE 1000;
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+
+    WRITE 1000;
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+
+    WRITE 1000;
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+
+    WRITE 1000;
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+
+    WRITE 1000;
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+
+    WRITE 1000;
+END

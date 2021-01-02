@@ -1,0 +1,49 @@
+DECLARE
+    a, b, c, d, e, f, g
+BEGIN
+
+    a := 0;
+    WHILE a < 5 DO
+
+        b := 0;
+        WHILE b < 5 DO
+
+            c := 0;
+            WHILE c < 5 DO
+
+                d := 0;
+                WHILE d < 5 DO
+
+                    e := 0;
+                    WHILE e < 5 DO
+
+                        f := 0;
+                        WHILE f < 5 DO
+
+                            g := 0;
+                            WHILE g < 5 DO
+
+                                WRITE a;
+                                WRITE b;
+                                WRITE c;
+                                WRITE d;
+                                WRITE e;
+                                WRITE f;
+                                WRITE g;
+                                WRITE 100000;
+                        
+                                g := g + 1;
+                            ENDWHILE
+                            f := f + 1;
+                        ENDWHILE
+                        e := e + 1;
+                    ENDWHILE
+                    d := d + 1;
+                ENDWHILE
+                c := c + 1;
+            ENDWHILE
+            b := b + 1;
+        ENDWHILE
+        a := a + 1;
+    ENDWHILE
+END 

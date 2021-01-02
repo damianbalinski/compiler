@@ -1,6 +1,8 @@
+DECLARE
+    a, b(5:7)
 BEGIN
     FOR i
-    FROM 10 DOWNTO 1 DO
+    FROM 20 DOWNTO 0 DO
         WRITE i;
     ENDFOR
 END

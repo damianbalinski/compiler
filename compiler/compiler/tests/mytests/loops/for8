@@ -1,0 +1,8 @@
+BEGIN
+    FOR a FROM 1 TO 2 DO
+        FOR b FROM 5 TO 6 DO
+            WRITE a;
+            WRITE b;
+        ENDFOR
+    ENDFOR
+END

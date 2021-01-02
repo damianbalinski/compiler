@@ -8,7 +8,6 @@
 typedef struct {
 
     unit_type* iter;
-    unit_type* cond;
 
     input_type label_cmd;
     input_type label_cond;

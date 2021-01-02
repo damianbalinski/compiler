@@ -2,7 +2,7 @@ DECLARE
     a, b(5:7)
 BEGIN
     FOR i
-    FROM 0 TO 0 DO
+    FROM 0 TO 20 DO
         WRITE i;
     ENDFOR
 END

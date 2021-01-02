@@ -11,6 +11,7 @@ void reg_print();
 int reg_get_free();
 void reg_free(int x);
 void reg_check(unit_type* unit);
+void reg_check_log(unit_type* unit);
 void reg_const(int x, input_type val);
 
 void reg_to_mem(unit_type* unit, int reg);

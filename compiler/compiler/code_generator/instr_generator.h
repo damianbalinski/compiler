@@ -19,9 +19,10 @@ void add_iterator(char* id);
 void remove_iterator(char* id);
 unit_type* get_iterator(char* id);
 
-unit_type* for_cond(unit_type* unit1, unit_type* unit2, bool type);
+void for_cond(unit_type* unit1, unit_type* unit2, bool type);
 void for_init(unit_type* unit1, unit_type* unit2);
-void for_step(unit_type* unit1, unit_type* unit2, bool type);
+void for_step(unit_type* unit1, unit_type* unit2, unit_type* unit3, bool type);
+void for_free(cond_type* cond, unit_type* condition, unit_type* iterator, unit_type* value);
 
 void jump_true_false(cond_type* cond, unit_type* condition, bool type);
 void jump_end(cond_type* cond, unit_type* condition, bool type);
