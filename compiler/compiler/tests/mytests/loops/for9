@@ -1,16 +1,10 @@
 BEGIN
     FOR a FROM 1 TO 2 DO
-        FOR b FROM 1 TO 2 DO
-            FOR c FROM 1 TO 2 DO
-                FOR d FROM 2 TO 1 DO
-
-                    WRITE a;
-                    WRITE b;
-                    WRITE c;
-                    WRITE d;
-                    WRITE 1000;
-
-                ENDFOR
+        FOR b FROM 3 TO 4 DO
+            FOR c FROM 5 TO 6 DO
+                WRITE a;
+                WRITE b;
+                WRITE c;
             ENDFOR
         ENDFOR
     ENDFOR

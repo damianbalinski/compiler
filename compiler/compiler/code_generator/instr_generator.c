@@ -561,10 +561,12 @@ void for_init(cond_type* cond, unit_type* value) {
 void for_step(cond_type* cond, unit_type* value, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");
     reg_check(value);
-    reg_check(condition);
+    reg_check_log(condition);
 
     if (type == FOR_TO) {
         // FOR TO
+        // reg_const(value->reg, cond->iter->offset);
+        // load(value->reg, value->reg)
         inc(value->reg);
         reg_const(SUPER_REGISTER, cond->iter->offset);
         store(value->reg, SUPER_REGISTER);
