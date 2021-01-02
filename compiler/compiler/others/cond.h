@@ -1,13 +1,13 @@
 #pragma once
 #include "types.h"
-#include "unit.h"
+#include "../symbol_table/symbol_table.h"
 
 #define INIT true
 #define FINISH false
 
 typedef struct {
 
-    unit_type* iter;
+    symbol* iter;
 
     input_type label_cmd;
     input_type label_cond;

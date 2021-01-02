@@ -106,25 +106,24 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         DBG_JUMPS($1);
                         jumps_free($1, $5);                 }
 
-|   FOR             {   $1 = cond_alloc();                          }
-    ID              {   add_iterator($3);
-                        $1->iter = get_iterator($3);                }
+|   FOR             {   $1 = cond_alloc();                  }
+    ID              {   $1->iter = add_iterator($3);        }
     FROM
-    value           {   for_init($1->iter, $6);                     }
+    value           {   for_init($1, $6);                   }
     to_downto
-    value           {   for_cond($6, $9, $8);                       }
+    value           {   for_cond($6, $9, $8);               }
     DO              {   $1->label_cond = code_get_label();
                         jump_true_false($1, $9, INIT);
                         jump_end($1, $9, INIT);        
-                        $1->label_cmd = code_get_label();           }
-    commands        {   for_step($1->iter, $6, $9, $8);
-                        jump_cond($1, $9, INIT);                    }
+                        $1->label_cmd = code_get_label();   }
+    commands        {   for_step($1, $6, $9, $8);
+                        jump_cond($1, $9, INIT);            }
     ENDFOR          {   $1->label_end = code_get_label();
                         jump_true_false($1, $9, FINISH);
                         jump_end($1, $9, FINISH);
                         jump_cond($1, $9, FINISH);
-                        remove_iterator($3);
-                        for_free($1, $9, $1->iter, $6);             }
+                        for_free($1, $6, $9);
+                        remove_iterator($3);                }
 
 |  READ lidentifier ';'        { read($2);         }
 |  WRITE valueloc ';'          { write($2);        }

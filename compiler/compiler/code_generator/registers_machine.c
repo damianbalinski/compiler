@@ -65,6 +65,7 @@ void reg_free(int x) {
  * jesli nie, przerzuca je do rejestru */
 void reg_check(unit_type* unit) {
     if (unit->reg == NOTHING) {
+        printf("new reg\n");
         CHECK_REG_CHECK(unit->reg_prev);
         int x = unit->reg_prev;
         mem_to_reg(unit, x);

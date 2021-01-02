@@ -15,14 +15,13 @@
 
 void add_variable(char* id);
 void add_array(char* id, input_type begin, input_type end);
-void add_iterator(char* id);
 void remove_iterator(char* id);
-unit_type* get_iterator(char* id);
+symbol* add_iterator(char* id);
 
 void for_cond(unit_type* unit1, unit_type* unit2, bool type);
-void for_init(unit_type* unit1, unit_type* unit2);
-void for_step(unit_type* unit1, unit_type* unit2, unit_type* unit3, bool type);
-void for_free(cond_type* cond, unit_type* condition, unit_type* iterator, unit_type* value);
+void for_init(cond_type* cond, unit_type* value);
+void for_step(cond_type* cond, unit_type* value, unit_type* condition, bool type);
+void for_free(cond_type* cond, unit_type* value, unit_type* condition);
 
 void jump_true_false(cond_type* cond, unit_type* condition, bool type);
 void jump_end(cond_type* cond, unit_type* condition, bool type);

@@ -1,0 +1,17 @@
+BEGIN
+    FOR a FROM 1 TO 2 DO
+        FOR b FROM 1 TO 2 DO
+            FOR c FROM 1 TO 2 DO
+                FOR d FROM 2 TO 1 DO
+
+                    WRITE a;
+                    WRITE b;
+                    WRITE c;
+                    WRITE d;
+                    WRITE 1000;
+
+                ENDFOR
+            ENDFOR
+        ENDFOR
+    ENDFOR
+END

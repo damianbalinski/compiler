@@ -278,32 +278,33 @@ unit_type* get_array_var(char* id, char* id_var, bool type, bool init) {
 }
 
 /* Dodaje iterator, przydziela mu pamiec. */
-void add_iterator(char* id) {
+symbol* add_iterator(char* id) {
     DBG_INSTRUCTION_BEGIN("add_iterator");
     symbol* sym;
     sym = sym_put(id);
     sym->type = VARIABLE;
-    sym->is_init = false;
+    sym->is_init = true;
     sym->is_const = true;
     sym->offset = variable_allocate();
 
     DBG_INSTRUCTION_END("add_iterator");
     DBG_SYMBOL_PRINT();
+    return sym;
 }
 
 /* Pobiera lokalizacje iteratora. */
-unit_type* get_iterator(char* id) {
-    DBG_INSTRUCTION_BEGIN("get_iterator");
-    symbol* sym = sym_get(id);
-    unit_type* unit = unit_alloc();
-    int x = reg_get_free();         // wolny rejestr
-    reg_const(x, sym->offset);      // stala do rejestru
-    sym->is_init = true;
-    reg_connect(unit, x);
+// unit_type* get_iterator(char* id) {
+//     DBG_INSTRUCTION_BEGIN("get_iterator");
+//     symbol* sym = sym_get(id);
+//     unit_type* unit = unit_alloc();
+//     int x = reg_get_free();         // wolny rejestr
+//     reg_const(x, sym->offset);      // stala do rejestru
+//     sym->is_init = true;
+//     reg_connect(unit, x);
 
-    DBG_INSTRUCTION_END("get_iterator");
-    return unit;
-}
+//     DBG_INSTRUCTION_END("get_iterator");
+//     return unit;
+// }
 
 /* Usuwa iterator. */
 void remove_iterator(char* id) {
@@ -549,30 +550,31 @@ void for_cond(unit_type* value, unit_type* condition, bool type) {
     DBG_INSTRUCTION_END("for_cond");
 }
 
-void for_init(unit_type* unit1, unit_type* unit2) {
+void for_init(cond_type* cond, unit_type* value) {
     DBG_INSTRUCTION_BEGIN("for_init");
-    reg_check(unit1);
-    reg_check(unit2);
-    store(unit2->reg, unit1->reg);
+    reg_check(value);
+    reg_const(SUPER_REGISTER, cond->iter->offset);
+    store(value->reg, SUPER_REGISTER);
     DBG_INSTRUCTION_END("for_init");
 }
 
-void for_step(unit_type* iterator, unit_type* value, unit_type* condition, bool type) {
+void for_step(cond_type* cond, unit_type* value, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");
-    reg_check(iterator);
     reg_check(value);
     reg_check(condition);
 
     if (type == FOR_TO) {
         // FOR TO
         inc(value->reg);
-        store(value->reg, iterator->reg);
+        reg_const(SUPER_REGISTER, cond->iter->offset);
+        store(value->reg, SUPER_REGISTER);
         dec(condition->reg);
     }
     else {
         // FOR DOWNTO
         dec(value->reg);
-        store(value->reg, iterator->reg);
+        reg_const(SUPER_REGISTER, cond->iter->offset);
+        store(value->reg, SUPER_REGISTER);
         dec(condition->reg);
     }
     
@@ -580,15 +582,13 @@ void for_step(unit_type* iterator, unit_type* value, unit_type* condition, bool 
 }
 
 /* Zwalnianie pamieci po petli for. */
-void for_free(cond_type* cond, unit_type* condition, unit_type* iterator, unit_type* value) {
+void for_free(cond_type* cond, unit_type* value, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("for_free");
     // ZWALNIANIE
     cond_free(cond);
-    reg_free(condition->reg);
-    unit_free(condition);
-    reg_free(iterator->reg);
-    unit_free(iterator);
     reg_free(value->reg);
     unit_free(value);
+    reg_free(condition->reg);
+    unit_free(condition);
     DBG_INSTRUCTION_END("for_free");
 }
