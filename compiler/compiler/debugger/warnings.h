@@ -9,6 +9,8 @@
 #ifdef WARNINGS
     #define CHECK_REGISTER(X)       if (X < 0 || X >= MAX_REGISTERS) \
                                         fprintf(stderr, RED "Ostrzezenie: Rejestr %d poza zakresem\n" DEF, X)
+    #define CHECK_REG_CHECK(X)      if (registers[X].unit != NULL) \
+                                        fprintf(stderr, RED "Ostrzezenie: Proba przywrocenia zajetego rejestru %d\n" DEF, X)
     #define CHECK_INSTRUCTION(X)    if (X >= MAX_CODES_TABLE) \
                                         fprintf(stderr, RED "Ostrzezenie: Brak miejsca w tablicy kodow\n" DEF)
     #define CHECK_DATA(X)           if (X >= MAX_DATA) \

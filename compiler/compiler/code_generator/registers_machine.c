@@ -65,18 +65,8 @@ void reg_free(int x) {
  * jesli nie, przerzuca je do rejestru */
 void reg_check(unit_type* unit) {
     if (unit->reg == NOTHING) {
-        int x = reg_get_free();
-        mem_to_reg(unit, x);
-        reg_connect(unit, x);
-    }
-}
-
-/* Sprawdza, czy dane sa w rejestrze,
- * jesli nie, przerzuca je do rejestru */
-void reg_check_log(unit_type* unit) {
-    if (unit->reg == NOTHING) {
-        printf("allocate new\n");
-        int x = reg_get_free();
+        CHECK_REG_CHECK(unit->reg_prev);
+        int x = unit->reg_prev;
         mem_to_reg(unit, x);
         reg_connect(unit, x);
     }
@@ -100,12 +90,14 @@ inline void mem_to_reg(unit_type* unit, int reg) {
 inline void reg_connect(unit_type* unit, int reg) {
     registers[reg].unit = unit;
     unit->reg = reg;
+    unit->reg_prev = NOTHING;
 }
 
 /* Odlacza rejestr od unity */
 inline void reg_disconnect(unit_type* unit, int reg) {
     registers[reg].unit = NULL;
     unit->reg = NOTHING;
+    unit->reg_prev = reg;
 }
 
 /* Drukuje liste rejestrow */

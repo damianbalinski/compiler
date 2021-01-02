@@ -364,7 +364,6 @@ void add_array(char* id, input_type begin, input_type end) {
     DBG_SYMBOL_PRINT();
 }
 
-
 /* Przypisuje wartosc do zmiennej. */
 void assign(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("assign");
@@ -527,25 +526,25 @@ unit_type* gt_le(unit_type* unit1, unit_type* unit2, bool type) {
     return unit1;
 }
 
-void for_cond(unit_type* unit1, unit_type* unit2, bool type) {
+void for_cond(unit_type* value, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_cond");
-    reg_check(unit1);
-    reg_check(unit2);
-    unit2->type = GREATER;
+    reg_check(value);
+    reg_check(condition);
+    condition->type = GREATER;
     if (type == FOR_TO) {
         // FOR TO
-        inc(unit2->reg);
-        sub(unit2->reg, unit1->reg);
+        inc(condition->reg);
+        sub(condition->reg, value->reg);
     }
     else {
         // FOR DOWNTO
         int x = reg_get_free();
         reset(x);
-        add(x, unit1->reg);
+        add(x, value->reg);
         inc(x);
-        sub(x, unit2->reg);
-        reg_free(unit2->reg);
-        reg_connect(unit2, x);
+        sub(x, condition->reg);
+        reg_free(condition->reg);
+        reg_connect(condition, x);
     }
     DBG_INSTRUCTION_END("for_cond");
 }
@@ -560,9 +559,9 @@ void for_init(unit_type* unit1, unit_type* unit2) {
 
 void for_step(unit_type* iterator, unit_type* value, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");
-    reg_check_log(iterator);
-    reg_check_log(value);
-    reg_check_log(condition);
+    reg_check(iterator);
+    reg_check(value);
+    reg_check(condition);
 
     if (type == FOR_TO) {
         // FOR TO

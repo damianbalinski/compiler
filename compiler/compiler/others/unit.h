@@ -13,6 +13,7 @@
 
 typedef struct {
     int reg;
+    int reg_prev;
     input_type offset;
     bool type;
 } unit_type;
