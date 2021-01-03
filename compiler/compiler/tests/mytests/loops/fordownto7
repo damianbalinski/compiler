@@ -1,0 +1,6 @@
+BEGIN
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+    ENDFOR
+    WRITE i;
+END

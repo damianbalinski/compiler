@@ -1,0 +1,21 @@
+BEGIN
+    FOR a FROM 4 DOWNTO 0 DO
+        FOR b FROM 4 DOWNTO 0 DO
+            FOR c FROM 4 DOWNTO 0 DO
+                FOR d FROM 4 DOWNTO 0 DO
+                    FOR e FROM 4 DOWNTO 0 DO
+                        FOR f FROM 4 DOWNTO 0 DO
+                            WRITE a;
+                            WRITE b;
+                            WRITE c;
+                            WRITE d;
+                            WRITE e;
+                            WRITE f;
+                            WRITE 1000;
+                        ENDFOR
+                    ENDFOR
+                ENDFOR
+            ENDFOR
+        ENDFOR
+    ENDFOR
+END
