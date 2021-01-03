@@ -1,0 +1,15 @@
+BEGIN
+    IF 10 > 20 THEN
+        IF 30 < 40 THEN
+            WRITE 10;
+        ELSE
+            WRITE 20;
+        ENDIF
+    ELSE
+        IF 50 > 60 THEN
+            WRITE 30;
+        ELSE
+            WRITE 40;
+        ENDIF
+    ENDIF
+END

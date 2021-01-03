@@ -13,9 +13,6 @@ extern int yylineno;
 extern char* yytext;
 extern register_type registers[6];
 
-
-
-/****************** SKOKI ************************/
 void jump_true_false(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("jump_true_false");
     if (type == INIT) {
@@ -87,6 +84,19 @@ void jump_cmd(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_END("jump_cmd");
 }
 
+void jump_else(cond_type* cond, bool else_type, bool type) {
+    DBG_INSTRUCTION_BEGIN("jump_else");
+    if (type == INIT && else_type == IF_THEN_ELSE) {
+        // JUMP ELSE - INIT
+        cond->jump_else = jump(0);
+    }
+    else if (type == FINISH && else_type == IF_THEN_ELSE) {
+        // JUMP ELSE - FINISH
+        code_modif(cond->jump_else, cond->label_else - cond->jump_else);
+    }
+    DBG_INSTRUCTION_END("jump_else");
+}
+
 /* Zwalnianie pamieci po skokach. */
 void jumps_free(cond_type* cond, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("jumps_free");
@@ -95,15 +105,6 @@ void jumps_free(cond_type* cond, unit_type* condition) {
     reg_free(condition->reg);
     unit_free(condition);
     DBG_INSTRUCTION_END("jumps_free");
-}
-
-/*************************************************/
-
-/* Modyfikacja skoku jump_else. */
-void jumps_modif_else(cond_type* cond, unit_type* condition) {
-    DBG_INSTRUCTION_BEGIN("jumps_modif_else");
-    code_modif(cond->jump_else, cond->label_else - cond->jump_else);
-    DBG_INSTRUCTION_END("jumps_modif_else");
 }
 
 /* Pobiera stala. Przechowuje ja w rejestrze. */
@@ -560,29 +561,6 @@ unit_type* for_init(cond_type* cond, unit_type* begin, unit_type* end, bool type
         return begin;
     }
 }
-
-// void for_cond(unit_type* value, unit_type* condition, bool type) {
-//     DBG_INSTRUCTION_BEGIN("for_cond");
-//     reg_check(value);
-//     reg_check(condition);
-//     condition->type = GREATER;
-//     if (type == FOR_TO) {
-//         // FOR TO
-//         inc(condition->reg);
-//         sub(condition->reg, value->reg);
-//     }
-//     else {
-//         // FOR DOWNTO
-//         int x = reg_get_free();
-//         reset(x);
-//         add(x, value->reg);
-//         inc(x);
-//         sub(x, condition->reg);
-//         reg_free(condition->reg);
-//         reg_connect(condition, x);
-//     }
-//     DBG_INSTRUCTION_END("for_cond");
-// }
 
 void for_step(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");

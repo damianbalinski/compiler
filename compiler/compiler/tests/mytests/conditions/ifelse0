@@ -1,0 +1,7 @@
+BEGIN
+    IF 2 < 3 THEN
+        WRITE 0;
+    ELSE
+        WRITE 1;
+    ENDIF
+END

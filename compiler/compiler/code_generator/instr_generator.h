@@ -13,6 +13,9 @@
 #define FOR_TO true
 #define FOR_DOWNTO false
 
+#define IF_THEN true
+#define IF_THEN_ELSE false
+
 void add_variable(char* id);
 void add_array(char* id, input_type begin, input_type end);
 void remove_iterator(char* id);
@@ -26,6 +29,7 @@ void jump_true_false(cond_type* cond, unit_type* condition, bool type);
 void jump_end(cond_type* cond, unit_type* condition, bool type);
 void jump_cond(cond_type* cond, unit_type* condition, bool type);
 void jump_cmd(cond_type* cond, unit_type* condition, bool type);
+void jump_else(cond_type* cond, bool else_type, bool type);
 void jumps_free(cond_type* cond, unit_type* condition);
 
 unit_type* get_const(input_type val, bool type);

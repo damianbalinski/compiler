@@ -1,19 +1,17 @@
 BEGIN
-    IF 2 < 3 THEN
-        WRITE 0;
-    ELSE
-        WRITE 1;
-    ENDIF
+    WRITE 10;
 
-    IF 3 < 3 THEN
+    IF 2 < 3 THEN
+        WRITE 1;
         WRITE 2;
-    ELSE
         WRITE 3;
     ENDIF
 
     IF 4 < 3 THEN
-        WRITE 4;
-    ELSE
-        WRITE 5;
+        WRITE 10;
+        WRITE 20;
+        WRITE 30;
     ENDIF
+
+    WRITE 30;
 END

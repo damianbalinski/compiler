@@ -29,7 +29,6 @@
     cond_type* cond;     /* skoki warunkowe  */
 }
 
-//%glr-parser
 %start program
 %type <unit> value
 %type <unit> valueloc
@@ -37,7 +36,7 @@
 %type <unit> condition
 %type <unit> ridentifier
 %type <unit> lidentifier
-%type <type> to_downto
+%type <type> to_downto else
 %token <val> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
@@ -74,10 +73,11 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
     condition       {   jump_true_false($1, $3, INIT);
                         jump_end($1, $3, INIT);             }
     THEN            {   $1->label_cmd = code_get_label();   }
-    commands    
-    ENDIF           {   $1->label_end = code_get_label();
-                        jump_true_false($1, $3, FINISH);
+    commands        {   $1->label_end = code_get_label();   }
+    else            {   $1->label_else = code_get_label();  }
+    ENDIF           {   jump_true_false($1, $3, FINISH);
                         jump_end($1, $3, FINISH);
+                        jump_else($1, $9, FINISH);
                         DBG_JUMPS($1);
                         jumps_free($1, $3);                 }
 
@@ -126,17 +126,25 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         for_free($1, $8);
                         remove_iterator($3);                }
 
-|  READ lidentifier ';'        { read($2);         }
-|  WRITE valueloc ';'          { write($2);        }
+|  READ lidentifier ';'        { read($2);          }
+|  WRITE valueloc ';'          { write($2);         }
 ;
 
-to_downto: TO                  { $$ = FOR_TO;      }
-|  DOWNTO                      { $$ = FOR_DOWNTO;  }
+to_downto: TO                  { $$ = FOR_TO;       }
+|  DOWNTO                      { $$ = FOR_DOWNTO;   }
+;
 
-expression: value              { $$ = $1;          }
-|  value '+' value             { $$ = sum($1, $3); }
-|  value '-' value             { $$ = dif($1, $3); }
-|  value '*' value             { $$ = mul($1, $3); }
+else: %empty                   { $<cond>-7->label_end = code_get_label();
+                                 $$ = IF_THEN;                             }
+|  ELSE                        { jump_else($<cond>-7, IF_THEN_ELSE, INIT); 
+                                 $<cond>-7->label_end = code_get_label();  }
+   commands                    { $$ = IF_THEN_ELSE;                        }
+;
+
+expression: value              { $$ = $1;           }
+|  value '+' value             { $$ = sum($1, $3);  }
+|  value '-' value             { $$ = dif($1, $3);  }
+|  value '*' value             { $$ = mul($1, $3);  }
 |  value '/' value
 |  value '%' value
 ;
