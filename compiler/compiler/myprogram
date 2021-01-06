@@ -11,10 +11,16 @@ flex $1.l
 gcc -o temp $FILES $1.tab.c lex.yy.c -lm
 
 ./temp $src $dest
-maszyna-wirtualna-cln $dest
 
-rm $1.tab.c 
-rm $1.tab.h
-rm lex.yy.c
-rm temp
-rm $dest
+if (( $? == 0 )) ; then
+    # compilation ok
+    maszyna-wirtualna-cln $dest
+    rm $1.tab.c 
+    rm $1.tab.h
+    rm lex.yy.c
+    rm temp
+    rm $dest
+else
+    # compilation error
+    echo "Compilation error"
+fi
