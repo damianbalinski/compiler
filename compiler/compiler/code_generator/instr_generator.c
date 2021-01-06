@@ -65,25 +65,6 @@ void jump_cond(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_END("jump_cond");
 }
 
-void jump_cmd(cond_type* cond, unit_type* condition, bool type) {
-    DBG_INSTRUCTION_BEGIN("jump_cmd");
-    if (type == INIT && condition->type) {
-        // NOTHING
-    }
-    else if (type == INIT) {
-        // JUMP_CMD - INIT
-        cond->jump_cmd = jump(0);
-    }
-    else if (condition->type) {
-        // NOTHING
-    }
-    else {
-        // JUMP_CMD - FINISH
-        code_modif(cond->jump_cmd, cond->label_cmd - cond->jump_cmd);
-    }
-    DBG_INSTRUCTION_END("jump_cmd");
-}
-
 void jump_else(cond_type* cond, bool else_type, bool type) {
     DBG_INSTRUCTION_BEGIN("jump_else");
     if (type == INIT && else_type == IF_THEN_ELSE) {

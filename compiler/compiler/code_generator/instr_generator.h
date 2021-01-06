@@ -28,7 +28,6 @@ void for_free(cond_type* cond, unit_type* condition);
 void jump_true_false(cond_type* cond, unit_type* condition, bool type);
 void jump_end(cond_type* cond, unit_type* condition, bool type);
 void jump_cond(cond_type* cond, unit_type* condition, bool type);
-void jump_cmd(cond_type* cond, unit_type* condition, bool type);
 void jump_else(cond_type* cond, bool else_type, bool type);
 void jumps_free(cond_type* cond, unit_type* condition);
 

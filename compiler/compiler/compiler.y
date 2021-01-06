@@ -95,14 +95,13 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         jumps_free($1, $3);                 }
                     
 |   REPEAT          {   $1 = cond_alloc();                 
-                        $1->label_cmd = code_get_label();   }
+                        $1->label_end = code_get_label();   }
     commands
     UNTIL
-    condition       {   jump_true_false($1, $5, INIT);
-                        jump_cmd($1, $5, INIT);             }
-    ';'             {   $1->label_end = code_get_label();
+    condition       {   jump_true_false($1, $5, INIT);            }
+    ';'             {   $1->label_cmd = code_get_label();
                         jump_true_false($1, $5, FINISH);
-                        jump_cmd($1, $5, FINISH);
+                        jump_end($1, $5, FINISH);
                         DBG_JUMPS($1);
                         jumps_free($1, $5);                 }
 
