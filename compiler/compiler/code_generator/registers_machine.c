@@ -131,7 +131,6 @@ void reg_const(int x, input_type val) {
     CHECK_VAL(val);
     
     reset(x);
-
     if (val == 0)
         return;
     
@@ -150,18 +149,35 @@ void reg_const(int x, input_type val) {
 }
 
 /* Mnozenie.
- * z = x * y. */
+ * z = x * y, jesli x > y
+ * z = y * x, jesli x <= y */
 void reg_mul(int x, int y, int z) {
     DBG_REGISTERS_BEGIN("reg_mul");
-    reset(z);
 
+    reset(z);
+    add(z, x);
+    sub(z, y);
+    jzero(z, 9);
+
+    // x < y
+    reset(z);
     jodd(y, 2);
     jump(2);
     add(z,x);
-    jzero(y,4);
+    jzero(y, 12);   /* JUMP END */
     shl(x);
     shr(y);
-    jump(-6);
+    jump(-6);       /* JUMP BACK */
+
+    // x >= y
+    reset(z);
+    jodd(x, 2);
+    jump(2);
+    add(z,y);
+    jzero(x,4);     /* JUMP END */
+    shl(y);
+    shr(x);
+    jump(-6);       /* JUMP BACK */
 
     DBG_REGISTERS_END("reg_mul");
 }

@@ -1,0 +1,15 @@
+DECLARE
+    a
+BEGIN
+    a := 10000*200000;
+    WRITE a;
+
+    a := 40000*100000;
+    WRITE a;
+
+    a := 80000*100000;
+    WRITE a;
+
+    a := 30000*100000;
+    WRITE a;
+END

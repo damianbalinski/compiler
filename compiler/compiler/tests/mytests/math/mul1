@@ -1,21 +1,12 @@
 DECLARE
-    a
+    a, b, c
 BEGIN
     a := 2;
-    WRITE a;
+    b := 1000000000;
 
-    a := a * a;
-    WRITE a;
+    c := a*b;
+    WRITE c;
 
-    a := a * a;
-    WRITE a;
-
-    a := a * a;
-    WRITE a;
-
-    a := a * a;
-    WRITE a;
-
-    a := a * a;
-    WRITE a;
+    c := b*a;
+    WRITE c;
 END
