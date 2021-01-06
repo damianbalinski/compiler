@@ -57,12 +57,10 @@ int division1(int r, int n, bool type) {
         
         x = n;
         y = 1;
-        while(f = x - r, f <= 0) {  /* x <= r */
+        while(f = x - r, f <= 0) {
             x <<= 1;
             y <<= 1;
         }
-
-        
         while(f = n-x, f <= 0) {
             if (f = x - r, f <= 0) {
                 q += y;

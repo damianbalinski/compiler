@@ -101,6 +101,7 @@ void jump_else(cond_type* cond, bool else_type, bool type) {
 void jumps_free(cond_type* cond, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("jumps_free");
     // ZWALNIANIE
+    reg_check(condition);
     cond_free(cond);
     reg_free(condition->reg);
     unit_free(condition);
@@ -559,7 +560,7 @@ symbol* add_iterator(char* id) {
     symbol* sym;
     sym = sym_put(id);
     sym->type = VARIABLE;
-    sym->is_init = true;
+    sym->is_init = false;
     sym->is_const = true;
     sym->offset = array_allocate(2);
 
@@ -574,6 +575,7 @@ unit_type* for_init(cond_type* cond, unit_type* begin, unit_type* end, bool type
     reg_check(end);
 
     // VALUE
+    cond->iter->is_init = true;
     reg_const(SUPER_REGISTER, cond->iter->offset);
     store(begin->reg, SUPER_REGISTER);
 

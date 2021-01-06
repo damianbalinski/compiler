@@ -1,12 +1,30 @@
-DECLARE
-    tab(10:20), a
-BEGIN
-    tab(10) := 100;
-    tab(15) := 200;
-    tab(20) := 300;
-    FOR i FROM 10 TO 20 DO
-        WRITE tab(i);
-    ENDFOR
+[ factorial3.imp - obliczanie n! dla n podanego przez uzytkownika 
 
-    WRITE tab(10);
+        Przykladowe dane testowe:
+        1. 100
+        2. 1000
+]
+[ 
+    Czas wykonywania tego programu nie powinien istotnie roznic sie 
+    od czasu wykonywania factorial1.imp /dla tych samych n/.
+]
+
+DECLARE
+    fact, r, n, k 
+BEGIN
+    READ n;
+    fact := 1;
+    k := 1;
+  
+    REPEAT
+        r := k % 2;
+        WRITE r;
+        fact := fact * k;
+        k := k + 1;
+	UNTIL k > n;    
+    
+	WRITE fact;
+
+	[ Liczy n! ]
 END
+
