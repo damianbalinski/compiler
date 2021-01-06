@@ -1,11 +1,12 @@
 DECLARE
-    a
+    tab(10:20), a
 BEGIN
-    a := 0;
-    
-    REPEAT
-        WRITE a;
-        a := a + 1;
-    UNTIL a < 10;
-    
+    tab(10) := 100;
+    tab(15) := 200;
+    tab(20) := 300;
+    FOR i FROM 10 TO 20 DO
+        WRITE tab(i);
+    ENDFOR
+
+    WRITE tab(10);
 END

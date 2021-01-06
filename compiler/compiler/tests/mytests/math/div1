@@ -1,0 +1,12 @@
+DECLARE
+    a, b
+BEGIN
+    FOR i FROM 0 TO 21 DO
+        a := 20 / i;
+        b := 200 / i;
+
+        WRITE a;
+        WRITE b;
+        WRITE 1000;
+    ENDFOR
+END

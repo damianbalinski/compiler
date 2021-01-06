@@ -132,7 +132,7 @@ unit_type* get_const(input_type val, bool type) {
     return unit;
 }
 
-/* Pobiera lokalizacje zmiennej. Ustawia zmienna
+/* Pobiera lokalizacje/wartosc zmiennej. Ustawia zmienna
  * jako zainicjalizowana.
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest zmienna
@@ -179,7 +179,7 @@ unit_type* get_variable(char* id, bool type, bool init) {
     return unit;
 }
 
-/* Pobiera lokalizacje komorki tablicy
+/* Pobiera lokalizacje/wartosc komorki tablicy
  * indeksowanej przez stala.
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest tablica
@@ -221,7 +221,7 @@ unit_type* get_array_num(char* id, input_type num, bool type, bool init) {
 }
 
 /*
- * Pobiera lokalizacje komorki tablicy indeksowanej 
+ * Pobiera lokalizacje/wartosc komorki tablicy indeksowanej 
  * przez zmienna.
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest tablica
@@ -259,38 +259,30 @@ unit_type* get_array_var(char* id, char* id_var, bool type, bool init) {
     else if (type == VALUE) {
         // VALUE
         int x = reg_get_free();                         // wolny rejestr
-        reg_const(x, sym->offset - sym->begin);         // stala do rejestru
-        reg_const(SUPER_REGISTER, sym_var->offset);     // stala do rejestru
+        reg_const(x, sym_var->offset);                  // stala do rejestru
+        load(x, x);                                     // wartosc do rejestru
+        reg_const(SUPER_REGISTER, sym->offset);         // stala do rejestru
         add(x, SUPER_REGISTER);                         // suma rejestrow
-        load(x,x);                                      // wartosc do rejestru
+        reg_const(SUPER_REGISTER, sym->begin);          // stala do rejestru
+        sub(x, SUPER_REGISTER);                         // roznica rejestrow
+        load(x, x);                                     // wartosc do rejestru
         reg_connect(unit, x);
     }
     else {
         // LOCATION
         int x = reg_get_free();                         // wolny rejestr
-        reg_const(x, sym->offset - sym->begin);         // stala do rejestru
-        reg_const(SUPER_REGISTER, sym_var->offset);     // stala do rejestru
+        reg_const(x, sym_var->offset);                  // stala do rejestru
+        load(x, x);                                     // wartosc do rejestru
+        reg_const(SUPER_REGISTER, sym->offset);         // stala do rejestru
         add(x, SUPER_REGISTER);                         // suma rejestrow
+        reg_const(SUPER_REGISTER, sym->begin);          // stala do rejestru
+        sub(x, SUPER_REGISTER);                         // roznica rejestrow
         reg_connect(unit, x);
     }
 
     DBG_INSTRUCTION_END("get_array_var");
     return unit;
 }
-
-/* Pobiera lokalizacje iteratora. */
-// unit_type* get_iterator(char* id) {
-//     DBG_INSTRUCTION_BEGIN("get_iterator");
-//     symbol* sym = sym_get(id);
-//     unit_type* unit = unit_alloc();
-//     int x = reg_get_free();         // wolny rejestr
-//     reg_const(x, sym->offset);      // stala do rejestru
-//     sym->is_init = true;
-//     reg_connect(unit, x);
-
-//     DBG_INSTRUCTION_END("get_iterator");
-//     return unit;
-// }
 
 /* Usuwa iterator. */
 void remove_iterator(char* id) {
@@ -449,6 +441,53 @@ unit_type* mul(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_END("mul");
     return unit1;
 }
+
+/* Iloraz.
+ * unit1 = unit1 / unit2 */
+ unit_type* divs(unit_type* unit1, unit_type* unit2) {
+    DBG_INSTRUCTION_BEGIN("div");
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    int q = reg_get_free();
+    int x = reg_get_free();
+    int y = reg_get_free();
+    reg_div(unit1->reg, unit2->reg, q, x, y, SUPER_REGISTER);
+
+    // ZWALNIANIE
+    reg_free(unit1->reg);
+    reg_free(unit2->reg);
+    reg_free(x);
+    reg_free(y);
+    unit1->reg = q;
+    unit_free(unit2);
+
+    DBG_INSTRUCTION_END("div");
+    return unit1;
+ }
+
+ /* Reszta z dzielenia.
+ * unit1 = unit1 % unit2 */
+ unit_type* mod(unit_type* unit1, unit_type* unit2) {
+    DBG_INSTRUCTION_BEGIN("mod");
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    int q = reg_get_free();
+    int x = reg_get_free();
+    int y = reg_get_free();
+    reg_div(unit1->reg, unit2->reg, q, x, y, SUPER_REGISTER);
+
+    // ZWALNIANIE
+    reg_free(unit2->reg);
+    reg_free(x);
+    reg_free(y);
+    reg_free(q);
+    unit_free(unit2);
+
+    DBG_INSTRUCTION_END("mod");
+    return unit1;
+ }
 
 /* Rowne/Rozne.
  * type=true    unit1 = (unit1 == unit2)

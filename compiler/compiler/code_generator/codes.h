@@ -1,6 +1,7 @@
 #pragma once
+#include <limits.h>
 #define MAX_CODES 15
-#define MAX_CODES_TABLE 999
+#define MAX_CODES_TABLE 100000
 
 typedef enum {
     GET, PUT, LOAD, STORE, 

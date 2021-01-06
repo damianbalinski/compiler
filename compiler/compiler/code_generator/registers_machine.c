@@ -128,6 +128,8 @@ void reg_print() {
 /* Umieszcza stala w rejestrze. */
 void reg_const(int x, input_type val) {
     DBG_REGISTERS_BEGIN("reg_const");
+    CHECK_VAL(val);
+    
     reset(x);
 
     if (val == 0)
@@ -161,6 +163,46 @@ void reg_mul(int x, int y, int z) {
     shr(y);
     jump(-6);
 
-    DBG_RVAL(z);
     DBG_REGISTERS_END("reg_mul");
+}
+
+/* Dzielenie. */
+void reg_div(int r, int n, int q, int x, int y, int f) {
+    DBG_REGISTERS_BEGIN("reg_div");
+    reset(q);
+
+    jzero(n, 28);   /* JUMP */
+    reset(x);
+    add(x, n);
+    reset(y);
+    inc(y);
+
+    reset(f);
+    add(f, x);
+    sub(f,r);
+    jzero(f, 2);   
+    jump(4);         /* JUMP */
+    shl(x);
+    shl(y);
+    jump(-7);       /* JUMP BACK */
+
+    reset(f);
+    add(f, n);
+    sub(f, x);
+    jzero(f, 2);
+    jump(12);       /* JUMP */
+
+    reset(f);
+    add(f, x);
+    sub(f, r);
+    jzero(f, 2);
+    jump(3);        /* JUMP */
+    add(q, y);
+    sub(r, x);
+    shr(x);
+    shr(y);
+    jump(-14);      /* JUMP BACK */
+    reset(r);
+
+    DBG_REGISTERS_END("reg_div");
 }

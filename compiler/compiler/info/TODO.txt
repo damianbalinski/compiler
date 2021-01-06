@@ -83,3 +83,39 @@
     ENDIF
 
 |  FOR ID FROM value DOWNTO value DO commands ENDFOR
+
+
+
+/* dzielenie: 2
+ * rejestrow: --
+ * zlozonosc: --
+ */
+int division2(int n, int d) {
+    int r = n;
+    int k = 1;
+    int q = 0;
+
+    do {
+        d <<= 1;
+        k <<= 1;
+    } while (k <= n);
+    // d >>= 1;
+    // k >>= 1;
+
+    while (k > 0) {
+
+        // printf("k = %d\n", k);
+        // printf("r = %d\n", r);
+        // printf("d = %d\n", r);
+        // printf("\n");
+
+        r <<= 1;
+        if (r-d >= 0) {
+            q += k;
+            r -= d;
+        }
+        k >>= 1;   
+    }
+
+    return q;
+}

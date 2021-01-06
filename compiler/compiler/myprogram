@@ -17,4 +17,4 @@ rm $1.tab.c
 rm $1.tab.h
 rm lex.yy.c
 rm temp
-rm $dest
+# rm $dest

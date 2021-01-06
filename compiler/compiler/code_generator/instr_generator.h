@@ -44,6 +44,8 @@ void read(unit_type* unit);
 unit_type* sum(unit_type* unit1, unit_type* unit2);
 unit_type* dif(unit_type* unit1, unit_type* unit2);
 unit_type* mul(unit_type* unit1, unit_type* unit2);
+unit_type* divs(unit_type* unit1, unit_type* unit2);
+unit_type* mod(unit_type* unit1, unit_type* unit2);
 
 unit_type* eq_ne(unit_type* unit1, unit_type* unit2, bool type);
 unit_type* lt_ge(unit_type* unit1, unit_type* unit2, bool type);

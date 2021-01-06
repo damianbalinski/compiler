@@ -1,0 +1,9 @@
+DECLARE
+    a
+BEGIN
+    FOR i FROM 0 TO 21 DO
+        a := 20 % i;
+        WRITE i;
+        WRITE a;
+    ENDFOR
+END

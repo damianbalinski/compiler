@@ -25,6 +25,8 @@
                                         fprintf(stderr, RED "Ostrzezenie: Iterator nie znajduje sie na poczatku listy" DEF)
     #define CHECK_JUMP(X)           if (X != JUMP && X != JZERO && X != JODD) \
                                         fprintf(stderr, RED "Ostrzezenie: Proba modyfikacji kodu, ktory nie jest skokiem" DEF)
+    #define CHECK_VAL(X)            if ((long long)X < 0) \
+                                        fprintf(stderr, RED "Ostrzezenie: Proba zaladowania wartosci ujemnej %lld" DEF, X)
 #else
     #define CHECK_REGISTER(X)
     #define CHECK_INSTRUCTION(X)

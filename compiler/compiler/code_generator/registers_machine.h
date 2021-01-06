@@ -20,3 +20,4 @@ void reg_connect(unit_type* unit, int reg);
 void reg_disconnect(unit_type* unit, int reg);
 
 void reg_mul(int x, int y, int z);
+void reg_div(int r, int n, int q, int x, int y, int f);

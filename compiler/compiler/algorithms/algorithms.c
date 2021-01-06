@@ -4,6 +4,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#define QUOTIENT true
+#define REMAINDER false
+
 int load_const(unsigned int val) {
     int reg = 0;
 
@@ -38,79 +41,90 @@ int mult(int x, int y) {
     return z;
 }
 
-/* dzielenie: 1
- * rejestrow: 5
- * zlozonosc: --
- */
-void division1(int m, int n) {
-    printf("%d / %d = ", m, n);
+int division0(int m, int n, bool type) {
+    if (type == QUOTIENT)
+        return n == 0 ? 0 : m/n;
+    else
+        return n == 0 ? 0 : m%n;
+}
 
+int division1(int r, int n, bool type) {
     int q = 0;
+    int x;
+    int y;
+    int f;
+    if (n != 0) {
+        
+        x = n;
+        y = 1;
+        while(f = x - r, f <= 0) {  /* x <= r */
+            x <<= 1;
+            y <<= 1;
+        }
 
-    int x = n;
-    int y = 1;
-    do {
-        x <<= 1;
-        y <<= 1;
-    } while(x <= m);
+        
+        while(f = n-x, f <= 0) {
+            if (f = x - r, f <= 0) {
+                q += y;
+                r -= x;
+            }
+            x >>= 1;
+            y >>= 1;
+        }
+    }
+    else {
+        r = 0;
+    }
 
-    x >>= 1;
-    y >>= 1;
+    if (type == QUOTIENT)
+        return q;
+    else
+        return r;
+}
 
-    while(x >= n) {
-        if (x <= m) {
+int division2(int r, int n, bool type) {
+    int q = 0;
+    int y;
+    int x;
+    int f;
+
+    if (n != 0) {
+        while( f = r-n, f >= 0 ) {
+            x = n;
+            y = 1;
+            
+            while( f = x<<1, f < r )
+            {
+                x <<= 1;
+                y <<= 1;
+            }
+
             q += y;
-            m -= x;
+            r -= x;
         }
-        x >>= 1;
-        y >>= 1;
+    }
+    else {
+        r = 0;
     }
 
-    printf("(%d,%d)\n", q, m);
+    if (type == QUOTIENT)
+        return q;
+    else
+        return r;
 }
 
-/* dzielenie: 2
- * rejestrow: --
- * zlozonosc: --
- */
-void division2(int n, int d) {
-    int r = n;
-    int k = 1;
-    int q = 0;
-
-    do {
-        d <<= 1;
-        k <<= 1;
-    } while (k <= n);
-    // d >>= 1;
-    // k >>= 1;
-
-    while (k > 0) {
-
-        // printf("k = %d\n", k);
-        // printf("r = %d\n", r);
-        // printf("d = %d\n", r);
-        // printf("\n");
-
-        r <<= 1;
-        if (r-d >= 0) {
-            q += k;
-            r -= d;
-        }
-        k >>= 1;   
-    }
-
-    printf("(%d)\n", q);
-}
-
-
-/* dzielenie:  --
- * rejestrow: --
- * zlozonosc: --
- */
 int main() {
     // TEST DIV
-    division2(23, 6);
-    division2(24, 6);
-    division2(25, 6);
+    for (int i = 0; i <= 100; i++) {
+        for (int j = 0; j <= 120; j++) {
+            assert(division0(i, j, QUOTIENT) == division1(i, j, QUOTIENT));
+            assert(division0(i, j, REMAINDER) == division1(i, j, REMAINDER));
+            assert(division0(i, j, QUOTIENT) == division2(i, j, QUOTIENT));
+            assert(division0(i, j, REMAINDER) == division2(i, j, REMAINDER));
+
+            printf("%d / %d  =  [%d, %d] OK\n", i, j, j == 0 ? 0 : i/j, j == 0 ? 0 : i%j);
+        }
+        printf("\n");
+    }
+    printf("END\n");
 }

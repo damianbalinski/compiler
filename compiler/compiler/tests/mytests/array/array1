@@ -1,0 +1,29 @@
+DECLARE
+    tab(0:5), arr(6:10)
+BEGIN
+    tab(0) := 120;
+    tab(1) := 140;
+    tab(2) := 160;
+    tab(3) := 180;
+    tab(4) := 200;
+    tab(5) := 220;
+
+    WRITE tab(0);
+    WRITE tab(1);
+    WRITE tab(2);
+    WRITE tab(3);
+    WRITE tab(4);
+    WRITE tab(5);
+
+    arr(6) := 1000;
+    arr(7) := 1100;
+    arr(8) := 1200;
+    arr(9) := 1300;
+    arr(10) := 1400;
+
+    WRITE arr(6);
+    WRITE arr(7);
+    WRITE arr(8);
+    WRITE arr(9);
+    WRITE arr(10);
+END

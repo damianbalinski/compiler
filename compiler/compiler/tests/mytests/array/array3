@@ -1,0 +1,11 @@
+DECLARE
+    tab(10:20)
+BEGIN
+    FOR i FROM 10 TO 20 DO
+        tab(i) := 2 * i;
+    ENDFOR
+
+    FOR i FROM 10 TO 20 DO
+        WRITE tab(i);
+    ENDFOR
+END

@@ -145,8 +145,8 @@ expression: value              { $$ = $1;           }
 |  value '+' value             { $$ = sum($1, $3);  }
 |  value '-' value             { $$ = dif($1, $3);  }
 |  value '*' value             { $$ = mul($1, $3);  }
-|  value '/' value
-|  value '%' value
+|  value '/' value             { $$ = divs($1, $3); }
+|  value '%' value             { $$ = mod($1, $3);  }
 ;
 
 condition: value EQ value            { $$ = eq_ne($1, $3, EQUAL);         }
