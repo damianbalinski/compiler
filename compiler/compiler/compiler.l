@@ -1,7 +1,7 @@
 %{
     #include <stdio.h>
     #include <string.h>
-    #include "compiler.tab.h"
+    #include "parser.h"
     #include "debugger/debugger.h"
 
     int yywrap();
