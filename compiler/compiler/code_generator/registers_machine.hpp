@@ -1,7 +1,7 @@
 #pragma once
-#include "../others/types.h"
-#include "../others/unit.h"
-#include "registers.h"
+#include "../others/types.hpp"
+#include "../others/unit.hpp"
+#include "registers.hpp"
 
 #define reg_unit(X,Y)  registers[X].unit = Y
 

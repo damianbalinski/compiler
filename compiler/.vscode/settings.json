@@ -2,6 +2,8 @@
     "files.associations": {
         "random": "cpp",
         "*.tcc": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "cstdio": "cpp",
+        "climits": "cpp"
     }
 }

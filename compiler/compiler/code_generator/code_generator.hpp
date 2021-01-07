@@ -1,7 +1,7 @@
 #pragma once
-#include <stdio.h>
-#include "codes.h"
-#include "../others/types.h"
+#include <cstdio>
+#include "codes.hpp"
+#include "../others/types.hpp"
 
 input_type code_get_label();
 

@@ -1,9 +1,9 @@
-#include <math.h>
-#include "registers_machine.h"
-#include "code_generator.h"
-#include "../debugger/debugger.h"
-#include "../debugger/warnings.h"
-#include "../symbol_table/data_manager.h"
+#include <cmath>
+#include "registers_machine.hpp"
+#include "code_generator.hpp"
+#include "../debugger/debugger.hpp"
+#include "../debugger/warnings.hpp"
+#include "../symbol_table/data_manager.hpp"
 
 /* Kolejka cykliczna rejestrow */
 register_type* head;

@@ -1,13 +1,13 @@
-#include "instr_generator.h"
-#include "code_generator.h"
-#include "registers_machine.h"
-#include "registers.h"
-#include "../others/types.h"
-#include "../others/unit.h"
-#include "../debugger/errors.h"
-#include "../debugger/debugger.h"
-#include "../symbol_table/symbol_table.h"
-#include "../symbol_table/data_manager.h"
+#include "instr_generator.hpp"
+#include "code_generator.hpp"
+#include "registers_machine.hpp"
+#include "registers.hpp"
+#include "../others/types.hpp"
+#include "../others/unit.hpp"
+#include "../debugger/errors.hpp"
+#include "../debugger/debugger.hpp"
+#include "../symbol_table/symbol_table.hpp"
+#include "../symbol_table/data_manager.hpp"
 
 extern int yylineno;
 extern char* yytext;

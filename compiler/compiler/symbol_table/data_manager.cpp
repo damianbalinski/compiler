@@ -1,6 +1,6 @@
-#include "data_manager.h"
-#include "../debugger/warnings.h"
-#include "../debugger/debugger.h"
+#include "data_manager.hpp"
+#include "../debugger/warnings.hpp"
+#include "../debugger/debugger.hpp"
 
 input_type data_counter = 0;
 

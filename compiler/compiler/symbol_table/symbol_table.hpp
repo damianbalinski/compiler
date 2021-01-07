@@ -1,6 +1,5 @@
 # pragma once
-#include <stdbool.h>
-#include "../others/types.h"
+#include "../others/types.hpp"
 
 #define VARIABLE true
 #define ARRAY false

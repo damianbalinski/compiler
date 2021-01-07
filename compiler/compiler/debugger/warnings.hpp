@@ -1,8 +1,8 @@
 #pragma once
-#include <stdio.h>
-#include "colors.h"
-#include "../code_generator/codes.h"
-#include "../symbol_table/data_manager.h"
+#include <cstdio>
+#include "colors.hpp"
+#include "../code_generator/codes.hpp"
+#include "../symbol_table/data_manager.hpp"
 
 #define WARNINGS
 

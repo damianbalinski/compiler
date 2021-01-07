@@ -1,6 +1,6 @@
 #pragma once
-#include "colors.h"
-#include "../code_generator/codes.h"
+#include "colors.hpp"
+#include "../code_generator/codes.hpp"
 
 #define DEBUG_MODE
 

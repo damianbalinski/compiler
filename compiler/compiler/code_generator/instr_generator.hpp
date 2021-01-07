@@ -1,8 +1,7 @@
 # pragma once
-#include <stdbool.h>
-#include "../others/types.h"
-#include "../others/unit.h"
-#include "../others/cond.h"
+#include "../others/types.hpp"
+#include "../others/unit.hpp"
+#include "../others/cond.hpp"
 
 #define VALUE true
 #define LOCATION false

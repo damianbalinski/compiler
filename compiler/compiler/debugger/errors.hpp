@@ -1,7 +1,7 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
-#include "colors.h"
+#include <cstdio>
+#include <cstdlib>
+#include "colors.hpp"
 
 #define ERR_SYNTAX()           fprintf(stderr, RED "Blad linia %d: Blad skladniowy \'%s\'\n"                  DEF, yylineno, yytext)
 #define ERR_ID_DECLARED(X)     fprintf(stderr, RED "Blad linia %d: Ponowna deklaracja identyfikatora %s\n"    DEF, yylineno, X)

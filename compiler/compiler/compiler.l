@@ -1,11 +1,11 @@
 %{
-    #include <stdio.h>
-    #include <string.h>
-    #include "parser.h"
-    #include "debugger/debugger.h"
+    #include <cstdio>
+    #include <cstring>
+    #include "parser.hpp"
+    #include "debugger/debugger.hpp"
 
-    int yywrap();
-    int yylex();
+    extern "C" int yywrap (void);
+    extern int yylex(void);
 %}
 
 %option yylineno

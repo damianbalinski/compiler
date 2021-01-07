@@ -1,6 +1,6 @@
 #pragma once
-#include "types.h"
-#include "../symbol_table/symbol_table.h"
+#include "types.hpp"
+#include "../symbol_table/symbol_table.hpp"
 
 #define INIT true
 #define FINISH false

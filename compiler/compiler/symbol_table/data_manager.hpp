@@ -1,6 +1,6 @@
 #pragma once
-#include "../others/types.h"
-#include <limits.h>
+#include <climits>
+#include "../others/types.hpp"
 
 #define MAX_DATA ULLONG_MAX
 

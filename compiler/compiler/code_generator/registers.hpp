@@ -1,6 +1,6 @@
 #pragma once
-#include "../others/types.h"
-#include "../others/unit.h"
+#include "../others/types.hpp"
+#include "../others/unit.hpp"
 
 #define NOTHING -1
 #define MAX_REGISTERS 6

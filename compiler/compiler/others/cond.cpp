@@ -1,7 +1,7 @@
-#include "cond.h"
-#include <stdlib.h>
-#include "../debugger/debugger.h"
-#include "../debugger/warnings.h"
+#include <cstdlib>
+#include "cond.hpp"
+#include "../debugger/debugger.hpp"
+#include "../debugger/warnings.hpp"
 
 cond_type* cond_alloc() {
     cond_type* cond = (cond_type*)malloc(sizeof(cond_type));

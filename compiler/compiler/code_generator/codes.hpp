@@ -1,5 +1,5 @@
 #pragma once
-#include <limits.h>
+#include <climits>
 #define MAX_CODES 15
 #define MAX_CODES_TABLE 100000
 

@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "symbol_table.h"
-#include "../debugger/debugger.h"
-#include "../debugger/warnings.h"
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include "symbol_table.hpp"
+#include "../debugger/debugger.hpp"
+#include "../debugger/warnings.hpp"
 
 symbol* sym_table = NULL;
 
@@ -12,7 +12,7 @@ symbol* sym_table = NULL;
 symbol* sym_put(char *id) {
     DBG_SYMBOL_PUT(id);
     symbol *ptr;
-    ptr = malloc(sizeof(symbol));
+    ptr = (symbol*)malloc(sizeof(symbol));
     ptr->id = strdup(id);
     ptr->next = sym_table;
     sym_table = ptr;

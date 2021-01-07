@@ -1,7 +1,7 @@
-#include "unit.h"
-#include <stdlib.h>
-#include "../debugger/debugger.h"
-#include "../debugger/warnings.h"
+#include <cstdlib>
+#include "unit.hpp"
+#include "../debugger/debugger.hpp"
+#include "../debugger/warnings.hpp"
 
 unit_type* unit_alloc() {
     unit_type* unit = (unit_type*)malloc(sizeof(unit_type));

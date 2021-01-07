@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include "code_generator.h"
-#include "registers.h"
-#include "../debugger/debugger.h"
-#include "../debugger/warnings.h"
+#include <cstdio>
+#include "code_generator.hpp"
+#include "registers.hpp"
+#include "../debugger/debugger.hpp"
+#include "../debugger/warnings.hpp"
 
 extern register_type registers[6];
 instr_type code_table[MAX_CODES_TABLE];

@@ -1,24 +1,24 @@
 %{
     #define YYDEBUG 1
 
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include "debugger/debugger.h"
-    #include "debugger/errors.h"
-    #include "code_generator/instr_generator.h"
-    #include "code_generator/code_generator.h"
-    #include "code_generator/registers_machine.h"
+    #include <cstdio>
+    #include <cstdlib>
+    #include "debugger/debugger.hpp"
+    #include "debugger/errors.hpp"
+    #include "code_generator/instr_generator.hpp"
+    #include "code_generator/code_generator.hpp"
+    #include "code_generator/registers_machine.hpp"
 
     extern int yylineno;
     extern char* yytext;
-    int yylex();
-    void yyerror( char *str );
+    extern int yylex(void);
+    void yyerror(char *str);
 %}
 
 %code requires {
-    #include "others/types.h"
-    #include "others/unit.h"
-    #include "others/cond.h"
+    #include "others/types.hpp"
+    #include "others/unit.hpp"
+    #include "others/cond.hpp"
 }
 
 %union{
