@@ -1,0 +1,27 @@
+DECLARE
+    a,b 
+BEGIN
+    a := 20;
+    b := a % 2;
+    IF b != 0 THEN
+        IF a != 0 THEN
+            a := 200 * 123;
+            b := 200 / 123;
+            WRITE 1000;
+        ELSE
+            a := 200 * 123;
+            b := 200 / 123;
+            WRITE 2000;
+        ENDIF
+    ELSE
+        IF a != 0 THEN
+            a := 200 * 123;
+            b := 200 / 123;
+            WRITE 3000;
+        ELSE
+            a := 200 * 123;
+            b := 200 / 123;
+            WRITE 4000;
+        ENDIF
+    ENDIF
+END 

@@ -72,18 +72,6 @@ void reg_check(unit_type* unit) {
     }
 }
 
-/* Sprawdza, czy dane sa w rejestrze,
- * jesli nie, przerzuca je do rejestru */
-void reg_check_log(unit_type* unit) {
-    if (unit->reg == NOTHING) {
-        printf("new reg\n");
-        CHECK_REG_CHECK(unit->reg_prev);
-        int x = unit->reg_prev;
-        mem_to_reg(unit, x);
-        reg_connect(unit, x);
-    }
-}
-
 /* Przerzuca dane z rejestru do pamieci */
 inline void reg_to_mem(unit_type* unit, int reg) {
     int offset = variable_allocate();   // alokacja pamieci

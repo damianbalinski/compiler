@@ -1,46 +1,28 @@
-[ arithm2.imp - operacje arytmetyczne cz. 2 
-
-        Przykladowe dane testowe:
-        1. ? 1
-           > 67108864001
-           ? 1
-           > 67108864001
-           ? 11
-           > 22407395739679346948952902572503159771566152330325298756997544942898194297396703768017371136
-           > 0
-           > 3999999992000000003
-        
-		2. ? 100
-           > 67108864100
-           ? 100
-           > 67108864100
-           ? 1
-           > 2037035976334486086268445688409378161051468393665936250636140449354381299763336706183397376
-           > 0
-           > 3999999992000000003
-]
+[ Rozklad liczby na czynniki pierwsze ]
 DECLARE
-	a, b, i
+    n, m, reszta, potega, dzielnik
 BEGIN
-	READ a;
-	i := 1;
-	WHILE i <= 1000 DO
-		b := 25663607 + 41445257;
-		a := b + a;
-  		i := i + 1;
-	ENDWHILE
-	WRITE a;
-
-    
-    READ a;
-	i := 1000;
-	REPEAT
-		b := 25663607 + 41445257;
-		a := b + a;
-  		i := i - 1;
-        WRITE i;
-    UNTIL i <= 0;	
-	WRITE a;
-    
+    n := 2000;
+    dzielnik := 2;
+    m := dzielnik * dzielnik;
+    WHILE n >= m DO
+        potega := 0;
+        reszta := n % dzielnik;
+        WHILE reszta = 0 DO
+            n := n / dzielnik;
+            potega := potega + 1;
+            reszta := n % dzielnik;
+        ENDWHILE
+        IF potega > 0 THEN [ czy znaleziono dzielnik ]
+            WRITE dzielnik;
+            WRITE potega;
+        ELSE
+            dzielnik := dzielnik + 1;
+            m := dzielnik * dzielnik;
+        ENDIF
+    ENDWHILE
+    IF n != 1 THEN [ ostatni dzielnik ]
+        WRITE n;
+        WRITE 1;
+    ENDIF
 END
-
