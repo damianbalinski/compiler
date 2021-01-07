@@ -1,7 +1,13 @@
 [ nestedLoop2.imp - petle while 
 
         Przykladowe dane testowe:
-        1. 111111, 2222
+        1. ? 111111
+           ? 2222
+           > 512
+           > 111111
+           > 2222
+           > 236361
+           > 12222
 ]
 DECLARE
 	a, b, i, j, acc, accb

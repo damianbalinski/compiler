@@ -6,14 +6,14 @@ BEGIN
     ENDIF
 
     IF 3 < 3 THEN
-        WRITE 2;
+        WRITE 0;
     ELSE
-        WRITE 3;
+        WRITE 1;
     ENDIF
 
     IF 4 < 3 THEN
-        WRITE 4;
+        WRITE 0;
     ELSE
-        WRITE 5;
+        WRITE 1;
     ENDIF
 END

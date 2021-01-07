@@ -1,7 +1,9 @@
 [ calc.imp - pewne obliczenia 
 
         Przykladowe dane testowe:
-        1. 2345, 12
+        1. ? 2345
+           ? 12
+           > 2345
 ]
 DECLARE
 	a, aa, b, c, d, j, p, q, r

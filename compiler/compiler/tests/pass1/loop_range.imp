@@ -1,4 +1,10 @@
-[ loop_range.imp - zakresy petli ]
+[ loop_range.imp - zakresy petli 
+    
+    OUTPUT:
+        > 10000
+        > 10000
+        > 10000
+]
 DECLARE
 	a, b, c
 BEGIN

@@ -17,8 +17,9 @@ void jump_true_false(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("jump_true_false");
     if (type == INIT) {
         // JUMP TRUE_FALSE - INIT
-        reg_check(condition);
+        // reg_check(condition);
         cond->jump_true_false = jzero(condition->reg, 0);
+        reg_disconnect(condition, condition->reg);
     }
     else if (condition->type) {
         // JUMP TRUE - FINISH
@@ -55,7 +56,6 @@ void jump_cond(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("jump_cond");
     if (type == INIT) {
         // JUMP_COND - INIT
-        reg_check(condition);
         cond->jump_cond = jump(0);
     }
     else {
@@ -82,9 +82,7 @@ void jump_else(cond_type* cond, bool else_type, bool type) {
 void jumps_free(cond_type* cond, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("jumps_free");
     // ZWALNIANIE
-    reg_check(condition);
     cond_free(cond);
-    reg_free(condition->reg);
     unit_free(condition);
     DBG_INSTRUCTION_END("jumps_free");
 }
@@ -610,6 +608,5 @@ void for_free(cond_type* cond, unit_type* condition) {
     // ZWALNIANIE
     cond_free(cond);
     reg_free(condition->reg);
-    unit_free(condition);
     DBG_INSTRUCTION_END("for_free");
 }

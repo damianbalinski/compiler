@@ -1,8 +1,10 @@
 [ factorial3.imp - obliczanie n! dla n podanego przez uzytkownika 
 
         Przykladowe dane testowe:
-        1. 100
-        2. 1000
+        1. ? 100
+           > {jak w factorial1.imp}
+        2. ? 1000
+           > {jak w factorial1.imp}
 ]
 [ 
     Czas wykonywania tego programu nie powinien istotnie roznic sie 

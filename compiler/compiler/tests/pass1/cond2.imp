@@ -1,8 +1,10 @@
 [ cond2.imp - porownania 
 
         Przykladowe dane testowe:
-        1. 2, 1
-        2. 1, 2
+        1. ? 2 | 2. ? 1
+           ? 1 |    ? 2
+           > 0 |    > 1
+           > 2 |    > 0
 ]
 DECLARE
 	a(999999:999999), b(888888:888888)
