@@ -9,6 +9,7 @@
 #include "../symbol_table/symbol_table.hpp"
 #include "../symbol_table/data_manager.hpp"
 #include "../optimizer/optimizer.hpp"
+#include "../others/const.hpp"
 
 extern int yylineno;
 extern char* yytext;
@@ -95,7 +96,7 @@ unit_type* get_const(input_type val, bool type) {
     
     if (type == VALUE) {
         // VALUE
-        #ifdef OPTIMIZER_CONST_VAL
+        #ifdef OPTIMIZE_CONST_VAL
             unit->val = val;
         #else
             int x = reg_get_free();         // wolny rejestr
@@ -383,11 +384,33 @@ unit_type* sum(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("sum");
     
     // NUM + NUM
-    #ifdef OPTIMIZER_SUM_BOTH
+    #ifdef OPTIMIZE_SUM_BOTH
     if (unit1->val != CLN_NOTHING && unit2->val != CLN_NOTHING) {
         unit1->val = unit1->val + unit2->val;
         unit_free(unit2);
-        goto end;
+        goto u1;
+    }
+    #endif
+
+    // NUM + a
+    #ifdef OPTIMIZE_SUM_LEFT
+    if (unit1->val != CLN_NOTHING) {
+        reg_check(unit2);
+        if (reg_sum_cln(unit2->reg, unit1->val)) {
+            unit_free(unit1);
+            goto u2;
+        }
+    }
+    #endif
+
+    // a + NUM
+    #ifdef OPTIMIZE_SUM_RIGHT
+    if (unit2->val != CLN_NOTHING) {
+        reg_check(unit1);
+        if (reg_sum_cln(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
     }
     #endif
 
@@ -398,16 +421,55 @@ unit_type* sum(unit_type* unit1, unit_type* unit2) {
 
     // ZWALNIANIE
     reg_free(unit2->reg);
-    unit_free(unit2); 
+    unit_free(unit2);
     
-end:DBG_INSTRUCTION_END("sum");
+u1: DBG_INSTRUCTION_END("sum");
     return unit1;
+
+u2: DBG_INSTRUCTION_END("sum");
+    return unit2;
 }
 
 /* Roznica. 
- * unit1 = unit1 - unit2 */
+ * OPT1     NUM - NUM
+ * OPT2     NUM - a
+ * OPT3     a   - NUM
+ * OPT4     a   - a
+ * ELSE     a1  - a2 */
 unit_type* dif(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("dif");
+
+    // NUM - NUM
+    #ifdef OPTIMIZE_DIF_BOTH
+    if (unit1->val != CLN_NOTHING && unit2->val != CLN_NOTHING) {
+        unit1->val = (unit1->val < unit2->val) ? CLN_ZERO : unit1->val - unit2->val;
+        unit_free(unit2);
+        goto u1;
+    }
+    #endif
+
+    // NUM - a
+    #ifdef OPTIMIZE_DIF_LEFT
+    if (unit1->val != CLN_NOTHING) {
+        reg_check(unit2);
+        if (reg_dif_left_cln(unit2->reg, unit1->val)) {
+            unit_free(unit1);
+            goto u2;
+        }
+    }
+    #endif
+
+    // a - NUM
+    #ifdef OPTIMIZE_DIF_RIGHT
+    if (unit2->val != CLN_NOTHING) {
+        reg_check(unit1);
+        if (reg_dif_right_cln(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
+    }
+    #endif
+
     // INSTRUKCJE
     reg_check(unit1);       
     reg_check(unit2);
@@ -417,28 +479,114 @@ unit_type* dif(unit_type* unit1, unit_type* unit2) {
     reg_free(unit2->reg);
     unit_free(unit2); 
 
-    DBG_INSTRUCTION_END("dif");
+u1: DBG_INSTRUCTION_END("dif");
     return unit1;
+
+u2: DBG_INSTRUCTION_END("dif");
+    return unit2;
 }
 
 /* Iloczyn.
- * unit1 = unit1 * unit2 */
+ * OPT1     NUM * NUM
+ * OPT2     NUM * a
+ * OPT2     a   * NUM
+ * ELSE     a1  * a2 */
 unit_type* mul(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("mul");
+    int z;
+
+    // NUM * NUM
+    #ifdef OPTIMIZE_MUL_BOTH
+    if (unit1->val != CLN_NOTHING && unit2->val != CLN_NOTHING) {
+        unit1->val = unit1->val * unit2->val;
+        unit_free(unit2);
+        goto u1;
+    }
+    #endif
+
+    // NUM * a
+    #ifdef OPTIMIZE_MUL_LEFT
+    if (unit1->val != CLN_NOTHING) {
+        reg_check(unit2);
+
+        // 0 * a
+        #ifdef OPTIMIZE_MUL_LEFT_ZERO
+        if (reg_mul_zero(unit2->reg, unit1->val)) {
+            unit_free(unit1);
+            goto u2;
+        }
+        #endif
+
+        // 2^n * a
+        #ifdef OPTIMIZE_MUL_LEFT_TWO_POWER
+        if (reg_mul_two_power_cln(unit2->reg, unit1->val)) {
+            unit_free(unit1);
+            goto u2;
+        }
+        #endif
+
+        // n * a
+        #ifdef OPTIMIZE_MUL_LEFT_OTHERS
+            z = reg_get_free();
+            reg_mul_cln(unit2->reg, z, unit1->val);
+            reg_free(unit2->reg);
+            reg_connect(unit2, z);
+            unit_free(unit1);
+            goto u2;
+        #endif
+    }
+    #endif
+
+    // a * NUM
+    #ifdef OPTIMIZE_MUL_RIGHT
+    if (unit2->val != CLN_NOTHING) {
+        reg_check(unit1);
+
+        // a * 0
+        #ifdef OPTIMIZE_MUL_RIGHT_ZERO
+        if (reg_mul_zero(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
+        #endif
+
+        // a 2^n
+        #ifdef OPTIMIZE_MUL_RIGHT_TWO_POWER
+        if (reg_mul_two_power_cln(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
+        #endif
+
+        // a * n
+        #ifdef OPTIMIZE_MUL_RIGHT_OTHERS
+            z = reg_get_free();
+            reg_mul_cln(unit1->reg, z, unit2->val);
+            reg_free(unit1->reg);
+            reg_connect(unit1, z);
+            unit_free(unit2);
+            goto u1;
+        #endif
+    }
+    #endif
+    
     // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);
-    int z = reg_get_free();
+    z = reg_get_free();
     reg_mul(unit1->reg, unit2->reg, z);
 
     // ZWALNIANIE
     reg_free(unit1->reg);
-    unit1->reg = z;
+    reg_connect(unit1, z);
     reg_free(unit2->reg);
     unit_free(unit2);
 
-    DBG_INSTRUCTION_END("mul");
+u1: DBG_INSTRUCTION_END("mul");
     return unit1;
+
+u2: DBG_INSTRUCTION_END("mul");
+    return unit2;
 }
 
 /* Iloraz.

@@ -27,19 +27,6 @@ int load_const(unsigned int val) {
     return reg;
 }
 
-int mult(int x, int y) {
-    int z = 0;
-    while (true) {
-        if (y & 1)
-            z += x;
-        if (y == 0)
-            break;
-        x <<= 1;
-        y >>= 1;
-    }
-
-    return z;
-}
 
 int division0(int m, int n, bool type) {
     if (type == QUOTIENT)

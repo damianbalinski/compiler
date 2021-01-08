@@ -1,0 +1,50 @@
+DECLARE
+    a, b
+BEGIN
+    b := 100;
+    
+    a := 0 + b;
+    WRITE a;
+
+    a := 1 + b;
+    WRITE a;
+
+    a := 2 + b;
+    WRITE a;
+
+    a := 3 + b;
+    WRITE a;
+
+    a := 4 + b;
+    WRITE a;
+
+    a := 5 + b;
+    WRITE a;
+
+    a := 6 + b;
+    WRITE a;
+
+    a := 7 + b;
+    WRITE a;
+
+    a := 8 + b;
+    WRITE a;
+
+    a := 9 + b;
+    WRITE a;
+
+    a := 10 + b;
+    WRITE a;
+
+    a := 11 + b;
+    WRITE a;
+
+    a := 12 + b;
+    WRITE a;
+
+    a := 13 + b;
+    WRITE a;
+
+    a := 14 + b;
+    WRITE a;
+END

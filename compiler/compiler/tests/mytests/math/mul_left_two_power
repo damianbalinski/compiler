@@ -1,0 +1,23 @@
+DECLARE 
+    a, b
+BEGIN
+    a := 100;
+
+    b := 0 * a;
+    WRITE b;
+
+    b := 1 * a;
+    WRITE b;
+
+    b := 2 * a;
+    WRITE b;
+
+    b := 4 * a;
+    WRITE b;
+
+    b := 8 * a;
+    WRITE b;
+
+    b := 16 * a;
+    WRITE b;
+END

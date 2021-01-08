@@ -1,9 +1,0 @@
-DECLARE
-    a
-BEGIN
-    a := 20 + 20;
-    WRITE a;
-
-    a := 400 + 400;
-    WRITE a;
-END

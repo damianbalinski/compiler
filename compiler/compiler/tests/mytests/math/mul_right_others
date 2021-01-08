@@ -1,0 +1,23 @@
+DECLARE 
+    a, b
+BEGIN
+    a := 1000;
+
+    b := a * 1;
+    WRITE b;
+
+    b := a * 15;
+    WRITE b;
+
+    b := a * 101;
+    WRITE b;
+
+    b := a * 1023;
+    WRITE b;
+
+    b := a * 123123;
+    WRITE b;
+
+    b := a * 999999;
+    WRITE b;
+END

@@ -6,6 +6,7 @@
 #include "../debugger/debugger.hpp"
 #include "../debugger/warnings.hpp"
 #include "../symbol_table/data_manager.hpp"
+#include "../others/const.hpp"
 
 /* Kolejka cykliczna rejestrow */
 register_type* head;
@@ -241,4 +242,133 @@ void reg_div(int r, int n, int q, int x, int y, int f) {
     reset(r);
 
     DBG_REGISTERS_END("reg_div");
+}
+
+/* Dodawanie zoptymalizowane. */
+bool reg_sum_cln(int x, cln::cl_I& val) {
+    DBG_OPTIMIZER_BEGIN("reg_sum_cln");
+
+    using namespace cln;
+    static const cl_I ELEVEN(11);
+
+    if (val > ELEVEN) {
+        // VAL > 11
+        return false;
+    }
+    else {
+        // VAL <= 11
+        for(cl_I i(0); i < val; i++)
+            inc(x);
+        return true;
+    }
+}
+
+/* Odejmowanie zoptymalizowane prawostronne. */
+bool reg_dif_right_cln(int x, cln::cl_I& val) {
+    DBG_OPTIMIZER_BEGIN("reg_dif_right_cln");
+    
+    using namespace cln;
+    static const cl_I ELEVEN(11);
+
+    if (val > ELEVEN) {
+        // VAL > 11
+        return false;
+    }
+    else {
+        // VAL <= 11
+        for(cl_I i(0); i < val; i++)
+            dec(x);
+        return true;
+    }
+}
+
+/* Odejmowanie zoptymalizowane lewostronne. */
+bool reg_dif_left_cln(int x, cln::cl_I& val) {
+    DBG_OPTIMIZER_BEGIN("reg_dif_left_cln");
+
+    if (val == CLN_ZERO) {
+        // 0 - VAL
+        reset(x);
+        return true;
+    }
+
+    else if (val == CLN_ONE) {
+        // 1 - VAL
+        jzero(x, 3);    /* JUMP x=0 */
+        reset(x);
+        jump(3);        /* JUMP END */
+        reset(x);
+        inc(x);
+        return true;
+    }
+
+    else if (val == CLN_TWO) {
+        // 2 - VAL
+        jzero(x, 5);    /* JUMP x=0 */
+        dec(x);
+        jzero(x, 7);    /* JUMP x=1 */
+        reset(x);       /* x>=2 */
+        jump(7);        /* JUMP END */
+        reset(x);       /* x=0 */
+        inc(x);
+        inc(x);
+        jump(3);        /* JUMP END */
+        reset(x);       /* x=1 */
+        inc(x);
+        return true;
+    }
+
+    else {
+        // OTHER - VAL
+        return false;
+    }
+}
+
+/* Mnozenie zoptymalizowane przez 0 */
+bool reg_mul_zero(int x, cln::cl_I& val) {
+    if (val == CLN_ZERO) {
+        // val == 0
+        DBG_OPTIMIZER_BEGIN("reg_mul_zero");
+        reset(x);
+        return true;
+    }
+    else {
+        // val != 0
+        return false;
+    }
+}
+
+/* Mnozenie zoptymalizowane przez 2^n */
+bool reg_mul_two_power_cln(int x, cln::cl_I& val) {
+    using namespace cln;
+
+    uintC n = integer_length(val);
+    n = (n == 0) ? 0 : n-1;
+    cl_I val2 = (CLN_ONE << n);
+    
+    if (val == val2) {
+        // val == 2^n
+        DBG_OPTIMIZER_BEGIN("reg_mul_two_power_cln");
+        for(uintC i = 0; i < n; i++) {
+            shl(x);
+        }
+        return true;
+    }
+    else {
+        // val != 2^n
+        return false;
+    }
+}
+
+/* Mnozenie zoptymalizowane przez n */
+void reg_mul_cln(int x, int z, cln::cl_I& val) {
+    DBG_OPTIMIZER_BEGIN("reg_mul_cln");
+
+    reset(z);
+    while (val != CLN_ZERO) {
+        if ((val & CLN_ONE) == CLN_ONE)
+            add(z, x);
+        shl(x);
+        val >>= 1;
+    }
 }

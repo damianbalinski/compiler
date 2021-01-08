@@ -5,7 +5,7 @@
 #define DEBUG_MODE
 
 #ifdef DEBUG_MODE
-    #define DEBUG_TOKENS
+    // #define DEBUG_TOKENS
     // #define DEBUG_PARSER
     // #define DEBUG_SYMBOL_TABLE
     // #define DEBUG_REGISTERS
@@ -142,6 +142,8 @@
 // OPTIMIZER
 #ifdef DEBUG_OPTIMIZER
     #define DBG_OPTIMIZER_VAL_TO_REG(X, Y)  std::cout << GREEN "optimizer [ val " << X << " to reg " << Y << "]" DEF << std::endl
+    #define DBG_OPTIMIZER_BEGIN(X)          std::cout << GREEN "optimizer [ begin " << X << " ]" DEF << std::endl
 #else
     #define DBG_OPTIMIZER_VAL_TO_REG(X)
+    #define DBG_OPTIMIZER_BEGIN(X)
 #endif

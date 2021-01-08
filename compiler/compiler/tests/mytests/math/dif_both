@@ -1,0 +1,36 @@
+DECLARE
+    a 
+BEGIN
+    a := 10 - 0;
+    WRITE a;
+
+    a := 9 - 1;
+    WRITE a;
+
+    a := 8 - 2;
+    WRITE a;
+
+    a := 7 - 3;
+    WRITE a;
+
+    a := 6 - 4;
+    WRITE a;
+
+    a := 5 - 5;
+    WRITE a;
+
+    a := 4 - 6;
+    WRITE a;
+
+    a := 3 - 7;
+    WRITE a;
+
+    a := 2 - 8;
+    WRITE a;
+
+    a := 1 - 9;
+    WRITE a;
+
+    a := 0 - 10;
+    WRITE a;
+END
