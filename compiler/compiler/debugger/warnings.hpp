@@ -27,6 +27,9 @@
                                         fprintf(stderr, RED "Ostrzezenie: Proba modyfikacji kodu, ktory nie jest skokiem" DEF)
     #define CHECK_VAL(X)            if ((long long)X < 0) \
                                         fprintf(stderr, RED "Ostrzezenie: Proba zaladowania wartosci ujemnej %lld" DEF, X)
+    #define CHECK_VAL_CLN(X)        if (X < 0) \
+                                        fprintf(stderr, RED "Ostrzezenie: Proba zaladowania wartosci ujemnej CLN" DEF)
+
 #else
     #define CHECK_REGISTER(X)
     #define CHECK_INSTRUCTION(X)

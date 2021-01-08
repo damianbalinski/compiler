@@ -15,6 +15,7 @@ symbol* sym_put(char *id) {
     ptr = (symbol*)malloc(sizeof(symbol));
     ptr->id = strdup(id);
     ptr->next = sym_table;
+    //ptr->val = -1;
     sym_table = ptr;
     return ptr;
 }

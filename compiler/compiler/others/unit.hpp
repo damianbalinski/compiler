@@ -1,4 +1,5 @@
 #pragma once
+#include <cln/integer.h>
 #include "types.hpp"
 
 #define EQUAL true
@@ -15,6 +16,7 @@ typedef struct {
     int reg_prev;
     input_type offset;
     bool type;
+    cln::cl_I val;
 } unit_type;
 
 unit_type* unit_alloc();

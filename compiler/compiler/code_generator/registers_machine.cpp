@@ -1,4 +1,6 @@
 #include <cmath>
+#include <iostream>
+#include <cln/cln.h>
 #include "registers_machine.hpp"
 #include "code_generator.hpp"
 #include "../debugger/debugger.hpp"
@@ -64,7 +66,14 @@ void reg_free(int x) {
 /* Sprawdza, czy dane sa w rejestrze,
  * jesli nie, przerzuca je do rejestru */
 void reg_check(unit_type* unit) {
-    if (unit->reg == NOTHING) {
+    if (unit->val != CLN_NOTHING) {
+        int x = reg_get_free();
+        DBG_OPTIMIZER_VAL_TO_REG(unit->val, x);
+        reg_const_cln(x, unit->val);
+        reg_connect(unit, x);
+        unit->val = CLN_NOTHING;
+    }
+    else if (unit->reg == NOTHING) {
         CHECK_REG_CHECK(unit->reg_prev);
         int x = unit->reg_prev;
         mem_to_reg(unit, x);
@@ -131,9 +140,32 @@ void reg_const(int x, input_type val) {
         shl(x);
         if (mask & val) inc(x);
     }
-
-    DBG_RVAL(x);
     DBG_REGISTERS_END("reg_const");
+}
+
+/* Umieszcza stala w rejestrze. */
+void reg_const_cln(int x, cln::cl_I& val) {
+    DBG_REGISTERS_BEGIN("reg_const_cln");
+    CHECK_VAL_CLN(val);
+
+    using namespace cln;
+    static const cl_I ZERO(0);
+    static const cl_I ONE(1);
+
+    reset(x);
+    if (equal(val, ZERO))
+        return;
+        
+    inc(x);
+    if (equal(val, ONE))
+        return;
+        
+    uintC n = integer_length(val)-2;
+    for(cl_I mask = (ONE<<n); mask > ZERO; mask >>= ONE) {
+        shl(x);
+        if ((mask & val) != ZERO) inc(x);
+    }
+    DBG_REGISTERS_END("reg_const_cln");
 }
 
 /* Mnozenie.

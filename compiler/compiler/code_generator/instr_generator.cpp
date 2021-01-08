@@ -8,6 +8,7 @@
 #include "../debugger/debugger.hpp"
 #include "../symbol_table/symbol_table.hpp"
 #include "../symbol_table/data_manager.hpp"
+#include "../optimizer/optimizer.hpp"
 
 extern int yylineno;
 extern char* yytext;
@@ -94,9 +95,13 @@ unit_type* get_const(input_type val, bool type) {
     
     if (type == VALUE) {
         // VALUE
-        int x = reg_get_free();         // wolny rejestr
-        reg_const(x, val);              // stala do rejestru
-        reg_connect(unit, x);
+        #ifdef OPTIMIZER_CONST_VAL
+            unit->val = val;
+        #else
+            int x = reg_get_free();         // wolny rejestr
+            reg_const(x, val);              // stala do rejestru
+            reg_connect(unit, x);
+        #endif
     }
     else {
         // LOCATION
@@ -369,19 +374,33 @@ void read(unit_type* unit) {
 }
 
 /* Suma. 
- * unit1 = unit1 + unit2 */
+ * OPT1     NUM + NUM
+ * OPT2     NUM + a
+ * OPT3     a   + NUM
+ * OPT4     a   + a
+ * ELSE     a1  + a2 */
 unit_type* sum(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("sum");
-    // INSTRUKCJE
-    reg_check(unit1);       
+    
+    // NUM + NUM
+    #ifdef OPTIMIZER_SUM_BOTH
+    if (unit1->val != CLN_NOTHING && unit2->val != CLN_NOTHING) {
+        unit1->val = unit1->val + unit2->val;
+        unit_free(unit2);
+        goto end;
+    }
+    #endif
+
+    // VAL + VAL
+    reg_check(unit1);
     reg_check(unit2);
     add(unit1->reg, unit2->reg);
 
     // ZWALNIANIE
     reg_free(unit2->reg);
     unit_free(unit2); 
-
-    DBG_INSTRUCTION_END("sum");
+    
+end:DBG_INSTRUCTION_END("sum");
     return unit1;
 }
 

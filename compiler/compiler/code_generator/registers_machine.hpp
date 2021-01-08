@@ -1,4 +1,5 @@
 #pragma once
+#include <cln/integer.h>
 #include "../others/types.hpp"
 #include "../others/unit.hpp"
 #include "registers.hpp"
@@ -21,3 +22,6 @@ void reg_disconnect(unit_type* unit, int reg);
 
 void reg_mul(int x, int y, int z);
 void reg_div(int r, int n, int q, int x, int y, int f);
+
+// CLN
+void reg_const_cln(int x, cln::cl_I& val);

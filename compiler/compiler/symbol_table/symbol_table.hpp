@@ -1,4 +1,5 @@
 # pragma once
+#include <cln/integer.h>
 #include "../others/types.hpp"
 
 #define VARIABLE true
@@ -14,6 +15,7 @@ typedef struct symbol
     input_type begin;       /* indeks poczatkowy tablicy */
     input_type end;         /* indeks poczatkowy tablicy */
     struct symbol* next;    /* nastepny symbol           */
+    //cln::cl_I val;          /* wartosc                   */
     
 } symbol;
 

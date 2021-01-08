@@ -1,8 +1,8 @@
 CC=g++
-FLAGS=-lm
+FLAGS=-lm -lcln
 
 main: parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o
-	gcc -o temp parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o ${FLAGS}
+	${CC} -o temp parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o ${FLAGS}
 
 symbol_table.o: symbol_table/symbol_table.cpp
 	${CC} -c symbol_table/symbol_table.cpp
@@ -42,3 +42,10 @@ clean:
 	rm parser.cpp
 	rm lexer.cpp
 	rm parser.hpp
+
+cleanf:
+	rm *.o
+	rm parser.cpp
+	rm lexer.cpp
+	rm parser.hpp
+	rm temp
