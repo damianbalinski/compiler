@@ -5,6 +5,7 @@
     #define OPTIMIZE_SUM
     #define OPTIMIZE_DIF
     #define OPTIMIZE_MUL
+    #define OPTIMIZE_DIV
 #endif
 
 // ASSIGN
@@ -37,4 +38,10 @@
     #define OPTIMIZE_MUL_RIGHT_ZERO
     #define OPTIMIZE_MUL_RIGHT_TWO_POWER
     #define OPTIMIZE_MUL_RIGHT_OTHERS
+#endif
+
+// DIV
+#ifdef OPTIMIZE_DIV
+    #define OPTIMIZE_DIV_BOTH
+    #define OPTIMIZE_DIV_LEFT
 #endif

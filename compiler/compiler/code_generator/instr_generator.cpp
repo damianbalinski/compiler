@@ -593,12 +593,36 @@ u2: DBG_INSTRUCTION_END("mul");
  * unit1 = unit1 / unit2 */
  unit_type* divs(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("div");
+    int q;
+    int x;
+    int y;
+
+    // NUM / NUM
+    #ifdef OPTIMIZE_DIV_BOTH
+    if (unit1->val != CLN_NOTHING && unit2->val != CLN_NOTHING) {
+        unit1->val = (unit2->val == CLN_ZERO) ? CLN_ZERO : floor1(unit1->val, unit2->val);
+        unit_free(unit2);
+        goto u1;
+    }
+    #endif
+
+    // NUM / a
+    #ifdef OPTIMIZE_DIV_LEFT
+    if (unit1->val != CLN_NOTHING) {
+        reg_check(unit2);
+        if (reg_div_left_cln(unit2->reg, unit1->val)) {
+            unit_free(unit1);
+            goto u2;
+        }
+    }
+    #endif
+
     // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);
-    int q = reg_get_free();
-    int x = reg_get_free();
-    int y = reg_get_free();
+    q = reg_get_free();
+    x = reg_get_free();
+    y = reg_get_free();
     reg_div(unit1->reg, unit2->reg, q, x, y, SUPER_REGISTER);
 
     // ZWALNIANIE
@@ -609,8 +633,11 @@ u2: DBG_INSTRUCTION_END("mul");
     unit1->reg = q;
     unit_free(unit2);
 
-    DBG_INSTRUCTION_END("div");
+u1: DBG_INSTRUCTION_END("div");
     return unit1;
+
+u2: DBG_INSTRUCTION_END("div");
+    return unit2;
  }
 
  /* Reszta z dzielenia.

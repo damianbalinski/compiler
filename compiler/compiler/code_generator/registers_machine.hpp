@@ -31,3 +31,4 @@ bool reg_dif_right_cln(int x, cln::cl_I& val);
 bool reg_mul_zero(int x, cln::cl_I& val);
 bool reg_mul_two_power_cln(int x, cln::cl_I& val);
 void reg_mul_cln(int x, int z, cln::cl_I& val);
+bool reg_div_left_cln(int x, cln::cl_I& val);

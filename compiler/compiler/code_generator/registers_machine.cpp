@@ -372,3 +372,46 @@ void reg_mul_cln(int x, int z, cln::cl_I& val) {
         val >>= 1;
     }
 }
+
+/* Dzielenie zoptymalizowane lewostronne. */
+bool reg_div_left_cln(int x, cln::cl_I& val) {
+    DBG_OPTIMIZER_BEGIN("reg_div_left_cln");
+
+    if (val == CLN_ZERO) {
+        // 0 / VAL
+        reset(x);
+        return true;
+    }
+    else if (val == CLN_ONE) {
+        // 1 / VAL
+        jzero(x, 7);       /* JUMP END */
+        dec(x);
+        jzero(x, 3);       /* JUMP x=1 */
+        reset(x);
+        jump(3);           /* JUMP END */
+        reset(x);          /* x=1 */
+        inc(x);            
+        return true;
+    }
+    else if (val == CLN_TWO) {
+        // 2 / VAL
+        jzero(x, 13);      /* JUMP END */
+        dec(x);
+        jzero(x, 8);       /* JUMP x=1 */
+        dec(x);            
+        jzero(x, 3);       /* JUMP x=2 */
+        reset(x);
+        jump(7);           /* JUMP END */
+        reset(x);          /* x=2 */
+        inc(x);
+        jump(4);           /* JUMPE END*/
+        reset(x);          /* x=1 */
+        inc(x);
+        inc(x);
+        return true;
+    }
+    else {
+        // OTHER / VAL
+        return false;
+    }
+}

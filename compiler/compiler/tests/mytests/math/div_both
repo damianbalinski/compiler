@@ -1,0 +1,33 @@
+DECLARE
+    a
+BEGIN
+    a := 10 / 0;
+    WRITE a;
+
+    a := 10 / 1;
+    WRITE a;
+
+    a := 10 / 2;
+    WRITE a;
+
+    a := 10 / 3;
+    WRITE a;
+
+    a := 10 / 7;
+    WRITE a;
+
+    a := 10 / 8;
+    WRITE a;
+
+    a := 10 / 9;
+    WRITE a;
+
+    a := 10 / 10;
+    WRITE a;
+
+    a := 10 / 11;
+    WRITE a;
+
+    a := 10 / 12;
+    WRITE a;
+END
