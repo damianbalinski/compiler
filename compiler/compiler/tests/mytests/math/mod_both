@@ -1,0 +1,15 @@
+DECLARE
+    a
+BEGIN
+    a := 20 % 0;
+    WRITE a;
+
+    a := 40 % 7;
+    WRITE a;
+
+    a := 100 % 100;
+    WRITE a;
+
+    a := 200 % 52;
+    WRITE a;
+END

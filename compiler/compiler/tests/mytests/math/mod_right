@@ -1,0 +1,21 @@
+DECLARE
+    a 
+BEGIN
+    a := 0 % 2;
+    WRITE a;
+
+    a := 1 % 2;
+    WRITE a;
+
+    a := 2 % 2;
+    WRITE a;
+
+    a := 3 % 2;
+    WRITE a;
+
+    a := 40 % 2;
+    WRITE a;
+
+    a := 2001 % 2;
+    WRITE a;
+END

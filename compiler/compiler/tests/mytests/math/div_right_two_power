@@ -1,0 +1,23 @@
+DECLARE 
+    a, b
+BEGIN
+    a := 10000000;
+
+    b := a / 0;
+    WRITE b;
+
+    b := a / 16;
+    WRITE b;
+
+    b := a / 256;
+    WRITE b;
+
+    b := a / 1024;
+    WRITE b;
+
+    b := a / 3;
+    WRITE b;
+
+    b := a / 2048;
+    WRITE b;
+END

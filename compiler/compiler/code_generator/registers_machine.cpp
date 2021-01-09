@@ -415,3 +415,104 @@ bool reg_div_left_cln(int x, cln::cl_I& val) {
         return false;
     }
 }
+
+/* Dzielenie zoptymalizowane prawostronne przez 0 */
+bool reg_div_right_zero(int x, cln::cl_I& val) {
+    if (val == CLN_ZERO) {
+        // val == 0
+        DBG_OPTIMIZER_BEGIN("reg_div_right_zero");
+        reset(x);
+        return true;
+    }
+    else {
+        // val != 0
+        return false;
+    }
+}
+
+/* Dzielenie zoptymalizowane prawostronne przez 2^n */
+bool reg_div_right_two_power_cln(int x, cln::cl_I& val) {
+    using namespace cln;
+
+    uintC n = integer_length(val);
+    n = (n == 0) ? 0 : n-1;
+    cl_I val2 = (CLN_ONE << n);
+    
+    if (val == val2) {
+        // val == 2^n
+        DBG_OPTIMIZER_BEGIN("reg_div_right_two_power_cln");
+        for(uintC i = 0; i < n; i++) {
+            shr(x);
+        }
+        return true;
+    }
+    else {
+        // val != 2^n
+        return false;
+    }
+}
+
+/* Reszta z dzielenia zoptymalizowana lewostronnie. */
+bool reg_mod_left_cln(int x, cln::cl_I& val) {
+    DBG_OPTIMIZER_BEGIN("reg_mod_left_cln");
+
+    if (val == CLN_ZERO) {
+        // 0 % VAL
+        reset(x);
+        return true;
+    }
+    else if (val == CLN_ONE) {
+        // 1 % VAL
+        jzero(x, 5);      /* JUMP END */
+        dec(x);
+        jzero(x, 3);      /* JUMP END */
+        reset(x);
+        inc(x);    
+        return true;
+    }
+    else if (val == CLN_TWO) {
+        // 2 % VAL
+        jzero(x, 8);     /* JUMP END */
+        dec(x);
+        jzero(x, 6);     /* JUMP END */
+        dec(x);
+        jzero(x, 4);     /* JUMP END */
+        reset(x);
+        inc(x);
+        inc(x);
+        return true;
+    }
+    else {
+        // OTHER % VAL
+        return false;
+    }
+}
+
+/* Reszta z dzielenia zoptymalizowana prawostronnie. */
+bool reg_mod_right_cln(int x, cln::cl_I& val) {
+    DBG_OPTIMIZER_BEGIN("reg_mod_right_cln");
+
+    if (val == CLN_ZERO) {
+        // VAL % 0
+        reset(x);
+        return true;
+    }
+    else if (val == CLN_ONE) {
+        // VAL % 1
+        reset(x);
+        return true;
+    }
+    else if (val == CLN_TWO) {
+        // VAL % 2
+        jodd(x, 3);     /* JUMP x=1 */
+        reset(x);
+        jump(3);        /* JUMP END */
+        reset(x);
+        inc(x);
+        return true;
+    }
+    else {
+        // VAL % OTHER
+        return false;
+    }
+}

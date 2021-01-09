@@ -550,7 +550,7 @@ unit_type* mul(unit_type* unit1, unit_type* unit2) {
         }
         #endif
 
-        // a 2^n
+        // a * 2^n
         #ifdef OPTIMIZE_MUL_RIGHT_TWO_POWER
         if (reg_mul_two_power_cln(unit1->reg, unit2->val)) {
             unit_free(unit2);
@@ -590,7 +590,11 @@ u2: DBG_INSTRUCTION_END("mul");
 }
 
 /* Iloraz.
- * unit1 = unit1 / unit2 */
+ * OPT1     NUM / NUM
+ * OPT2     NUM / a
+ * OPT2     a   / NUM
+ * OPT3     a   / a
+ * ELSE     a1  / a2 */
  unit_type* divs(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("div");
     int q;
@@ -600,7 +604,7 @@ u2: DBG_INSTRUCTION_END("mul");
     // NUM / NUM
     #ifdef OPTIMIZE_DIV_BOTH
     if (unit1->val != CLN_NOTHING && unit2->val != CLN_NOTHING) {
-        unit1->val = (unit2->val == CLN_ZERO) ? CLN_ZERO : floor1(unit1->val, unit2->val);
+        unit1->val = (unit2->val == CLN_ZERO) ? CLN_ZERO : cln::floor1(unit1->val, unit2->val);
         unit_free(unit2);
         goto u1;
     }
@@ -614,6 +618,29 @@ u2: DBG_INSTRUCTION_END("mul");
             unit_free(unit1);
             goto u2;
         }
+    }
+    #endif
+
+    // a / NUM
+    #ifdef OPTIMIZE_DIF_RIGHT
+    if (unit2->val != CLN_NOTHING) {
+        reg_check(unit1);
+
+        // a / 0
+        #ifdef OPTIMIZE_DIV_RIGHT_ZERO
+        if (reg_div_right_zero(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
+        #endif
+
+        // a / 2^n
+        #ifdef OPTIMIZE_DIV_RIGHT_TWO_POWER
+        if (reg_div_right_two_power_cln(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
+        #endif
     }
     #endif
 
@@ -638,18 +665,57 @@ u1: DBG_INSTRUCTION_END("div");
 
 u2: DBG_INSTRUCTION_END("div");
     return unit2;
- }
+}
 
- /* Reszta z dzielenia.
- * unit1 = unit1 % unit2 */
+/* Reszta z dzielenia.
+ * OPT1     NUM % NUM
+ * OPT2     NUM % a
+ * OPT2     a   % NUM
+ * OPT3     a   / a
+ * ELSE     a1  % a2 */
  unit_type* mod(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("mod");
+    int q;
+    int x;
+    int y;
+
+    // NUM % NUM
+    #ifdef OPTIMIZE_MOD_BOTH
+    if (unit1->val != CLN_NOTHING && unit2->val != CLN_NOTHING) {
+        unit1->val = (unit2->val == CLN_ZERO) ? CLN_ZERO : cln::mod(unit1->val, unit2->val);
+        unit_free(unit2);
+        goto u1;
+    }
+    #endif
+
+    // NUM % a
+    #ifdef OPTIMIZE_MOD_LEFT
+    if (unit1->val != CLN_NOTHING) {
+        reg_check(unit2);
+        if (reg_mod_left_cln(unit2->reg, unit1->val)) {
+            unit_free(unit1);
+            goto u2;
+        }
+    }
+    #endif
+
+    // a % NUM
+    #ifdef OPTIMIZE_MOD_RIGHT
+    if (unit2->val != CLN_NOTHING) {
+        reg_check(unit1);
+        if (reg_mod_right_cln(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
+    }
+    #endif
+
     // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);
-    int q = reg_get_free();
-    int x = reg_get_free();
-    int y = reg_get_free();
+    q = reg_get_free();
+    x = reg_get_free();
+    y = reg_get_free();
     reg_div(unit1->reg, unit2->reg, q, x, y, SUPER_REGISTER);
 
     // ZWALNIANIE
@@ -659,9 +725,12 @@ u2: DBG_INSTRUCTION_END("div");
     reg_free(q);
     unit_free(unit2);
 
-    DBG_INSTRUCTION_END("mod");
+u1: DBG_INSTRUCTION_END("mod");
     return unit1;
- }
+
+u2: DBG_INSTRUCTION_END("mod");
+    return unit2;
+}
 
 /* Rowne/Rozne.
  * type=true    unit1 = (unit1 == unit2)

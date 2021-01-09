@@ -6,6 +6,7 @@
     #define OPTIMIZE_DIF
     #define OPTIMIZE_MUL
     #define OPTIMIZE_DIV
+    #define OPTIMIZE_MOD
 #endif
 
 // ASSIGN
@@ -44,4 +45,14 @@
 #ifdef OPTIMIZE_DIV
     #define OPTIMIZE_DIV_BOTH
     #define OPTIMIZE_DIV_LEFT
+    #define OPTIMIZE_DIV_RIGHT
+    #define OPTIMIZE_DIV_RIGHT_ZERO
+    #define OPTIMIZE_DIV_RIGHT_TWO_POWER
+#endif
+
+// MOD
+#ifdef OPTIMIZE_MOD
+    #define OPTIMIZE_MOD_BOTH
+    #define OPTIMIZE_MOD_LEFT
+    #define OPTIMIZE_MOD_RIGHT
 #endif

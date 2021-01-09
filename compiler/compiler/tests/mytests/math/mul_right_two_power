@@ -15,7 +15,7 @@ BEGIN
     b := a * 1024;
     WRITE b;
 
-    b := a * 16;
+    b := a * 33;
     WRITE b;
 
     b := a * 2048;

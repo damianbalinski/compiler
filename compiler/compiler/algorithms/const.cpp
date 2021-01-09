@@ -1,9 +1,31 @@
 #include <iostream>
+#include <math.h>
 #include <cln/cln.h>
 #include <cln/condition.h>
 
 using namespace std;
 using namespace cln;
+
+int reg_const(unsigned int val) {
+    int reg = 0;
+
+    if (val == 0)
+        return reg;
+    reg++;
+    if (val == 1)
+        return reg;
+        
+    int n = (int)log2(val) - 1;
+    
+    for(int mask = (1 << n); mask > 0; mask >>= 1) {
+        reg <<= 1;
+        if (mask & val)
+            reg++;
+    }
+    printf("%u %d %u\n", val, n, reg);
+    return reg;
+}
+
 
 /* Umieszcza stala w rejestrze. */
 cl_I reg_const_num(cl_I& val) {
