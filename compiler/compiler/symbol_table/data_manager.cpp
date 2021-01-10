@@ -4,13 +4,13 @@
 
 input_type data_counter = 0;
 
-int variable_allocate() {
+input_type variable_allocate() {
     CHECK_DATA(data_counter);
     DBG_ALLOCATE_VARIABLE(data_counter);
     return data_counter++;
 }
 
-int array_allocate(input_type n) {
+input_type array_allocate(input_type n) {
     input_type temp = data_counter;
     data_counter += n;
     CHECK_DATA(data_counter);

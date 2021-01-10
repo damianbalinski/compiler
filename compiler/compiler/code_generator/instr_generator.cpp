@@ -106,11 +106,11 @@ unit_type* get_const(input_type val, bool type) {
     }
     else {
         // LOCATION
-        int x = reg_get_free();             // wolny rejestr
-        int offset = variable_allocate();   // zmienna tymczasowa
-        reg_const(x, offset);               // stala do rejestru
-        reg_const(SUPER_REGISTER, val);     // stala do rejestru  
-        store(SUPER_REGISTER, x);           // rejestr do pamieci
+        int x = reg_get_free();                     // wolny rejestr
+        input_type offset = variable_allocate();    // zmienna tymczasowa
+        reg_const(x, offset);                       // stala do rejestru
+        reg_const(SUPER_REGISTER, val);             // stala do rejestru  
+        store(SUPER_REGISTER, x);                   // rejestr do pamieci
         reg_connect(unit, x);
     }
 
@@ -752,6 +752,48 @@ u2: DBG_INSTRUCTION_END("mod");
  * typ2=false   unit1 = (unit1 != unit2) */
 unit_type* eq_ne(unit_type* unit1, unit_type* unit2, bool type) {
     DBG_INSTRUCTION_BEGIN("eq_ne");
+
+    // NUM = NUM | NUM != NUM
+    #ifdef OPTIMIZE_EQ_NE_BOTH
+    if (unit1->val != CLN_NOTHING && unit2->val != NOTHING) {
+        DBG_OPTIMIZER_BEGIN("eq_ne both");
+        unit1->val = (unit1->val == unit2->val) ? CLN_ZERO : CLN_ONE;
+        unit1->type = type;
+        unit_free(unit2);
+        goto u1;
+    }
+    #endif
+
+    // NUM = a | NUM != a
+    #ifdef OPTIMIZE_EQ_NE_LEFT
+    if (unit1->val != CLN_NOTHING) {
+        reg_check(unit2);
+        // 0 == a | 0 != a
+        #ifdef OPTIMIZE_EQ_NE_LEFT_ZERO
+        if (reg_eq_ne_zero_cln(unit2->reg, unit1->val)) {
+            unit2->type = type;
+            unit_free(unit1);
+            goto u2;
+        }
+        #endif
+    }
+    #endif
+
+    // a == NUM | a != NUM
+    #ifdef OPTIMIZE_EQ_NE_RIGHT
+    if (unit2->val != CLN_NOTHING) {
+        reg_check(unit1);
+        // a == 0 | a != 0
+        #ifdef OPTIMIZE_EQ_NE_RIGHT_ZERO
+        if (reg_eq_ne_zero_cln(unit1->reg, unit2->val)) {
+            unit1->type = type;
+            unit_free(unit2);
+            goto u1;
+        }
+        #endif
+    }
+    #endif
+
     // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);
@@ -767,8 +809,11 @@ unit_type* eq_ne(unit_type* unit1, unit_type* unit2, bool type) {
     reg_free(unit2->reg);
     unit_free(unit2);
 
-    DBG_INSTRUCTION_END("eq_ne");
+u1: DBG_INSTRUCTION_END("eq_ne");
     return unit1;
+
+u2: DBG_INSTRUCTION_END("eq_ne");
+    return unit2;
 }
 
 /* Mniejsze/Wieksze rowne.

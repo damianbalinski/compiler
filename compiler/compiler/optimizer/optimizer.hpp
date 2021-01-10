@@ -64,4 +64,9 @@
 #ifdef OPTIMIZE_CONDITIONS
     #define OPTIMIZE_LT_GE
     #define OPTIMIZE_GT_LE
+    #define OPTIMIZE_EQ_NE_BOTH
+    #define OPTIMIZE_EQ_NE_LEFT
+    #define OPTIMIZE_EQ_NE_LEFT_ZERO
+    #define OPTIMIZE_EQ_NE_RIGHT
+    #define OPTIMIZE_EQ_NE_RIGHT_ZERO
 #endif

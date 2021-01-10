@@ -8,8 +8,6 @@
 #define MAX_REGISTERS_IN_USE 5
 #define SUPER_REGISTER 5
 
-const cln::cl_I CLN_NOTHING(-1); 
-
 typedef struct register_type{
     const char name;            /* nazwa rejestru */
     const int num;

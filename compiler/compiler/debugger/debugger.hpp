@@ -100,11 +100,13 @@
 
 // UNIT
 #ifdef DEBUG_UNIT
-    #define DBG_UNIT_ALLOC(X) printf(GREEN "unit [ allocate %p ]\n" DEF, X)
-    #define DBG_UNIT_FREE(X)  printf(GREEN "unit [ free %p ]\n" DEF, X)
+    #define DBG_UNIT_ALLOC(X)         printf(GREEN "unit [ allocate %p ]\n" DEF, X)
+    #define DBG_UNIT_FREE(X)          printf(GREEN "unit [ free %p ]\n" DEF, X)
+    #define DBG_UNIT_COPY(X)          printf(GREEN "unit [ copy %s ]\n" DEF, X)
 #else
     #define DBG_UNIT_ALLOC(X)
     #define DBG_UNIT_FREE(X)
+    #define DBG_UNIT_COPY(X)
 #endif
 
 // COND

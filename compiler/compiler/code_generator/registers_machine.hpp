@@ -37,3 +37,4 @@ bool reg_div_right_two_power_cln(int x, cln::cl_I& val);
 bool reg_mod_left_cln(int x, cln::cl_I& val);
 bool reg_mod_right_cln(int x, cln::cl_I& val);
 bool reg_mod_right_two_power_cln(int x, cln::cl_I& val, int* yptr, int* zptr);
+bool reg_eq_ne_zero_cln(int x, cln::cl_I& val);

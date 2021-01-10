@@ -3,6 +3,8 @@
 #include "colors.hpp"
 #include "../code_generator/codes.hpp"
 #include "../symbol_table/data_manager.hpp"
+#include "../others/const.hpp"
+#include "../code_generator/registers.hpp"
 
 #define WARNINGS
 
@@ -18,6 +20,8 @@
     #define CHECK_CODE(X)           if (X < 0 || X >= MAX_CODES) \
                                         fprintf(stderr, RED "Ostrzezenie: Kod %d poza zakresem\n" DEF, X)
     #define CHECK_UNIT(X)           if (X == NULL) \
+                                        fprintf(stderr, RED "Ostrzezenie: Problem z alokacja unit" DEF)
+    #define CHECK_UNIT_COPY(X, Y)   if (X == CLN_NOTHING && Y == NOTHING) \
                                         fprintf(stderr, RED "Ostrzezenie: Problem z alokacja unit" DEF)
     #define CHECK_COND(X)           if (X == NULL) \
                                         fprintf(stderr, RED "Ostrzezenie: Problem z alokacja cond" DEF)

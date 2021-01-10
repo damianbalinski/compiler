@@ -1,0 +1,29 @@
+DECLARE
+    a
+BEGIN
+    a := 0;
+    
+    IF a != 0 THEN
+        WRITE 1;
+    ENDIF
+
+    IF a != 123 THEN
+        WRITE 2;
+    ENDIF
+
+    IF a != 123 THEN
+        WRITE 3;
+    ENDIF
+
+    IF a != 124 THEN
+        WRITE 4;
+    ENDIF
+
+    IF a != 0 THEN
+        WRITE 5;
+    ENDIF
+
+    IF a != 44 THEN
+        WRITE 6;
+    ENDIF
+END

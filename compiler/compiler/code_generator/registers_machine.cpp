@@ -84,7 +84,7 @@ void reg_check(unit_type* unit) {
 
 /* Przerzuca dane z rejestru do pamieci */
 inline void reg_to_mem(unit_type* unit, int reg) {
-    int offset = variable_allocate();   // alokacja pamieci
+    input_type offset = variable_allocate();   // alokacja pamieci
     reg_const(SUPER_REGISTER, offset);  // offset do rejestru
     store(reg, SUPER_REGISTER);         // rejestr do pamieci
     unit->offset = offset;
@@ -556,6 +556,20 @@ bool reg_mod_right_two_power_cln(int x, cln::cl_I& val, int* yptr, int* zptr) {
     }
     else {
         // val != 2^n
+        return false;
+    }
+}
+
+/* Rowne/Rozne zoptymalizowane przez 0. */
+bool reg_eq_ne_zero_cln(int x, cln::cl_I& val) {
+    if (val == CLN_ZERO) {
+        // VAL == 0
+        DBG_OPTIMIZER_BEGIN("reg_eq_ne_zero_cln");
+        return true;
+    }
+
+    else {
+        // VAL != 0
         return false;
     }
 }

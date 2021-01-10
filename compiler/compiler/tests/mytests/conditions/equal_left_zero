@@ -1,0 +1,29 @@
+DECLARE
+    a
+BEGIN
+    a := 0;
+    
+    IF 0 = a THEN
+        WRITE 1;
+    ENDIF
+
+    IF 123 = a THEN
+        WRITE 2;
+    ENDIF
+
+    IF 123 = a THEN
+        WRITE 3;
+    ENDIF
+
+    IF 124 = a THEN
+        WRITE 4;
+    ENDIF
+
+    IF 0 = a THEN
+        WRITE 5;
+    ENDIF
+
+    IF 44 = a THEN
+        WRITE 6;
+    ENDIF
+END

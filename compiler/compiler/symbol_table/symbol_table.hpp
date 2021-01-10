@@ -15,7 +15,7 @@ typedef struct symbol
     input_type begin;       /* indeks poczatkowy tablicy */
     input_type end;         /* indeks poczatkowy tablicy */
     struct symbol* next;    /* nastepny symbol           */
-    //cln::cl_I val;          /* wartosc                   */
+    //cln::cl_I val;        /* wartosc                   */
     
 } symbol;
 
