@@ -1,0 +1,57 @@
+DECLARE
+    a
+BEGIN
+    a := 0 % 8;
+    WRITE a;
+
+    a := 1 % 8;
+    WRITE a;
+
+    a := 2 % 8;
+    WRITE a;
+    
+    a := 3 % 8;
+    WRITE a;
+
+    a := 4 % 8;
+    WRITE a;
+
+    a := 5 % 8;
+    WRITE a;
+
+    a := 6 % 8;
+    WRITE a;
+
+    a := 7 % 8;
+    WRITE a;
+
+    a := 8 % 8;
+    WRITE a;
+
+    a := 9 % 8;
+    WRITE a;
+
+    a := 10 % 8;
+    WRITE a;
+
+    a := 11 % 8;
+    WRITE a;
+
+    a := 12 % 8;
+    WRITE a;
+
+    a := 13 % 8;
+    WRITE a;
+
+    a := 14 % 8;
+    WRITE a;
+
+    a := 15 % 8;
+    WRITE a;
+
+    a := 16 % 8;
+    WRITE a;
+
+    a := 17 % 8;
+    WRITE a;
+END

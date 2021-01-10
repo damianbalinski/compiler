@@ -7,6 +7,7 @@
     #define OPTIMIZE_MUL
     #define OPTIMIZE_DIV
     #define OPTIMIZE_MOD
+    #define OPTIMIZE_CONDITIONS
 #endif
 
 // ASSIGN
@@ -55,4 +56,12 @@
     #define OPTIMIZE_MOD_BOTH
     #define OPTIMIZE_MOD_LEFT
     #define OPTIMIZE_MOD_RIGHT
+    #define OPTIMIZE_MOD_RIGHT_SIMPLE
+    #define OPTIMIZE_MOD_RIGHT_TWO_POWER
+#endif
+
+// CONDITIONS
+#ifdef OPTIMIZE_CONDITIONS
+    #define OPTIMIZE_LT_GE
+    #define OPTIMIZE_GT_LE
 #endif

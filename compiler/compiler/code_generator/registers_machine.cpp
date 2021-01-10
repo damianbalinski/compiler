@@ -361,8 +361,11 @@ bool reg_mul_two_power_cln(int x, cln::cl_I& val) {
 }
 
 /* Mnozenie zoptymalizowane przez n */
-void reg_mul_cln(int x, int z, cln::cl_I& val) {
+bool reg_mul_cln(int x, cln::cl_I& val, int* zptr) {
     DBG_OPTIMIZER_BEGIN("reg_mul_cln");
+
+    int z = reg_get_free();
+    *zptr = z;
 
     reset(z);
     while (val != CLN_ZERO) {
@@ -371,6 +374,7 @@ void reg_mul_cln(int x, int z, cln::cl_I& val) {
         shl(x);
         val >>= 1;
     }
+    return true;
 }
 
 /* Dzielenie zoptymalizowane lewostronne. */
@@ -433,7 +437,6 @@ bool reg_div_right_zero(int x, cln::cl_I& val) {
 /* Dzielenie zoptymalizowane prawostronne przez 2^n */
 bool reg_div_right_two_power_cln(int x, cln::cl_I& val) {
     using namespace cln;
-
     uintC n = integer_length(val);
     n = (n == 0) ? 0 : n-1;
     cl_I val2 = (CLN_ONE << n);
@@ -513,6 +516,46 @@ bool reg_mod_right_cln(int x, cln::cl_I& val) {
     }
     else {
         // VAL % OTHER
+        return false;
+    }
+}
+
+/* Reszta z dzielenia przez 2^n zoptymalizowana prawostronnie. */
+bool reg_mod_right_two_power_cln(int x, cln::cl_I& val, int* yptr, int* zptr) {
+    using namespace cln;
+    uintC n = integer_length(val);
+    n = (n == 0) ? 0 : n-1;
+    cl_I val2 = (CLN_ONE << n);
+
+    if (val == val2) {
+        // val == 2^n
+        DBG_OPTIMIZER_BEGIN("reg_mod_right_two_power_cln");
+        int y = reg_get_free();
+        int z = reg_get_free();
+        *yptr = y;
+        *zptr = z;
+
+        reset(y);
+        inc(y);
+        reset(z);
+  
+        // 0 - n-2
+        for (uintC i = 0; i < n-1; i++) {
+            jodd(x, 2);
+            jump(2);        /* JUMP NEXT */
+            add(z, y);
+            shl(y);
+            shr(x);
+        }
+
+        // n-1
+        jodd(x, 2);
+        jump(2);            /* JUMP END */
+        add(z, y);
+        return true;
+    }
+    else {
+        // val != 2^n
         return false;
     }
 }

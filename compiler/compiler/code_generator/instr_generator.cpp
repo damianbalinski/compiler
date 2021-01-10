@@ -19,7 +19,7 @@ void jump_true_false(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("jump_true_false");
     if (type == INIT) {
         // JUMP TRUE_FALSE - INIT
-        // reg_check(condition);
+        reg_check(condition);
         cond->jump_true_false = jzero(condition->reg, 0);
         reg_disconnect(condition, condition->reg);
     }
@@ -527,12 +527,12 @@ unit_type* mul(unit_type* unit1, unit_type* unit2) {
 
         // n * a
         #ifdef OPTIMIZE_MUL_LEFT_OTHERS
-            z = reg_get_free();
-            reg_mul_cln(unit2->reg, z, unit1->val);
+        if (reg_mul_cln(unit2->reg, unit1->val, &z)) {
+            unit_free(unit1);
             reg_free(unit2->reg);
             reg_connect(unit2, z);
-            unit_free(unit1);
             goto u2;
+        }
         #endif
     }
     #endif
@@ -560,12 +560,12 @@ unit_type* mul(unit_type* unit1, unit_type* unit2) {
 
         // a * n
         #ifdef OPTIMIZE_MUL_RIGHT_OTHERS
-            z = reg_get_free();
-            reg_mul_cln(unit1->reg, z, unit2->val);
+        if (reg_mul_cln(unit1->reg, unit2->val, &z)) {
+            unit_free(unit2);
             reg_free(unit1->reg);
             reg_connect(unit1, z);
-            unit_free(unit2);
             goto u1;
+        }
         #endif
     }
     #endif
@@ -703,10 +703,25 @@ u2: DBG_INSTRUCTION_END("div");
     #ifdef OPTIMIZE_MOD_RIGHT
     if (unit2->val != CLN_NOTHING) {
         reg_check(unit1);
+
+        // a % 0, 1, 2
+        #ifdef OPTIMIZE_MOD_RIGHT_SIMPLE
         if (reg_mod_right_cln(unit1->reg, unit2->val)) {
             unit_free(unit2);
             goto u1;
         }
+        #endif
+
+        // a % 2^n
+        #ifdef OPTIMIZE_MOD_RIGHT_TWO_POWER
+        if (reg_mod_right_two_power_cln(unit1->reg, unit2->val, &x, &y)) {
+            unit_free(unit2);
+            reg_free(unit1->reg);
+            reg_free(x);
+            reg_connect(unit1, y);
+            goto u1;
+        }
+        #endif
     }
     #endif
 
@@ -756,12 +771,19 @@ unit_type* eq_ne(unit_type* unit1, unit_type* unit2, bool type) {
     return unit1;
 }
 
-
 /* Mniejsze/Wieksze rowne.
  * type=false    unit2 = (unit1 < unit2)
  * typ2=true     unit2 = (unit1 >= unit2) */
 unit_type* lt_ge(unit_type* unit1, unit_type* unit2, bool type) {
     DBG_INSTRUCTION_BEGIN("lt_ge");
+    
+    #ifdef OPTIMIZE_LT_GE
+        DBG_OPTIMIZER_BEGIN("lt_ge");
+        unit_type* res = dif(unit2, unit1);
+        res->type = type;
+        return res;
+    #endif
+
     // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);
@@ -781,6 +803,13 @@ unit_type* lt_ge(unit_type* unit1, unit_type* unit2, bool type) {
  * type=true    unit1 = (unit1 <= unit2) */
 unit_type* gt_le(unit_type* unit1, unit_type* unit2, bool type) {
     DBG_INSTRUCTION_BEGIN("gt_le");
+
+    #ifdef OPTIMIZE_GT_LE
+        unit_type* res = dif(unit1, unit2);
+        res->type = type;
+        return res;
+    #endif
+
     // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);

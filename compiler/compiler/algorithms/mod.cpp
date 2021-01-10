@@ -4,10 +4,34 @@
 using namespace std;
 using namespace cln;
 
-int main() {
-    cl_I val1 = 1024;
-    cl_I val2 = 0;
+void reg_mod_right_cln(cl_I a, cl_I b) {
+    uintC n = integer_length(b);
+    n = (n == 0) ? 0 : n-1;
+    cl_I c = (cl_I(1) << n);
 
-    cl_I val3 = mod(val1, val2);
-    cout << val3 << endl;
+    if (c == b) {
+        // cout << "OK" << endl;
+        cl_I x = 1;
+        cl_I y = 0;
+        for( int i = 0; i < n; i++) {
+            if ((a & 1) == 1) {
+                y += x;
+            }
+            x <<= 1;
+            a >>= 1;
+        }
+        cout << y << endl;
+    }
+    else {
+        cout << "ERR" << endl;
+    }
+}
+int main() {
+    cl_I a = 5;
+    cl_I b = 32;
+    for (int i = 0; i <= 66; i++) {
+        b = i;
+        reg_mod_right_cln(a, b);
+    }
+    
 }
