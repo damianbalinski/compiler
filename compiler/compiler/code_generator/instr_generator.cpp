@@ -915,6 +915,7 @@ unit_type* for_init(cond_type* cond, unit_type* begin, unit_type* end, bool type
         store(end->reg, SUPER_REGISTER);
         reg_free(begin->reg);
         unit_free(begin);
+        end->type = GREATER;
         DBG_INSTRUCTION_END("for_init");
         return end;
     }
@@ -926,6 +927,7 @@ unit_type* for_init(cond_type* cond, unit_type* begin, unit_type* end, bool type
         store(begin->reg, SUPER_REGISTER);
         reg_free(end->reg);
         unit_free(end);
+        begin->type = LESS;
         DBG_INSTRUCTION_END("for_init");
         return begin;
     }

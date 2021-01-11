@@ -12,7 +12,7 @@ BEGIN
     ENDWHILE
 
     WRITE 1000;
-    WHILE b < 10 DO
+    WHILE b <= 10 DO
         WRITE b;
         b:= b + 1;
     ENDWHILE

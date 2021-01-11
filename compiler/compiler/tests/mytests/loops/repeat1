@@ -6,6 +6,6 @@ BEGIN
     REPEAT
         WRITE a;
         a := a + 1;
-    UNTIL a < 2;
-    
+    UNTIL a > 20;
+    WRITE a;
 END

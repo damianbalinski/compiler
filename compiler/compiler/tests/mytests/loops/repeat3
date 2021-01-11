@@ -32,18 +32,18 @@ BEGIN
                                 WRITE 1000;
 
                                 g := g + 1;
-                            UNTIL g < 5;
+                            UNTIL g > 5;
                             f := f + 1;
-                        UNTIL f < 5;
+                        UNTIL f > 5;
                         e := e + 1;
-                    UNTIL e < 5;
+                    UNTIL e > 5;
                     d := d + 1;
-                UNTIL d < 5;
+                UNTIL d > 5;
                 c := c + 1;
-            UNTIL c < 5;
+            UNTIL c > 5;
             b := b + 1;
-        UNTIL b < 5;
+        UNTIL b > 5;
         a := a + 1;
-    UNTIL a < 5;
+    UNTIL a > 5;
     
 END

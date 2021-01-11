@@ -1,4 +1,4 @@
-// #define OPTIMIZER_ON
+#define OPTIMIZER_ON
 
 /* 
  * TODO LIST
