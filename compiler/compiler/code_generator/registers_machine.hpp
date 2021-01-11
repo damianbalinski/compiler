@@ -17,6 +17,7 @@ void reg_const(int x, input_type val);
 
 void reg_to_mem(unit_type* unit, int reg);
 void mem_to_reg(unit_type* unit, int reg);
+void mem_to_reg_cln(unit_type* unit, int reg);
 void reg_connect(unit_type* unit, int reg);
 void reg_disconnect(unit_type* unit, int reg);
 

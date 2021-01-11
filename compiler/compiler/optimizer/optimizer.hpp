@@ -9,18 +9,13 @@
  */
 
 #ifdef OPTIMIZER_ON
-    #define OPTIMIZE_CONST
+    #define OPTIMIZE_POSTPONE
     #define OPTIMIZE_SUM
     #define OPTIMIZE_DIF
     #define OPTIMIZE_MUL
     #define OPTIMIZE_DIV
     #define OPTIMIZE_MOD
     #define OPTIMIZE_CONDITIONS
-#endif
-
-// ASSIGN
-#ifdef OPTIMIZE_CONST
-    #define OPTIMIZE_CONST_VAL
 #endif
 
 // SUM
@@ -36,6 +31,7 @@
     #define OPTIMIZE_DIF_BOTH
     #define OPTIMIZE_DIF_LEFT
     #define OPTIMIZE_DIF_RIGHT
+    #define OPTIMIZE_DIF_EQUAL
 #endif
 
 // MUL
@@ -58,6 +54,7 @@
     #define OPTIMIZE_DIV_RIGHT
     #define OPTIMIZE_DIV_RIGHT_ZERO
     #define OPTIMIZE_DIV_RIGHT_TWO_POWER
+    #define OPTIMIZE_DIV_EQUAL
 #endif
 
 // MOD
@@ -67,6 +64,7 @@
     #define OPTIMIZE_MOD_RIGHT
     #define OPTIMIZE_MOD_RIGHT_SIMPLE
     #define OPTIMIZE_MOD_RIGHT_TWO_POWER
+    #define OPTIMIZE_MOD_EQUAL
 #endif
 
 // CONDITIONS
@@ -78,4 +76,11 @@
     #define OPTIMIZE_EQ_NE_LEFT_ZERO
     #define OPTIMIZE_EQ_NE_RIGHT
     #define OPTIMIZE_EQ_NE_RIGHT_ZERO
+#endif
+
+// POSTPONE
+#ifdef OPTIMIZE_POSTPONE
+    #define OPTIMIZE_CONST_POSTPONE
+    #define OPTIMIZE_VAR_POSTPONE
+    #define POTIMIZE_ARR_NUM_POSTPONE
 #endif

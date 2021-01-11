@@ -13,6 +13,8 @@
                                         fprintf(stderr, RED "Ostrzezenie: Rejestr %d poza zakresem\n" DEF, X)
     #define CHECK_REG_CHECK(X)      if (registers[X].unit != NULL) \
                                         fprintf(stderr, RED "Ostrzezenie: Proba przywrocenia zajetego rejestru %d\n" DEF, X)
+    #define CHECK_REG_NOT_EMPTY(X)  if (X != NOTHING) \
+                                        fprintf(stderr, RED "Ostrzezenie: Nie zwolniono rejestru %d\n" DEF, X)
     #define CHECK_INSTRUCTION(X)    if (X >= MAX_CODES_TABLE) \
                                         fprintf(stderr, RED "Ostrzezenie: Brak miejsca w tablicy kodow\n" DEF)
     #define CHECK_DATA(X)           if (X >= MAX_DATA) \
@@ -22,7 +24,7 @@
     #define CHECK_UNIT(X)           if (X == NULL) \
                                         fprintf(stderr, RED "Ostrzezenie: Problem z alokacja unit" DEF)
     #define CHECK_UNIT_COPY(X, Y)   if (X == CLN_NOTHING && Y == NOTHING) \
-                                        fprintf(stderr, RED "Ostrzezenie: Problem z alokacja unit" DEF)
+                                        fprintf(stderr, RED "Ostrzezenie: Problem z kopia unit" DEF)
     #define CHECK_COND(X)           if (X == NULL) \
                                         fprintf(stderr, RED "Ostrzezenie: Problem z alokacja cond" DEF)
     #define CHECK_ITERATOR(X, Y)    if (strcmp(X, Y) != 0) \

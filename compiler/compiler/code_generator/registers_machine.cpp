@@ -68,33 +68,52 @@ void reg_free(int x) {
  * jesli nie, przerzuca je do rejestru */
 void reg_check(unit_type* unit) {
     if (unit->val != CLN_NOTHING) {
+        // VALUE
         int x = reg_get_free();
         DBG_OPTIMIZER_VAL_TO_REG(unit->val, x);
         reg_const_cln(x, unit->val);
         reg_connect(unit, x);
         unit->val = CLN_NOTHING;
+        unit->offset_cln = CLN_NOTHING;
+    }
+    else if (unit->offset_cln != NOTHING) {
+        // OFFSET CLN
+        int x = reg_get_free();
+        DBG_OPTIMIZER_OFFSET_TO_REG(unit->offset, x);
+        mem_to_reg_cln(unit, x);
+        reg_connect(unit, x);
+        unit->val = CLN_NOTHING;
+        unit->offset_cln = CLN_NOTHING;
     }
     else if (unit->reg == NOTHING) {
+        // OFFSET
         CHECK_REG_CHECK(unit->reg_prev);
         int x = unit->reg_prev;
         mem_to_reg(unit, x);
         reg_connect(unit, x);
         unit->val = CLN_NOTHING;
+        unit->offset_cln = CLN_NOTHING;
     }
 }
 
 /* Przerzuca dane z rejestru do pamieci */
 inline void reg_to_mem(unit_type* unit, int reg) {
-    input_type offset = variable_allocate();   // alokacja pamieci
-    reg_const(SUPER_REGISTER, offset);  // offset do rejestru
-    store(reg, SUPER_REGISTER);         // rejestr do pamieci
+    input_type offset = variable_allocate(); // alokacja pamieci
+    reg_const(SUPER_REGISTER, offset);      // offset do rejestru
+    store(reg, SUPER_REGISTER);             // rejestr do pamieci
     unit->offset = offset;
 }
 
 /* Przerzuca dane z pamieci do rejestru */
 inline void mem_to_reg(unit_type* unit, int reg) {
-    reg_const(reg, unit->offset);       // offset do rejestru
-    load(reg, reg);                     // wartosc do rejestru
+    reg_const(reg, unit->offset);           // offset do rejestru
+    load(reg, reg);                         // wartosc do rejestru
+}
+
+/* Przerzuca dane z pamieci do rejestru cln */
+inline void mem_to_reg_cln(unit_type* unit, int reg) {
+    reg_const_cln(reg, unit->offset_cln);   // offset do rejestru
+    load(reg, reg);                         // wartosc do rejestru
 }
 
 /* Laczy rejestr z unity */

@@ -6,6 +6,7 @@
 #include "../others/unit.hpp"
 #include "../debugger/errors.hpp"
 #include "../debugger/debugger.hpp"
+#include "../debugger/warnings.hpp"
 #include "../symbol_table/symbol_table.hpp"
 #include "../symbol_table/data_manager.hpp"
 #include "../optimizer/optimizer.hpp"
@@ -96,7 +97,7 @@ unit_type* get_const(input_type val, bool type) {
     
     if (type == VALUE) {
         // VALUE
-        #ifdef OPTIMIZE_CONST_VAL
+        #ifdef OPTIMIZE_CONST_POSTPONE
             unit->val = val;
         #else
             int x = reg_get_free();         // wolny rejestr
@@ -148,10 +149,14 @@ unit_type* get_variable(char* id, bool type, bool init) {
     }
     else if (type == VALUE) {
         // VALUE
-        int x = reg_get_free();     // wolny rejestr
-        reg_const(x, sym->offset);  // stala do rejestru
-        load(x, x);                 // wartosc do rejestru
-        reg_connect(unit, x);
+        #ifdef OPTIMIZE_VAR_POSTPONE
+            unit->offset_cln = sym->offset;
+        #else
+            int x = reg_get_free();     // wolny rejestr
+            reg_const(x, sym->offset);  // stala do rejestru
+            load(x, x);                 // wartosc do rejestru
+            reg_connect(unit, x);
+        #endif
     }
     else {
         // LOCATION
@@ -190,10 +195,14 @@ unit_type* get_array_num(char* id, input_type num, bool type, bool init) {
     }
     else if (type == VALUE) {
         // VALUE
-        int x = reg_get_free();                         // wolny rejestr
-        reg_const(x, sym->offset + num - sym->begin);   // stala do rejestru
-        load(x,x);                                      // wartosc do rejestru
-        reg_connect(unit, x);
+        #ifdef POTIMIZE_ARR_NUM_POSTPONE
+            unit->offset_cln = sym->offset + num - sym->begin;
+        #else
+            int x = reg_get_free();                         // wolny rejestr
+            reg_const(x, sym->offset + num - sym->begin);   // stala do rejestru
+            load(x,x);                                      // wartosc do rejestru
+            reg_connect(unit, x);
+        #endif
     }
     else {
         // LOCATION
@@ -416,14 +425,16 @@ unit_type* sum(unit_type* unit1, unit_type* unit2) {
 
     // a + a
     #ifdef OPTIMIZE_SUM_EQUAL
-    // if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
-    //     DBG_OPTIMIZER_BEGIN("reg_sum_equal");
-    //     reg_check(unit1);
-    //     shl(unit1->reg);
-    //     reg_free(unit2->reg);
-    //     unit_free(unit2);
-    //     goto u1;
-    // }
+    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
+        if (unit1->offset_cln == unit2->offset_cln) {
+            DBG_OPTIMIZER_BEGIN("reg_sum_equal")
+            CHECK_REG_NOT_EMPTY(unit2->reg);
+            reg_check(unit1);
+            shl(unit1->reg);
+            unit_free(unit2);
+            goto u1;
+        }
+    }
     #endif
 
     // VAL + VAL
@@ -476,6 +487,20 @@ unit_type* dif(unit_type* unit1, unit_type* unit2) {
     if (unit2->val != CLN_NOTHING) {
         reg_check(unit1);
         if (reg_dif_right_cln(unit1->reg, unit2->val)) {
+            unit_free(unit2);
+            goto u1;
+        }
+    }
+    #endif
+
+    // a - a
+    #ifdef OPTIMIZE_DIF_EQUAL
+    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
+        if (unit1->offset_cln == unit2->offset_cln) {
+            DBG_OPTIMIZER_BEGIN("reg_dif_equal")
+            CHECK_REG_NOT_EMPTY(unit2->reg);
+            reg_check(unit1);
+            reset(unit1->reg);
             unit_free(unit2);
             goto u1;
         }
@@ -656,6 +681,23 @@ u2: DBG_INSTRUCTION_END("mul");
     }
     #endif
 
+    // a / a
+    #ifdef OPTIMIZE_DIV_EQUAL
+    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
+        if (unit1->offset_cln == unit2->offset_cln) {
+            DBG_OPTIMIZER_BEGIN("reg_div_equal")
+            CHECK_REG_NOT_EMPTY(unit2->reg);
+            reg_check(unit1);
+            int x = unit1->reg;
+            jzero(x, 3);   /* JUMP END */
+            reset(x);
+            inc(x);
+            unit_free(unit2);
+            goto u1;
+        }
+    }
+    #endif
+    
     // INSTRUKCJE
     reg_check(unit1);
     reg_check(unit2);
@@ -683,7 +725,7 @@ u2: DBG_INSTRUCTION_END("div");
  * OPT1     NUM % NUM
  * OPT2     NUM % a
  * OPT2     a   % NUM
- * OPT3     a   / a
+ * OPT3     a   % a
  * ELSE     a1  % a2 */
  unit_type* mod(unit_type* unit1, unit_type* unit2) {
     DBG_INSTRUCTION_BEGIN("mod");
@@ -734,6 +776,20 @@ u2: DBG_INSTRUCTION_END("div");
             goto u1;
         }
         #endif
+    }
+    #endif
+
+    // a % a
+    #ifdef OPTIMIZE_MOD_EQUAL
+    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
+        if (unit1->offset_cln == unit2->offset_cln) {
+            DBG_OPTIMIZER_BEGIN("reg_mod_equal")
+            CHECK_REG_NOT_EMPTY(unit2->reg);
+            reg_check(unit1);
+            reset(unit1->reg);
+            unit_free(unit2);
+            goto u1;
+        }
     }
     #endif
 

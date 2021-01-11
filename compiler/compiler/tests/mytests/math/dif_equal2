@@ -1,0 +1,25 @@
+DECLARE
+    a(10:20), b
+BEGIN
+    FOR i FROM 10 TO 20 DO
+        a(i) := 100 * i;
+    ENDFOR
+
+    b := a(10) - a(10);
+    WRITE b;
+
+    b := a(11) - a(11);
+    WRITE b;
+
+    b := a(12) - a(12);
+    WRITE b;
+
+    b := a(15) - a(15);
+    WRITE b;
+
+    b := a(17) - a(16);
+    WRITE b;
+
+    b := a(20) - a(20);
+    WRITE b;
+END

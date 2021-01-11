@@ -1,0 +1,19 @@
+DECLARE
+    a, b
+BEGIN
+    a := 0;
+    b := a % a;
+    WRITE b;
+
+    a := 1;
+    b := a % a;
+    WRITE b;
+
+    a := 2;
+    b := a % a;
+    WRITE b;
+
+    a := 3;
+    b := a % a;
+    WRITE b;
+END
