@@ -79,6 +79,7 @@ void reg_check(unit_type* unit) {
         int x = unit->reg_prev;
         mem_to_reg(unit, x);
         reg_connect(unit, x);
+        unit->val = CLN_NOTHING;
     }
 }
 

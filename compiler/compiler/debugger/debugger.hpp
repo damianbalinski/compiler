@@ -146,6 +146,6 @@
     #define DBG_OPTIMIZER_VAL_TO_REG(X, Y)  std::cout << GREEN "optimizer [ val " << X << " to reg " << Y << "]" DEF << std::endl
     #define DBG_OPTIMIZER_BEGIN(X)          printf(GREEN "optimizer [ begin %s ]\n" DEF, X );
 #else                                       
-    #define DBG_OPTIMIZER_VAL_TO_REG(X)
+    #define DBG_OPTIMIZER_VAL_TO_REG(X, Y)
     #define DBG_OPTIMIZER_BEGIN(X)
 #endif

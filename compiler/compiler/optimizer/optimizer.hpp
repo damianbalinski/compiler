@@ -1,4 +1,12 @@
-#define OPTIMIZER_ON
+// #define OPTIMIZER_ON
+
+/* 
+ * TODO LIST
+ * tablica jednoelementowa przy indeksowaniu zachowuje sie jak zwykla zmienna
+ * 
+ *
+ * 
+ */
 
 #ifdef OPTIMIZER_ON
     #define OPTIMIZE_CONST
@@ -20,6 +28,7 @@
     #define OPTIMIZE_SUM_BOTH
     #define OPTIMIZE_SUM_LEFT
     #define OPTIMIZE_SUM_RIGHT
+    #define OPTIMIZE_SUM_EQUAL
 #endif
 
 // DIF

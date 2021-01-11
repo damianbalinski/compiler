@@ -1,0 +1,8 @@
+DECLARE
+    a, b 
+BEGIN
+    a := 20000;
+    b := a + a;
+    WRITE a;
+    WRITE b;
+END

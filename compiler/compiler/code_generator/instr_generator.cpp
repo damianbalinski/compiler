@@ -414,6 +414,18 @@ unit_type* sum(unit_type* unit1, unit_type* unit2) {
     }
     #endif
 
+    // a + a
+    #ifdef OPTIMIZE_SUM_EQUAL
+    // if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
+    //     DBG_OPTIMIZER_BEGIN("reg_sum_equal");
+    //     reg_check(unit1);
+    //     shl(unit1->reg);
+    //     reg_free(unit2->reg);
+    //     unit_free(unit2);
+    //     goto u1;
+    // }
+    #endif
+
     // VAL + VAL
     reg_check(unit1);
     reg_check(unit2);

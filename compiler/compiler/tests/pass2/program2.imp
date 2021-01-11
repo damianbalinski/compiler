@@ -1,4 +1,4 @@
-[ Rozklad liczby na czynniki pierwsze ]
+[ Rozklad liczby na czynniki pierwsze 2000 ]
 DECLARE
     n, m, reszta, potega, dzielnik
 BEGIN
