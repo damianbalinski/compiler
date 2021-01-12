@@ -71,12 +71,12 @@ data_type code_jump2(code_type code, int x, int y) {
     return code_counter++;
 }
 
-void code_modif(data_type offset, int val) {
-    CHECK_JUMP(code_table[offset].code);
-    if (code_table[offset].code == JUMP)
-        code_table[offset].x = val;
+void code_modif(input_type offset, input_type val) {
+    CHECK_JUMP(code_table[CLN_CAST(offset)].code);
+    if (code_table[CLN_CAST(offset)].code == JUMP)
+        code_table[CLN_CAST(offset)].x = CLN_CAST(val);
     else
-        code_table[offset].y = val;
+        code_table[CLN_CAST(offset)].y = CLN_CAST(val);
 }
 
 /* Zwraca bierzaca pozycje w tablicy kodow. */
@@ -107,6 +107,6 @@ void code_print(FILE* file, code_type code, int x, int y) {
 
 /* Drukuje wszystkie instrukcje. */
 void code_print_all(FILE* file) {
-    for (int i = 0; i < code_counter; i++)
+    for (data_type i = 0; i < code_counter; i++)
         code_print(file, code_table[i].code, code_table[i].x, code_table[i].y);
 }

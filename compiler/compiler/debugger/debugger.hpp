@@ -19,7 +19,7 @@ using std::endl;
     // #define DEBUG_UNIT
     // #define DEBUG_COND
     // #define DEBUG_JUMPS
-    #define DEBUG_OPTIMIZER
+    // #define DEBUG_OPTIMIZER
 #endif
 
 // TOKENS

@@ -314,7 +314,7 @@ void add_variable(char* id) {
  * ERR1 - id zostal zadeklarowany
  * ERR2 - begin wieksze od end
  */
-void add_array(char* id, input_type begin, input_type end) {
+void add_array(char* id, data_type begin, data_type end) {
     DBG_INSTRUCTION_BEGIN("add_table");
     symbol* sym = sym_get(id);
 

@@ -4,5 +4,5 @@
 
 #define MAX_DATA ULLONG_MAX
 
-input_type variable_allocate();
-input_type array_allocate(input_type n);
+data_type variable_allocate();
+data_type array_allocate(data_type n);

@@ -16,7 +16,7 @@
 #define IF_THEN_ELSE false
 
 void add_variable(char* id);
-void add_array(char* id, input_type begin, input_type end);
+void add_array(char* id, data_type begin, data_type end);
 void remove_iterator(char* id);
 symbol* add_iterator(char* id);
 

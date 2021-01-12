@@ -134,11 +134,11 @@ inline void reg_disconnect(unit_type* unit, int reg) {
 void reg_print() {
     register_type* reg = head;
     printf("r n reg            next           unit\n");
-    printf("%c %d %p %p %p\n", reg->name, reg->num, reg, reg->next, reg->unit);
+    printf("%c %d %p %p %p\n", reg->name, reg->num, (void*)reg, (void*)reg->next, (void*)reg->unit);
     reg = reg->next;
 
     while(reg != head) {
-        printf("%c %d %p %p %p\n", reg->name, reg->num, reg, reg->next, reg->unit);
+        printf("%c %d %p %p %p\n", reg->name, reg->num, (void*)reg, (void*)reg->next, (void*)reg->unit);
         reg = reg->next;
     }
 }
@@ -146,21 +146,22 @@ void reg_print() {
 /* Umieszcza stala w rejestrze. */
 void reg_const(int x, input_type val) {
     DBG_REGISTERS_BEGIN("reg_const");
-    CHECK_VAL(val);
+    reg_const_cln(x, val);
+    // CHECK_VAL(val);
     
-    reset(x);
-    if (val == 0)
-        return;
+    // reset(x);
+    // if (val == 0)
+    //     return;
     
-    inc(x);
-    if (val == 1)
-        return;
+    // inc(x);
+    // if (val == 1)
+    //     return;
     
-    input_type n = (input_type)log2(val) - 1;    
-    for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
-        shl(x);
-        if (mask & val) inc(x);
-    }
+    // input_type n = (input_type)log2(val) - 1;    
+    // for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
+    //     shl(x);
+    //     if (mask & val) inc(x);
+    // }
     DBG_REGISTERS_END("reg_const");
 }
 

@@ -1,5 +1,6 @@
 CC=g++
 FLAGS=-lm -lcln
+FLAGS2=-Wall -Wpedantic
 
 main: parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o
 	${CC} -o temp parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o ${FLAGS}

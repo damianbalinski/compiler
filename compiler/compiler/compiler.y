@@ -22,7 +22,7 @@
 }
 
 %union{
-    input_type val;      /* wartosc          */
+    data_type val;        /* wartosc          */
     unit_type* unit;     /* pamiec i rejestr */
     char *id;            /* identyfikator    */
     bool type;           /* wartosc logiczna */
@@ -114,7 +114,7 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
     value           {   $8 = for_init($1, $6, $8, $7);      }
     DO              {   $1->label_cond = code_get_label();
                         jump_true_false($1, $8, INIT);
-                        jump_end($1, $8, INIT);        
+                        jump_end($1, $8, INIT);
                         $1->label_cmd = code_get_label();   }
     commands        {   for_step($1, $8, $7);
                         jump_cond($1, $8, INIT);            }

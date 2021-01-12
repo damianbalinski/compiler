@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdlib>
 #include <iostream>
+#include <cln/cln.h>
 #include "colors.hpp"
 
 using std::cerr;
@@ -29,6 +30,4 @@ using std::endl;
 #define ERR_BAD_CALL(X)        /* fprintf(stderr, RED "Nieprawidlowe wywolanie, sproboj %s <src> <dest>\n"       DEF, X) */\
                                cerr << RED "Nieprawidlowe wywolanie, sproboj " <<X<< " <src> <dest>" DEF << endl
 
-static int errors_counter = 0;
 #define ERR_ADD() exit(EXIT_FAILURE)
-#define ERR_GET() (errors_counter)
