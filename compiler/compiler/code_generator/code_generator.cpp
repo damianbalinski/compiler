@@ -6,23 +6,23 @@
 
 extern register_type registers[6];
 instr_type code_table[MAX_CODES_TABLE];
-input_type code_counter = 0;
+data_type code_counter = 0;
 
-void get(int x)          { code_put1(GET, x);      }
-void put(int x)          { code_put1(PUT, x);      }
-void load(int x, int y)  { code_put2(LOAD, x, y);  }
-void store(int x, int y) { code_put2(STORE, x, y); }
-void add(int x, int y)   { code_put2(ADD, x, y);   DBG_RADD(x,y); }
-void sub(int x, int y)   { code_put2(SUB, x, y);   DBG_RSUB(x,y); }
-void reset(int x)        { code_put1(RESET, x);    DBG_RRESET(x); }
-void inc(int x)          { code_put1(INC, x);      DBG_RINC(x);   }
-void dec(int x)          { code_put1(DEC, x);      DBG_RDEC(x);   }
-void shr(int x)          { code_put1(SHR, x);      DBG_RSHR(x);   }
-void shl(int x)          { code_put1(SHL, x);      DBG_RSHL(x);   }
-void halt()              { code_put0(HALT);                       }
-input_type jump(int x)         { return code_jump1(JUMP, x);      }
-input_type jzero(int x, int y) { return code_jump2(JZERO, x, y);  }
-input_type jodd(int x, int y)  { return code_jump2(JODD, x, y);   }
+void get(int x)               { code_put1(GET, x);      }
+void put(int x)               { code_put1(PUT, x);      }
+void load(int x, int y)       { code_put2(LOAD, x, y);  }
+void store(int x, int y)      { code_put2(STORE, x, y); }
+void add(int x, int y)        { code_put2(ADD, x, y);   }
+void sub(int x, int y)        { code_put2(SUB, x, y);   }
+void reset(int x)             { code_put1(RESET, x);    }
+void inc(int x)               { code_put1(INC, x);      }
+void dec(int x)               { code_put1(DEC, x);      }
+void shr(int x)               { code_put1(SHR, x);      }
+void shl(int x)               { code_put1(SHL, x);      }
+void halt()                   { code_put0(HALT);        }
+data_type jump(int x)         { return code_jump1(JUMP, x);      }
+data_type jzero(int x, int y) { return code_jump2(JZERO, x, y);  }
+data_type jodd(int x, int y)  { return code_jump2(JODD, x, y);   }
 
 void code_put0(code_type code) {
     CHECK_CODE(code);
@@ -51,7 +51,7 @@ void code_put2(code_type code, int x, int y) {
     code_table[code_counter++].y = y;
 }
 
-input_type code_jump1(code_type code, int x) {
+data_type code_jump1(code_type code, int x) {
     CHECK_CODE(code);
     CHECK_INSTRUCTION(code_counter);
     DBG_CODE1(code_counter, code, x);
@@ -60,7 +60,7 @@ input_type code_jump1(code_type code, int x) {
     return code_counter++;
 }
 
-input_type code_jump2(code_type code, int x, int y) {
+data_type code_jump2(code_type code, int x, int y) {
     CHECK_CODE(code);
     CHECK_INSTRUCTION(code_counter);
     CHECK_REGISTER(x);
@@ -71,7 +71,7 @@ input_type code_jump2(code_type code, int x, int y) {
     return code_counter++;
 }
 
-void code_modif(input_type offset, int val) {
+void code_modif(data_type offset, int val) {
     CHECK_JUMP(code_table[offset].code);
     if (code_table[offset].code == JUMP)
         code_table[offset].x = val;
@@ -80,7 +80,7 @@ void code_modif(input_type offset, int val) {
 }
 
 /* Zwraca bierzaca pozycje w tablicy kodow. */
-input_type code_get_label() {
+data_type code_get_label() {
     return code_counter;
 }
 

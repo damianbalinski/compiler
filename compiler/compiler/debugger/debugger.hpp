@@ -1,6 +1,10 @@
 #pragma once
+#include <iostream>
 #include "colors.hpp"
 #include "../code_generator/codes.hpp"
+
+using std::cout;
+using std::endl;
 
 #define DEBUG_MODE
 
@@ -9,7 +13,6 @@
     // #define DEBUG_PARSER
     // #define DEBUG_SYMBOL_TABLE
     // #define DEBUG_REGISTERS
-    // #define DEBUG_REGISTER_OPERATIONS
     // #define DEBUG_CODES
     // #define DEBUG_INSTRUCTIONS
     // #define DEBUG_DATA_MANAGER
@@ -68,27 +71,6 @@
     #define DBG_INSTRUCTION_END(X) 
 #endif
 
-// REGISTER OPERATIONS
-#ifdef DEBUG_REGISTER_OPERATIONS
-    #define DBG_RRESET(X) registers[X].val = 0
-    #define DBG_RINC(X)   registers[X].val++
-    #define DBG_RDEC(X)   registers[X].val--
-    #define DBG_RSHL(X)   registers[X].val <<= 1
-    #define DBG_RSHR(X)   registers[X].val >>= 1
-    #define DBG_RADD(X,Y) registers[X].val += registers[Y].val
-    #define DBG_RSUB(X,Y) registers[X].val = (registers[X].val > registers[Y].val) ? (registers[X].val - registers[Y].val) : 0
-    #define DBG_RVAL(X)   printf(GREEN "registers [ val %d = %lld]\n" DEF, X, registers[X].val)  
-#else
-    #define DBG_RRESET(X)
-    #define DBG_RINC(X)
-    #define DBG_RDEC(X)
-    #define DBG_RSHL(X)
-    #define DBG_RSHR(X)
-    #define DBG_RADD(X,Y)
-    #define DBG_RSUB(X,Y)
-    #define DBG_RVAL(X)
-#endif
-
 // DATA MANAGER
 #ifdef DEBUG_DATA_MANAGER
     #define DBG_ALLOCATE_VARIABLE(X) printf(GREEN "allocate [ variable %lld ]\n" DEF, X)
@@ -143,9 +125,9 @@
 
 // OPTIMIZER
 #ifdef DEBUG_OPTIMIZER
-    #define DBG_OPTIMIZER_VAL_TO_REG(X, Y)     std::cout << GREEN "optimizer [ val " << X << " to reg " << Y << "]" DEF << std::endl
-    #define DBG_OPTIMIZER_OFFSET_TO_REG(X, Y)  std::cout << GREEN "optimizer [ val from offset " << X << " to reg " << Y << "]" DEF << std::endl
-    #define DBG_OPTIMIZER_BEGIN(X)             printf(GREEN "optimizer [ begin %s ]\n" DEF, X );
+    #define DBG_OPTIMIZER_VAL_TO_REG(X, Y)     cout << GREEN "optimizer [ val " << X << " to reg " << Y << "]"             DEF << endl
+    #define DBG_OPTIMIZER_OFFSET_TO_REG(X, Y)  cout << GREEN "optimizer [ val from offset " << X << " to reg " << Y << "]" DEF << endl
+    #define DBG_OPTIMIZER_BEGIN(X)             cout << GREEN "optimizer [ begin " << X << "]"                              DEF << endl
 #else                                       
     #define DBG_OPTIMIZER_VAL_TO_REG(X, Y)
     #define DBG_OPTIMIZER_OFFSET_TO_REG(X, Y)
