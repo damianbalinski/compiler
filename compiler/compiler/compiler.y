@@ -8,10 +8,12 @@
     #include "code_generator/instr_generator.hpp"
     #include "code_generator/code_generator.hpp"
     #include "code_generator/registers_machine.hpp"
+    #include "parse_tree/commands.hpp"
 
     extern int yylineno;
     extern char* yytext;
     extern int yylex(void);
+    extern CommandVector* commands;
     void yyerror(char *str);
 %}
 
@@ -20,29 +22,34 @@
     #include "others/unit.hpp"
     #include "others/cond.hpp"
     #include "parse_tree/commands.hpp"
+    #include "parse_tree/values.hpp"
+    #include "parse_tree/conditions.hpp"
+    #include "parse_tree/expressions.hpp"
 }
 
 %union{
-    data_type val;          /* wartosc          */
-    unit_type* unit;        /* pamiec i rejestr */
-    char *id;               /* identyfikator    */
-    bool type;              /* wartosc logiczna */
-    cond_type* cond;        /* skoki warunkowe  */
-    AbstractCommand* cmd;   /* komenda          */
-    CommandVector* vec;     /* wektor komend    */
+    data_type input;         /* wartosc          */
+    unit_type* unit;         /* pamiec i rejestr */
+    char *id;                /* identyfikator    */
+    bool type;               /* wartosc logiczna */
+    AbstractCommand* cmd;    /* komenda          */
+    CommandVector* vec;      /* wektor komend    */
+    AbstractValue* val;      /* wartosc          */
+    AbstractExpression* exp; /* wyrazenie        */
+    AbstractCondition* con;  /* warunek          */
+    
 }
 
 %start program
-%type <unit> value
-%type <unit> valueloc
-%type <unit> expression
-%type <unit> condition
-%type <unit> ridentifier
-%type <unit> lidentifier
-%type <type> to_downto else
+%type <val> value
+%type <val> valueloc
+%type <exp> expression
+%type <con> condition
+%type <val> ridentifier
+%type <val> lidentifier
 %type <cmd> command
 %type <vec> commands
-%token <val> NUMBER
+%token <input> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
 %token <cond> IF WHILE REPEAT FOR
@@ -58,8 +65,8 @@
 %nonassoc ASSIGN                     /* operator przypisania    */
 
 %%
-program: DECLARE declarations T_BEGIN commands END { $4->print_raw(); halt(); YYACCEPT; }
-| T_BEGIN commands END                             { $2->print_raw(); halt(); YYACCEPT; }
+program: DECLARE declarations T_BEGIN commands END { commands = $4; commands->push_back(new CHalt()); YYACCEPT; }
+| T_BEGIN commands END                             { commands = $2; commands->push_back(new CHalt()); YYACCEPT; }
 ;
 
 declarations: declarations ',' ID                  { add_variable($3);      }
@@ -68,127 +75,56 @@ declarations: declarations ',' ID                  { add_variable($3);      }
 |  ID '(' NUMBER ':' NUMBER ')'                    { add_array($1, $3, $5); }
 ;
 
-commands: commands command                         { $1->push_back($2);  $$ = $1;       }
+commands: commands command                         { $1->push_back($2);  $$ = $1;           }
 |  command                                         { $$ = new CommandVector();
-                                                     $$->push_back($1);                 }
+                                                     $$->push_back($1);                     }
 ;
 
-command: lidentifier ASSIGN expression ';'         { assign($1, $3); 
-                                                     $$ = new CAssign(); }
-
-|   IF              {   $1 = cond_alloc();                  }
-    condition       {   jump_true_false($1, $3, INIT);
-                        jump_end($1, $3, INIT);             }
-    THEN            {   $1->label_cmd = code_get_label();   }
-    commands        {   $1->label_end = code_get_label();   }
-    else            {   $1->label_else = code_get_label();  }
-    ENDIF           {   jump_true_false($1, $3, FINISH);
-                        jump_end($1, $3, FINISH);
-                        jump_else($1, $9, FINISH);
-                        DBG_JUMPS($1);
-                        jumps_free($1, $3);
-                        if ($9 == IF_THEN)
-                            $$ = new CIfThen($7);           }
-
-|   WHILE           {   $1 = cond_alloc();                    
-                        $1->label_cond = code_get_label();  }  
-    condition       {   jump_true_false($1, $3, INIT);
-                        jump_end($1, $3, INIT);             }
-    DO              {   $1->label_cmd = code_get_label();   }
-    commands        {   jump_cond($1, $3, INIT);            }
-    ENDWHILE        {   $1->label_end = code_get_label();
-                        jump_true_false($1, $3, FINISH);
-                        jump_end($1, $3, FINISH);
-                        jump_cond($1, $3, FINISH);
-                        DBG_JUMPS($1);
-                        jumps_free($1, $3);
-                        $$ = new CWhile($7);                }
-                    
-|   REPEAT          {   $1 = cond_alloc();                 
-                        $1->label_end = code_get_label();   }
-    commands
-    UNTIL
-    condition       {   jump_true_false($1, $5, INIT);
-                        jump_end($1, $5, INIT);             }
-    ';'             {   $1->label_cmd = code_get_label();
-                        jump_true_false($1, $5, FINISH);
-                        jump_end($1, $5, FINISH);
-                        DBG_JUMPS($1);
-                        jumps_free($1, $5);
-                        $$ = new CRepeat($3);               }
-
-|   FOR             {   $1 = cond_alloc();                  }
-    ID              {   $1->iter = add_iterator($3);        }
-    FROM
-    value
-    to_downto
-    value           {   $8 = for_init($1, $6, $8, $7);      }
-    DO              {   $1->label_cond = code_get_label();
-                        jump_true_false($1, $8, INIT);
-                        jump_end($1, $8, INIT);
-                        $1->label_cmd = code_get_label();   }
-    commands        {   for_step($1, $8, $7);
-                        jump_cond($1, $8, INIT);            }
-    ENDFOR          {   $1->label_end = code_get_label();
-                        jump_true_false($1, $8, FINISH);
-                        jump_end($1, $8, FINISH);
-                        jump_cond($1, $8, FINISH);
-                        for_free($1, $8);
-                        remove_iterator($3);
-                        if ($7 = FOR_TO)
-                            $$ = new CForTo($12);            }
-
-|  READ lidentifier ';'        { read($2);
-                                 $$ = new CRead();          }
-|  WRITE valueloc ';'          { write($2);
-                                 $$ = new CWrite();         }
+command: lidentifier ASSIGN expression ';'           { $$ = new CAssign($1, $3);            }
+| IF condition THEN commands ELSE commands ENDIF     { $$ = new CIfThenElse($2, $4, $6);    }
+| IF condition THEN commands ENDIF                   { $$ = new CIfThen($2, $4);            }
+| WHILE condition DO commands ENDWHILE               { $$ = new CWhile($2, $4);             }
+| REPEAT commands UNTIL condition ';'                { $$ = new CRepeat($4, $2);            }
+| FOR ID FROM value TO value DO commands ENDFOR      { $$ = new CForTo($2, $4, $6, $8);     }
+| FOR ID FROM value DOWNTO value DO commands ENDFOR  { $$ = new CForDownto($2, $4, $6, $8); }
+| READ lidentifier ';'                               { $$ = new CRead($2);                  }
+| WRITE valueloc ';'                                 { $$ = new CWrite($2);                 }
 ;
 
-to_downto: TO                  { $$ = FOR_TO;       }
-|  DOWNTO                      { $$ = FOR_DOWNTO;   }
+expression: value              { $$ = new ExpressionBas($1);     }
+|  value '+' value             { $$ = new ExpressionSum($1, $3); }
+|  value '-' value             { $$ = new ExpressionDif($1, $3); }
+|  value '*' value             { $$ = new ExpressionMul($1, $3); }
+|  value '/' value             { $$ = new ExpressionDiv($1, $3); }
+|  value '%' value             { $$ = new ExpressionMod($1, $3); }
 ;
 
-else: %empty                   { $<cond>-7->label_end = code_get_label();
-                                 $$ = IF_THEN;                             }
-|  ELSE                        { jump_else($<cond>-7, IF_THEN_ELSE, INIT); 
-                                 $<cond>-7->label_end = code_get_label();  }
-   commands                    { $$ = IF_THEN_ELSE;                        }
+condition: value EQ value      { $$ = new ConditionEQ($1, $3);   }
+|  value NE value              { $$ = new ConditionNE($1, $3);   }
+|  value LT value              { $$ = new ConditionLT($1, $3);   }
+|  value GT value              { $$ = new ConditionGT($1, $3);   }
+|  value LE value              { $$ = new ConditionLE($1, $3);   }
+|  value GE value              { $$ = new ConditionGE($1, $3);   }
 ;
 
-expression: value              { $$ = $1;           }
-|  value '+' value             { $$ = sum($1, $3);  }
-|  value '-' value             { $$ = dif($1, $3);  }
-|  value '*' value             { $$ = mul($1, $3);  }
-|  value '/' value             { $$ = divs($1, $3); }
-|  value '%' value             { $$ = mod($1, $3);  }
+value: NUMBER                  { $$ = new VNum($1, VALUE);                     }
+|  ridentifier                 { $$ = $1;                                      }
 ;
 
-condition: value EQ value            { $$ = eq_ne($1, $3, EQUAL);         }
-|  value NE value                    { $$ = eq_ne($1, $3, NOT_EQUAL);     }
-|  value LT value                    { $$ = lt_ge($1, $3, LESS);          }
-|  value GT value                    { $$ = gt_le($1, $3, GREATER);       }
-|  value LE value                    { $$ = gt_le($1, $3, LESS_EQUAL);    }
-|  value GE value                    { $$ = lt_ge($1, $3, GREATER_EQUAL); }
+valueloc: NUMBER               { $$ = new VNum($1, LOCATION);                  }
+|  ID                          { $$ = new VVar($1, LOCATION, INIT);            }
+|  ID '(' ID ')'               { $$ = new VArrVar($1, $3, LOCATION, INIT);     }
+|  ID '(' NUMBER ')'           { $$ = new VArrNum($1, $3, LOCATION, INIT);     }
 ;
 
-value: NUMBER                        { $$ = get_const($1,         VALUE); }
-|  ridentifier                       { $$ = $1;                           }
+ridentifier: ID                { $$ = new VVar($1, VALUE, INIT);               }
+|  ID '(' ID ')'               { $$ = new VArrVar($1, $3, VALUE, INIT);        }
+|  ID '(' NUMBER ')'           { $$ = new VArrNum($1, $3, VALUE, INIT);        }
 ;
 
-valueloc: NUMBER                     { $$ = get_const($1,         LOCATION);         }
-|  ID                                { $$ = get_variable($1,      LOCATION, INIT);   }
-|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, INIT);   }
-|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, INIT);   }
-;
-
-ridentifier: ID                      { $$ = get_variable($1,      VALUE, INIT);      }
-|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, VALUE, INIT);      }
-|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, VALUE, INIT);      }
-;
-
-lidentifier: ID                      { $$ = get_variable($1,      LOCATION, NOINIT); }
-|  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, NOINIT); }
-|  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, NOINIT); }
+lidentifier: ID                { $$ = new VVar($1, LOCATION, NOINIT);          }
+|  ID '(' ID ')'               { $$ = new VArrVar($1, $3, LOCATION, NOINIT);   }
+|  ID '(' NUMBER ')'           { $$ = new VArrNum($1, $3, LOCATION, NOINIT);   }
 %%
 
 /* Metoda startowa.
@@ -216,6 +152,11 @@ int main( int argc, char** argv )
     DBG_PARSER_END();
     DBG_REGISTER_PRINT();
 
+    commands->print();
+    cout << "OK" << endl;
+    commands->code();
+    cout << "OK2" << endl;
+    
     if ((output = fopen(argv[2], "w")) == NULL) {
         ERR_BAD_FILENAME(argv[2]);
         ERR_ADD();

@@ -1,0 +1,5 @@
+DECLARE
+    a
+BEGIN
+    a := 20;
+END

@@ -16,7 +16,7 @@ ID    [_a-z]+
 %x      COMMENT
 
 %%
-{DIGIT}+    { DBG_TOKEN("NUMBER");   yylval.val = atoll(yytext); return(NUMBER); }
+{DIGIT}+    { DBG_TOKEN("NUMBER");   yylval.input = atoll(yytext); return(NUMBER); }
 ":="        { DBG_TOKEN("ASSIGN");   return(ASSIGN);   }
 "="         { DBG_TOKEN("EQ");       return(EQ);       }
 "!="        { DBG_TOKEN("NE");       return(NE);       }

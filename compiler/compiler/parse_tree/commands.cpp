@@ -1,103 +1,178 @@
-#include "commands.hpp"
 #include <iostream>
+#include "commands.hpp"
+#include "parse_tree.hpp"
+#include "../code_generator/instr_generator.hpp"
+#include "../code_generator/code_generator.hpp"
+#include "../debugger/debugger.hpp"
 
 using std::cout;
 using std::endl;
 
+CommandVector* commands;
 int DEPTH = 0;
-const char* DEPTH_SIGN = "  ";
 
-void print_depth() {
-    for(int i = 0; i < DEPTH; i++)
-        cout << DEPTH_SIGN;
-}
-void CommandVector::print_raw() {
-    for (AbstractCommand* com: *this)
-        com->print_raw();
-};
-
-void CWrite::print_raw() {
-    print_depth();
-    cout << "WRITE val;" << endl;
+// HALT
+void CHalt::print() {
+    cout << "END" << endl;
 }
 
-void CRead::print_raw() {
-    print_depth();
-    cout << "READ id;" << endl;
+void CHalt::code() {
+    halt();
 }
 
-void CAssign::print_raw() {
-    print_depth();
-    cout << "id := expr;" << endl;
+// WRITE
+void CWrite::print() {
+    DEPTH_PRINT();
+    cout << "WRITE ";
+    val->print();
+    cout << ";" << endl;
 }
 
-void CIfThen::print_raw() {
-    print_depth();
-    cout << "IF cond THEN" << endl;
+void CWrite::code() {
+    cout << "write" << endl;
+    write(val->unit()); 
+}
 
-    DEPTH++;
-    cmd_true->print_raw();
-    DEPTH--;
+// READ
+void CRead::print() {
+    DEPTH_PRINT();
+    cout << "READ ";
+    val->print();
+    cout << ";" << endl;
+}
 
-    print_depth();
+void CRead::code() {
+    read(val->unit()); 
+}
+
+// ASSIGN
+void CAssign::print() {
+    DEPTH_PRINT();
+    val->print();
+    cout << " := ";
+    exp->print();
+    cout << ";" << endl;
+}
+
+void CAssign::code() {
+    assign(val->unit(), exp->unit());
+}
+
+void CIfThen::print() {
+    DEPTH_PRINT();
+    cout << "IF ";
+    con->print();
+    cout << " THEN" << endl;
+
+    DEPTH_INC();
+    cmd_true->print();
+    DEPTH_DEC();
+
+    DEPTH_PRINT();
     cout << "ENDIF" << endl;
 }
 
+void CIfThenElse::print() {
+    DEPTH_PRINT();
+    cout << "IF ";
+    con->print();
+    cout << " THEN" << endl;
 
-void CWhile::print_raw() {
-    print_depth();
-    cout << "WHILE cond DO" << endl;
+    DEPTH_INC();
+    cmd_true->print();
+    DEPTH_DEC();
+    
+    DEPTH_PRINT();
+    cout << "ELSE" << endl;
 
-    DEPTH++;
-    cmd_true->print_raw();
-    DEPTH--;
+    DEPTH_INC();
+    cmd_false->print();
+    DEPTH_DEC();
 
-    print_depth();
+    DEPTH_PRINT();
+    cout << "ENDIF" << endl;
+}
+
+// WHILE
+void CWhile::print() {
+    DEPTH_PRINT();
+    cout << "WHILE ";
+    con->print();
+    cout << " DO" << endl;
+
+    DEPTH_INC();
+    cmd_true->print();
+    DEPTH_DEC();
+
+    DEPTH_PRINT();
     cout << "ENDWHILE" << endl;
 }
 
-void CRepeat::print_raw() {
-    print_depth();
+void CWhile::code() {
+    cond = cond_alloc();                    
+    cond->label_cond = code_get_label();
+
+    cond_unit = con->unit();    /* condition */
+    jump_true_false(cond, cond_unit, INIT);
+    jump_end(cond, cond_unit, INIT);
+    cond->label_cmd = code_get_label();
+
+    cmd_true->code();           /* commands */
+    jump_cond(cond, cond_unit, INIT);
+    cond->label_end = code_get_label();
+    jump_true_false(cond, cond_unit, FINISH);
+    jump_end(cond, cond_unit, FINISH);
+    jump_cond(cond, cond_unit, FINISH);
+    DBG_JUMPS(cond);
+    jumps_free(cond, cond_unit);
+}
+
+void CRepeat::print() {
+    DEPTH_PRINT();
     cout << "REPEAT" << endl;
 
-    DEPTH++;
-    cmd_true->print_raw();
-    DEPTH--;
+    DEPTH_INC();
+    cmd_true->print();
+    DEPTH_DEC();
 
-    print_depth();
-    cout << "UNTIL cond;" << endl;
+    DEPTH_PRINT();
+    cout << "UNTIL ";
+    con->print();
+    cout << ";" << endl;
 }
 
-void CForTo::print_raw() {
-    print_depth();
-    cout << "FOR id FROM val TO val DO" << endl;
+void CForTo::print() {
+    DEPTH_PRINT();
+    cout << "FOR ";
+    cout << iter;
+    cout << " FROM ";
+    val1->print();
+    cout << " TO ";
+    val2->print();
+    cout << " DO" << endl;
 
-    DEPTH++;
-    cmd_true->print_raw();
-    DEPTH--;
+    DEPTH_INC();
+    cmd_true->print();
+    DEPTH_DEC();
 
-    print_depth();
+    DEPTH_PRINT();
     cout << "ENDFOR" << endl;
 }
 
-void CForDownto::print_raw() {
-    print_depth();
-    cout << "FOR id FROM val DOWNTO val DO" << endl;
+void CForDownto::print() {
+    DEPTH_PRINT();
+    cout << "FOR ";
+    cout << iter;
+    cout << " FROM ";
+    val1->print();
+    cout << " DOWNTO ";
+    val2->print();
+    cout << " DO" << endl;
 
-    DEPTH++;
-    cmd_true->print_raw();
-    DEPTH--;
+    DEPTH_INC();
+    cmd_true->print();
+    DEPTH_DEC();
 
-    print_depth();
+    DEPTH_PRINT();
     cout << "ENDFOR" << endl;
 }
-
-// TEST
-// int main() {
-//     CommandVector* vec = new CommandVector();
-//     vec->push_back(new AbstractCommand("first"));
-//     vec->push_back(new AbstractCommand("second"));
-//     vec->push_back(new AbstractCommand("third"));
-
-//     vec->print_raw();
-// }

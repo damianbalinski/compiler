@@ -1,5 +1,5 @@
 DECLARE
-    a
+    a, b
 BEGIN
     FOR i FROM 10 TO 20 DO  
         WRITE i;
@@ -10,4 +10,19 @@ BEGIN
         a := 20;
         b := 30;
     ENDFOR
+
+    FOR i FROM 30 DOWNTO 10 DO
+        WRITE 123;
+        a := 123;
+    ENDFOR
+
+    WHILE 10 > 20 DO
+        WRITE 10;
+        WRITE 300;
+    ENDWHILE
+
+    REPEAT
+        WRITE 10;
+        WRITE 2020;
+    UNTIL 30 > 20;
 END

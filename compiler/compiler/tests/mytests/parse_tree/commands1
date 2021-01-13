@@ -6,4 +6,11 @@ BEGIN
     WRITE 20;
     READ a;
     a := 20;
+    WRITE a;
+
+    a := 20;
+    WHILE a < 40 DO
+        WRITE a;
+        a := a + 1;
+    ENDWHILE
 END

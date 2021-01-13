@@ -3,16 +3,22 @@ DECLARE
 BEGIN
     IF 10 > 20 THEN
         WRITE 100;
-        WRITE 2000;
+        READ a;
+        a := 200;
+        b := 300;
+        b := 20 + 20;
+        b := 20 - 20;
+        b := 20 * 20;
+        b := 20 / 20;
+        b := 20 % 20;
     ENDIF
 
-    WHILE 10 > 20 DO
-        WRITE 10;
-        WRITE 300;
-    ENDWHILE
-
-    REPEAT
-        WRITE 10;
-        WRITE 2020;
-    UNTIL 30 > 20;
+    IF 10 > 20 THEN
+        WRITE 20;
+        WRITE 30;
+        READ a;
+    ELSE
+        WRITE 30;
+        WRITE 40;
+    ENDIF
 END

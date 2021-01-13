@@ -2,8 +2,8 @@ CC=g++
 FLAGS=-lm -lcln
 FLAGS2=-Wall -Wpedantic
 
-main: parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o commands.o
-	${CC} -o temp parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o commands.o ${FLAGS}
+main: parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o commands.o values.o expressions.o
+	${CC} -o temp parser.o lexer.o symbol_table.o registers_machine.o code_generator.o instr_generator.o unit.o cond.o data_manager.o commands.o values.o expressions.o ${FLAGS}
 
 symbol_table.o: symbol_table/symbol_table.cpp
 	${CC} -c symbol_table/symbol_table.cpp
@@ -28,6 +28,12 @@ cond.o: others/cond.cpp
 
 commands.o : parse_tree/commands.cpp
 	$(CC) -c parse_tree/commands.cpp
+
+values.o : parse_tree/values.cpp
+	$(CC) -c parse_tree/values.cpp
+
+expressions.o : parse_tree/expressions.cpp
+	$(CC) -c parse_tree/expressions.cpp
 
 lexer.o: lexer.cpp
 	${CC} -c lexer.cpp
