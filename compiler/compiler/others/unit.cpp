@@ -9,8 +9,9 @@
 unit_type* unit_alloc() {
     unit_type* unit = new unit_type;
     unit->reg = NOTHING;
+    unit->reg_prev = NOTHING;
     unit->val = CLN_NOTHING;
-    unit->offset_cln = CLN_NOTHING;
+    unit->offset = CLN_NOTHING;
     DBG_UNIT_ALLOC(unit);
     CHECK_UNIT(unit);
     return unit;
@@ -30,14 +31,14 @@ unit_type* unit_copy(unit_type* unit) {
         DBG_UNIT_COPY("value");
         unit2->reg = NOTHING;
         unit2->val = unit->val;
-        unit2->offset_cln = CLN_NOTHING;
+        unit2->offset = CLN_NOTHING;
     }
     else {
         // COPY TEMP REG
         DBG_UNIT_COPY("temp register");
         unit2->reg = SUPER_REGISTER;
         unit2->val = CLN_NOTHING;
-        unit2->offset_cln = CLN_NOTHING;
+        unit2->offset = CLN_NOTHING;
         reset(SUPER_REGISTER);
         add(SUPER_REGISTER, unit->reg);
     }

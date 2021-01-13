@@ -150,7 +150,7 @@ unit_type* get_variable(char* id, bool type, bool init) {
     else if (type == VALUE) {
         // VALUE
         #ifdef OPTIMIZE_VAR_POSTPONE
-            unit->offset_cln = sym->offset;
+            unit->offset = sym->offset;
         #else
             int x = reg_get_free();     // wolny rejestr
             reg_const(x, sym->offset);  // stala do rejestru
@@ -196,7 +196,7 @@ unit_type* get_array_num(char* id, input_type num, bool type, bool init) {
     else if (type == VALUE) {
         // VALUE
         #ifdef POTIMIZE_ARR_NUM_POSTPONE
-            unit->offset_cln = sym->offset + num - sym->begin;
+            unit->offset = sym->offset + num - sym->begin;
         #else
             int x = reg_get_free();                         // wolny rejestr
             reg_const(x, sym->offset + num - sym->begin);   // stala do rejestru
@@ -425,8 +425,8 @@ unit_type* sum(unit_type* unit1, unit_type* unit2) {
 
     // a + a
     #ifdef OPTIMIZE_SUM_EQUAL
-    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
-        if (unit1->offset_cln == unit2->offset_cln) {
+    if (unit1->offset != CLN_NOTHING && unit2->offset != CLN_NOTHING) {
+        if (unit1->offset == unit2->offset) {
             DBG_OPTIMIZER_BEGIN("reg_sum_equal");
             CHECK_REG_NOT_EMPTY(unit2->reg);
             reg_check(unit1);
@@ -495,8 +495,8 @@ unit_type* dif(unit_type* unit1, unit_type* unit2) {
 
     // a - a
     #ifdef OPTIMIZE_DIF_EQUAL
-    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
-        if (unit1->offset_cln == unit2->offset_cln) {
+    if (unit1->offset != CLN_NOTHING && unit2->offset != CLN_NOTHING) {
+        if (unit1->offset == unit2->offset) {
             DBG_OPTIMIZER_BEGIN("reg_dif_equal");
             CHECK_REG_NOT_EMPTY(unit2->reg);
             reg_check(unit1);
@@ -683,8 +683,8 @@ u2: DBG_INSTRUCTION_END("mul");
 
     // a / a
     #ifdef OPTIMIZE_DIV_EQUAL
-    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
-        if (unit1->offset_cln == unit2->offset_cln) {
+    if (unit1->offset != CLN_NOTHING && unit2->offset != CLN_NOTHING) {
+        if (unit1->offset == unit2->offset) {
             DBG_OPTIMIZER_BEGIN("reg_div_equal");
             CHECK_REG_NOT_EMPTY(unit2->reg);
             reg_check(unit1);
@@ -781,8 +781,8 @@ u2: DBG_INSTRUCTION_END("div");
 
     // a % a
     #ifdef OPTIMIZE_MOD_EQUAL
-    if (unit1->offset_cln != CLN_NOTHING && unit2->offset_cln != CLN_NOTHING) {
-        if (unit1->offset_cln == unit2->offset_cln) {
+    if (unit1->offset != CLN_NOTHING && unit2->offset != CLN_NOTHING) {
+        if (unit1->offset == unit2->offset) {
             DBG_OPTIMIZER_BEGIN("reg_mod_equal");
             CHECK_REG_NOT_EMPTY(unit2->reg);
             reg_check(unit1);

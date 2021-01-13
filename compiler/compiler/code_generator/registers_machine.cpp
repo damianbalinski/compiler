@@ -71,28 +71,28 @@ void reg_check(unit_type* unit) {
         // VALUE
         int x = reg_get_free();
         DBG_OPTIMIZER_VAL_TO_REG(unit->val, x);
-        reg_const_cln(x, unit->val);
+        reg_const(x, unit->val);
         reg_connect(unit, x);
         unit->val = CLN_NOTHING;
-        unit->offset_cln = CLN_NOTHING;
+        unit->offset = CLN_NOTHING;
     }
-    else if (unit->offset_cln != NOTHING) {
+    else if (unit->offset != CLN_NOTHING) {
         // OFFSET CLN
-        int x = reg_get_free();
+        if (unit->reg_prev != NOTHING) {
+            // PREV REG
+            unit->reg = unit->reg_prev;
+            unit->reg_prev = NOTHING;
+        }
+        else {
+            // NEW REG
+            unit->reg = reg_get_free();
+        }
+        int x = unit->reg;
         DBG_OPTIMIZER_OFFSET_TO_REG(unit->offset, x);
-        mem_to_reg_cln(unit, x);
-        reg_connect(unit, x);
-        unit->val = CLN_NOTHING;
-        unit->offset_cln = CLN_NOTHING;
-    }
-    else if (unit->reg == NOTHING) {
-        // OFFSET
-        CHECK_REG_CHECK(unit->reg_prev);
-        int x = unit->reg_prev;
         mem_to_reg(unit, x);
         reg_connect(unit, x);
         unit->val = CLN_NOTHING;
-        unit->offset_cln = CLN_NOTHING;
+        unit->offset = CLN_NOTHING;
     }
 }
 
@@ -107,12 +107,6 @@ inline void reg_to_mem(unit_type* unit, int reg) {
 /* Przerzuca dane z pamieci do rejestru */
 inline void mem_to_reg(unit_type* unit, int reg) {
     reg_const(reg, unit->offset);           // offset do rejestru
-    load(reg, reg);                         // wartosc do rejestru
-}
-
-/* Przerzuca dane z pamieci do rejestru cln */
-inline void mem_to_reg_cln(unit_type* unit, int reg) {
-    reg_const_cln(reg, unit->offset_cln);   // offset do rejestru
     load(reg, reg);                         // wartosc do rejestru
 }
 

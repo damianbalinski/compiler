@@ -17,7 +17,6 @@ typedef struct {
     input_type offset;
     bool type;
     cln::cl_I val;
-    cln::cl_I offset_cln;
 } unit_type;
 
 unit_type* unit_alloc();
