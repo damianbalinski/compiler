@@ -17,7 +17,6 @@ symbol* sym_put(char *id) {
     ptr = new symbol;
     ptr->id = strdup(id);
     ptr->next = sym_table;
-    //ptr->val = -1;
     sym_table = ptr;
     return ptr;
 }

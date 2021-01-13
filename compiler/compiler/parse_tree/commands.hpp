@@ -10,10 +10,6 @@ using std::string;
 // POJEDYNCZA KOMENDA
 class AbstractCommand {
 public:
-    string name;
-
-    AbstractCommand(string name) : name(name){};
-    AbstractCommand() {};
     virtual void print() = 0;
     virtual void code() { cout << "code not yet implemented"; };
 };
@@ -24,6 +20,20 @@ public:
     CommandVector() : std::vector<AbstractCommand*>() {};
     void print() { for (AbstractCommand* com: *this) com->print(); };
     void code()  { for (AbstractCommand* com: *this) com->code();  };
+};
+
+// KOMENDA ZLOZONA
+class ConditionalCommand : public AbstractCommand {
+public:
+    AbstractCondition* cond;
+    CommandVector* cmd_true;
+    CommandVector* cmd_false;
+    cond_type* labels;
+    unit_type* cond_unit;
+    ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true) :
+        cond(cond), cmd_true(cmd_true) {};
+    ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true, CommandVector* cmd_false) :
+        cond(cond), cmd_true(cmd_true), cmd_false(cmd_false) {};
 };
 
 // HALT
@@ -87,28 +97,21 @@ public:
 };
 
 // WHILE
-class CWhile : public AbstractCommand {
+class CWhile : public ConditionalCommand {
 public:
-    AbstractCondition* con;
-    CommandVector* cmd_true;
-    cond_type* cond;
-    unit_type* cond_unit;
-
-    CWhile(AbstractCondition* con, CommandVector* cmd_true) :
-        con(con), cmd_true(cmd_true) {};
+    CWhile(AbstractCondition* cond, CommandVector* cmd_true) :
+        ConditionalCommand(cond, cmd_true) {};
     void print();
     void code();
 };
 
-// REPEAT COMMAND
-class CRepeat : public AbstractCommand {
+// REPEAT
+class CRepeat : public ConditionalCommand {
 public:
-    AbstractCondition* con;
-    CommandVector* cmd_true;
-    CRepeat(AbstractCondition* con, CommandVector* cmd_true) :
-        con(con), cmd_true(cmd_true) {};
+    CRepeat(AbstractCondition* cond, CommandVector* cmd_true) :
+        ConditionalCommand(cond, cmd_true) {};
     void print();
-    using AbstractCommand::code;
+    void code();
 };
 
 // FOR_TO COMMAND

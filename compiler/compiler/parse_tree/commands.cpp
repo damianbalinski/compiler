@@ -97,7 +97,7 @@ void CIfThenElse::print() {
 void CWhile::print() {
     DEPTH_PRINT();
     cout << "WHILE ";
-    con->print();
+    cond->print();
     cout << " DO" << endl;
 
     DEPTH_INC();
@@ -109,24 +109,25 @@ void CWhile::print() {
 }
 
 void CWhile::code() {
-    cond = cond_alloc();                    
-    cond->label_cond = code_get_label();
+    labels = cond_alloc();                    
+    labels->label_cond = code_get_label();
 
-    cond_unit = con->unit();    /* condition */
-    jump_true_false(cond, cond_unit, INIT);
-    jump_end(cond, cond_unit, INIT);
-    cond->label_cmd = code_get_label();
+    cond_unit = cond->unit();    /* warunek */
+    jump_true_false(labels, cond_unit, INIT);
+    jump_end(labels, cond_unit, INIT);
+    labels->label_cmd = code_get_label();
 
-    cmd_true->code();           /* commands */
-    jump_cond(cond, cond_unit, INIT);
-    cond->label_end = code_get_label();
-    jump_true_false(cond, cond_unit, FINISH);
-    jump_end(cond, cond_unit, FINISH);
-    jump_cond(cond, cond_unit, FINISH);
-    DBG_JUMPS(cond);
-    jumps_free(cond, cond_unit);
+    cmd_true->code();           /* komendy */
+    jump_cond(labels, cond_unit, INIT);
+    labels->label_end = code_get_label();
+    jump_true_false(labels, cond_unit, FINISH);
+    jump_end(labels, cond_unit, FINISH);
+    jump_cond(labels, cond_unit, FINISH);
+    DBG_JUMPS(labels);
+    jumps_free(labels, cond_unit);
 }
 
+// REPEAT
 void CRepeat::print() {
     DEPTH_PRINT();
     cout << "REPEAT" << endl;
@@ -137,9 +138,27 @@ void CRepeat::print() {
 
     DEPTH_PRINT();
     cout << "UNTIL ";
-    con->print();
+    cond->print();
     cout << ";" << endl;
 }
+
+void CRepeat::code() {
+    labels = cond_alloc();                 
+    labels->label_end = code_get_label();
+
+    cmd_true->code();               /* komendy */
+    cond_unit = cond->unit();       /* warunek */
+    
+    jump_true_false(labels, cond_unit, INIT);
+    jump_end(labels, cond_unit, INIT);
+    labels->label_cmd = code_get_label();
+    jump_true_false(labels, cond_unit, FINISH);
+    jump_end(labels, cond_unit, FINISH);
+    DBG_JUMPS(labels);
+    jumps_free(labels, cond_unit);   
+}
+
+
 
 void CForTo::print() {
     DEPTH_PRINT();

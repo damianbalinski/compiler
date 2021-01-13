@@ -153,9 +153,7 @@ int main( int argc, char** argv )
     DBG_REGISTER_PRINT();
 
     commands->print();
-    cout << "OK" << endl;
     commands->code();
-    cout << "OK2" << endl;
     
     if ((output = fopen(argv[2], "w")) == NULL) {
         ERR_BAD_FILENAME(argv[2]);
