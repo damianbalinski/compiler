@@ -19,14 +19,17 @@
     #include "others/types.hpp"
     #include "others/unit.hpp"
     #include "others/cond.hpp"
+    #include "parse_tree/commands.hpp"
 }
 
 %union{
-    data_type val;        /* wartosc          */
-    unit_type* unit;     /* pamiec i rejestr */
-    char *id;            /* identyfikator    */
-    bool type;           /* wartosc logiczna */
-    cond_type* cond;     /* skoki warunkowe  */
+    data_type val;          /* wartosc          */
+    unit_type* unit;        /* pamiec i rejestr */
+    char *id;               /* identyfikator    */
+    bool type;              /* wartosc logiczna */
+    cond_type* cond;        /* skoki warunkowe  */
+    AbstractCommand* cmd;   /* komenda          */
+    CommandVector* vec;     /* wektor komend    */
 }
 
 %start program
@@ -37,6 +40,8 @@
 %type <unit> ridentifier
 %type <unit> lidentifier
 %type <type> to_downto else
+%type <cmd> command
+%type <vec> commands
 %token <val> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
@@ -53,8 +58,8 @@
 %nonassoc ASSIGN                     /* operator przypisania    */
 
 %%
-program: DECLARE declarations T_BEGIN commands END { halt(); YYACCEPT; }
-| T_BEGIN commands END                             { halt(); YYACCEPT; }
+program: DECLARE declarations T_BEGIN commands END { $4->print_raw(); halt(); YYACCEPT; }
+| T_BEGIN commands END                             { $2->print_raw(); halt(); YYACCEPT; }
 ;
 
 declarations: declarations ',' ID                  { add_variable($3);      }
@@ -63,11 +68,13 @@ declarations: declarations ',' ID                  { add_variable($3);      }
 |  ID '(' NUMBER ':' NUMBER ')'                    { add_array($1, $3, $5); }
 ;
 
-commands: commands command
-|  command
+commands: commands command                         { $1->push_back($2);  $$ = $1;       }
+|  command                                         { $$ = new CommandVector();
+                                                     $$->push_back($1);                 }
 ;
 
-command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
+command: lidentifier ASSIGN expression ';'         { assign($1, $3); 
+                                                     $$ = new CAssign(); }
 
 |   IF              {   $1 = cond_alloc();                  }
     condition       {   jump_true_false($1, $3, INIT);
@@ -79,7 +86,9 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         jump_end($1, $3, FINISH);
                         jump_else($1, $9, FINISH);
                         DBG_JUMPS($1);
-                        jumps_free($1, $3);                 }
+                        jumps_free($1, $3);
+                        if ($9 == IF_THEN)
+                            $$ = new CIfThen($7);           }
 
 |   WHILE           {   $1 = cond_alloc();                    
                         $1->label_cond = code_get_label();  }  
@@ -92,7 +101,8 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         jump_end($1, $3, FINISH);
                         jump_cond($1, $3, FINISH);
                         DBG_JUMPS($1);
-                        jumps_free($1, $3);                 }
+                        jumps_free($1, $3);
+                        $$ = new CWhile($7);                }
                     
 |   REPEAT          {   $1 = cond_alloc();                 
                         $1->label_end = code_get_label();   }
@@ -104,7 +114,8 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         jump_true_false($1, $5, FINISH);
                         jump_end($1, $5, FINISH);
                         DBG_JUMPS($1);
-                        jumps_free($1, $5);                 }
+                        jumps_free($1, $5);
+                        $$ = new CRepeat($3);               }
 
 |   FOR             {   $1 = cond_alloc();                  }
     ID              {   $1->iter = add_iterator($3);        }
@@ -123,10 +134,14 @@ command: lidentifier ASSIGN expression ';'              { assign($1, $3); }
                         jump_end($1, $8, FINISH);
                         jump_cond($1, $8, FINISH);
                         for_free($1, $8);
-                        remove_iterator($3);                }
+                        remove_iterator($3);
+                        if ($7 = FOR_TO)
+                            $$ = new CForTo($12);            }
 
-|  READ lidentifier ';'        { read($2);          }
-|  WRITE valueloc ';'          { write($2);         }
+|  READ lidentifier ';'        { read($2);
+                                 $$ = new CRead();          }
+|  WRITE valueloc ';'          { write($2);
+                                 $$ = new CWrite();         }
 ;
 
 to_downto: TO                  { $$ = FOR_TO;       }
@@ -161,7 +176,7 @@ value: NUMBER                        { $$ = get_const($1,         VALUE); }
 ;
 
 valueloc: NUMBER                     { $$ = get_const($1,         LOCATION);         }
-| ID                                 { $$ = get_variable($1,      LOCATION, INIT);   }
+|  ID                                { $$ = get_variable($1,      LOCATION, INIT);   }
 |  ID '(' ID ')'                     { $$ = get_array_var($1, $3, LOCATION, INIT);   }
 |  ID '(' NUMBER ')'                 { $$ = get_array_num($1, $3, LOCATION, INIT);   }
 ;

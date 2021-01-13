@@ -1,0 +1,13 @@
+DECLARE
+    a
+BEGIN
+    FOR i FROM 10 TO 20 DO  
+        WRITE i;
+    ENDFOR
+
+    FOR i FROM 20 DOWNTO 10 DO
+        WRITE i;
+        a := 20;
+        b := 30;
+    ENDFOR
+END

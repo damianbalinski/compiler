@@ -1,0 +1,9 @@
+DECLARE
+    a
+BEGIN
+    WRITE 10;
+    READ a;
+    WRITE 20;
+    READ a;
+    a := 20;
+END
