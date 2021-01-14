@@ -16,6 +16,7 @@ class AbstractExpression {
 public:
     virtual void print() = 0;
     virtual unit_type* unit() = 0;
+    virtual void flow() = 0;
 };
 
 // WYRAZENIE BINARNE
@@ -25,6 +26,7 @@ public:
     AbstractValue* val_right;
     BinaryExpression(AbstractValue* val_left, AbstractValue* val_right) : 
         val_left(val_left), val_right(val_right) {};
+    void flow() { val_left->flow(); val_right->flow(); }
 };
 
 // WYRAZENIE UNARNE
@@ -32,6 +34,7 @@ class UnaryExpression : public AbstractExpression {
 public:
     AbstractValue* val;
     UnaryExpression(AbstractValue* val) : val(val) {};
+    void flow() { val->flow(); }
 };
 
 // DODAWANIE

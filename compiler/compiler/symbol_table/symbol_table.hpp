@@ -1,9 +1,12 @@
 # pragma once
+#include <vector>
 #include <cln/integer.h>
 #include "../others/types.hpp"
 
 #define VARIABLE true
 #define ARRAY false
+
+using std::vector;
 
 typedef struct symbol
 {
@@ -16,11 +19,11 @@ typedef struct symbol
     input_type begin;       /* indeks poczatkowy tablicy */
     input_type end;         /* indeks poczatkowy tablicy */
     struct symbol* next;    /* nastepny symbol           */
+    vector<symbol*>* deps;  /* lista zaleznosci          */
     //cln::cl_I val;        /* wartosc                   */
     
 } symbol;
 
 symbol* sym_put(char *id);
 symbol* sym_get(char*id);
-void sym_pop(char* id);
 void sym_print();

@@ -21,6 +21,7 @@ public:
         val_left(val_left), val_right(val_right) {};
     virtual void print() {};
     virtual unit_type* unit() = 0;
+    virtual void flow() { val_left->flow(); val_right->flow(); };
 };
 
 class ConditionLT : public AbstractCondition {

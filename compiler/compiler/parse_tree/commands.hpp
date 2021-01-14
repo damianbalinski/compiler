@@ -3,6 +3,7 @@
 #include <vector>
 #include "../symbol_table/symbol_table.hpp"
 #include "../code_generator/registers_machine.hpp"
+#include "../debugger/debugger.hpp"
 #include "values.hpp"
 #include "expressions.hpp"
 #include "conditions.hpp"
@@ -13,6 +14,7 @@ class AbstractCommand {
 public:
     virtual void print() = 0;
     virtual void code() = 0;
+    virtual void flow() {};
 };
 
 // WEKTOR KOMEND
@@ -21,6 +23,7 @@ public:
     CommandVector() : std::vector<AbstractCommand*>() {};
     void print() { for (AbstractCommand* com: *this) com->print(); };
     void code()  { for (AbstractCommand* com: *this) com->code();  };
+    void flow()  { for (AbstractCommand* com: *this) com->flow(); };
 };
 
 // KOMENDA ZLOZONA
@@ -36,6 +39,7 @@ public:
     ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true, CommandVector* cmd_false) :
         cond(cond), cmd_true(cmd_true), cmd_false(cmd_false), labels(new labels_type) {};
     void finish() { unit_free(cond_unit); }
+    void flow() { cmd_true->flow(); };
 };
 
 // PETLA FOR
@@ -47,9 +51,11 @@ public:
     labels_type* labels;
     unit_type* cond_unit;
     ForCommand(char* iter_id, CommandVector* cmd_true) :
-        iter_id(iter_id), cmd_true(cmd_true), iter(add_iterator(iter_id)), labels(new labels_type) {};
+        iter_id(iter_id), iter(add_iterator(iter_id)), cmd_true(cmd_true), labels(new labels_type) { 
+            iter->is_visible = false; DBG_SYMBOL_PRINT(); };
     virtual void finish() { reg_free(cond_unit->reg), unit_free(cond_unit); };
     virtual void step() = 0;
+    void flow() { iter->is_visible = true; cmd_true->flow(); iter->is_visible = false; };
 };
 
 // HALT
@@ -58,6 +64,7 @@ public:
     CHalt() {};
     void print();
     void code();
+    void flow() {};
 };
 
 // WRITE
@@ -67,6 +74,7 @@ public:
     CWrite(AbstractValue* val) : val(val) {};
     void print();
     void code();
+    void flow() { val->flow(); };
 };
 
 // READ
@@ -76,6 +84,7 @@ public:
     CRead(AbstractValue* val) : val(val) {};
     void print();
     void code();
+    void flow() { val->flow(); };
 };
 
 // ASSIGN
@@ -87,6 +96,7 @@ public:
         val(val), exp(exp) {};
     void print();
     void code();
+    void flow() { val->flow(); exp->flow(); };
 };
 
 // IF THEN
@@ -105,6 +115,7 @@ public:
         ConditionalCommand(cond, cmd_true, cmd_false) {};
     void print();
     void code();
+    void flow() { cmd_true->flow(); cmd_false->flow(); };
 };
 
 // WHILE

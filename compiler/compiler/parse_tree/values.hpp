@@ -18,8 +18,8 @@ void add_array(char* id, data_type begin, data_type end);
 symbol* add_iterator(char* id);
 
 unit_type* get_const(input_type val, bool type);
-unit_type* get_variable(char* id, bool type, bool init);
-unit_type* get_array_num(char* id, input_type num, bool type, bool init);
+unit_type* get_variable(symbol* sym, bool type, bool init);
+unit_type* get_array_num(symbol* sym, input_type num, bool type, bool init);
 unit_type* get_array_var(char* id, char* id_var, bool type, bool init);
 
 class AbstractValue {
@@ -30,6 +30,7 @@ public:
         type(type), init(init) {};
     virtual void print() = 0;
     virtual unit_type* unit() = 0;
+    virtual void flow() {};
 };
 
 // LICZBA
@@ -40,27 +41,32 @@ public:
         AbstractValue(type, true), val(val) {};
     void print() { cout << val; };
     unit_type* unit() { return get_const(val, type); }
+    void flow() {};
 };
 
 // ZMIENNA
 class VVar : public AbstractValue {
 public:
-    char* id_var;
-    VVar(char* id_var, bool type, bool init) :
-        AbstractValue(type, init), id_var(id_var) {};
-    void print() { cout << id_var; }
-    unit_type* unit() { return get_variable(id_var, type, init); }
+    char* var_id;
+    symbol* var;
+    VVar(char* var_id, bool type, bool init) :
+        AbstractValue(type, init), var_id(var_id) {};
+    void print() { cout << var_id; }
+    unit_type* unit() { return get_variable(var, type, init); }
+    void flow();
 };
 
 // TABLICA INDEKSOWANA LICZBA
 class VArrNum : public AbstractValue {
 public:
-    char* id_arr;
+    char* arr_id;
+    symbol* arr;
     cln::cl_I val;
-    VArrNum(char* id_arr, data_type val, bool type, bool init) : 
-        AbstractValue(type, init), id_arr(id_arr), val(val) {};
-    void print() { cout << id_arr << "[" << val << "]"; }
-    unit_type* unit() { return get_array_num(id_arr, val, type, init); }
+    VArrNum(char* arr_id, data_type val, bool type, bool init) : 
+        AbstractValue(type, init), arr_id(arr_id), val(val) {};
+    void print() { cout << arr_id << "[" << val << "]"; }
+    unit_type* unit() { return get_array_num(arr, val, type, init); }
+    void flow();
 };
 
 // TABLICA INDEKSOWANA ZMIENNA

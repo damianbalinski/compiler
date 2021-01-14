@@ -1,5 +1,6 @@
 #include "../debugger/debugger.hpp"
 #include "../debugger/errors.hpp"
+#include "../optimizer/optimizer.hpp"
 #include "../code_generator/registers_machine.hpp"
 #include "../code_generator/code_generator.hpp"
 #include "../symbol_table/data_manager.hpp"
@@ -7,6 +8,45 @@
 
 extern int yylineno;
 extern char* yytext;
+
+/* Zmienna
+ * ERR1 - id nie zostal zadeklarowany
+ * ERR2 - id nie jest zmienna
+ */
+void VVar::flow() {
+    var = sym_get(var_id);
+
+    if (var == NULL) {
+        ERR_ID_UNDECLARED(var_id);
+        ERR_ADD();
+    }
+    else if (var->type != VARIABLE) {
+        ERR_ID_NOT_VARIABLE(var_id);
+        ERR_ADD();
+    }
+}
+
+/* Tablica indeksowana liczba
+ * ERR1 - id nie zostal zadeklarowany
+ * ERR2 - id nie jest tablica
+ * ERR3 - num jest poza zakresem tablicy
+ */
+void VArrNum::flow() {
+    arr = sym_get(arr_id);
+
+    if (arr == NULL) {
+        ERR_ID_UNDECLARED(arr_id);
+        ERR_ADD();
+    }
+    else if (arr->type != ARRAY) {
+        ERR_ID_NOT_ARRAY(arr_id);
+        ERR_ADD();
+    }
+    else if (val < arr->begin || val > arr->end) {
+        ERR_ARRAY_INDEX_RANGE(arr_id, val);
+        ERR_ADD();
+    }
+}
 
 /* Pobiera stala. Przechowuje ja w rejestrze. */
 unit_type* get_const(input_type val, bool type) {
@@ -39,30 +79,19 @@ unit_type* get_const(input_type val, bool type) {
 
 /* Pobiera lokalizacje/wartosc zmiennej. Ustawia zmienna
  * jako zainicjalizowana.
- * ERR1 - id nie zostal zadeklarowany
- * ERR2 - id nie jest zmienna
- * ERR3 - (INIT) id nie zostal zainicjalizowany
- * ERR4 - (NOINIT) id jest stala
+ * ERR1 - (INIT) id nie zostal zainicjalizowany
+ * ERR1 - (NOINIT) id jest stala
  */
-unit_type* get_variable(char* id, bool type, bool init) {
+unit_type* get_variable(symbol* sym, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_variable");
-    symbol* sym = sym_get(id);
     unit_type* unit = unit_alloc();
 
-    if (sym == NULL) {
-        ERR_ID_UNDECLARED(id);
-        ERR_ADD();
-    }
-    else if (sym->type != VARIABLE) {
-        ERR_ID_NOT_VARIABLE(id);
-        ERR_ADD();
-    }
-    else if (init == INIT && sym->is_init == false) {
-        ERR_ID_NOT_INIT(id);
+    if (init == INIT && sym->is_init == false) {
+        ERR_ID_NOT_INIT(sym->id);
         ERR_ADD();
     }
     else if (init == NOINIT && sym->is_const) {
-        ERR_ID_CONST(id);
+        ERR_ID_CONST(sym->id);
         ERR_ADD();
     }
     else if (type == VALUE) {
@@ -90,28 +119,12 @@ unit_type* get_variable(char* id, bool type, bool init) {
 
 /* Pobiera lokalizacje/wartosc komorki tablicy
  * indeksowanej przez stala.
- * ERR1 - id nie zostal zadeklarowany
- * ERR2 - id nie jest tablica
- * ERR3 - num jest poza zakresem tablicy
  */
-unit_type* get_array_num(char* id, input_type num, bool type, bool init) {
+unit_type* get_array_num(symbol* sym, input_type num, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_array_num");
-    symbol* sym = sym_get(id);
     unit_type* unit = unit_alloc();
 
-    if (sym == NULL) {
-        ERR_ID_UNDECLARED(id);
-        ERR_ADD();
-    }
-    else if (sym->type != ARRAY) {
-        ERR_ID_NOT_ARRAY(id);
-        ERR_ADD();
-    }
-    else if (num < sym->begin || num > sym->end) {
-        ERR_ARRAY_INDEX_RANGE(id, num);
-        ERR_ADD();
-    }
-    else if (type == VALUE) {
+    if (type == VALUE) {
         // VALUE
         #ifdef POTIMIZE_ARR_NUM_POSTPONE
             unit->offset = sym->offset + num - sym->begin;

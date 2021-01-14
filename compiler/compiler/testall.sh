@@ -10,7 +10,7 @@ re='^[0-9]+$'
 loops=1
 
 make
-make clean
+# make clean
 
 for file in $(find $path -type f); do
 
