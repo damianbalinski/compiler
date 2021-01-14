@@ -1,36 +1,54 @@
-[ arithm2.imp - operacje arytmetyczne cz. 2 
-
-        Przykladowe dane testowe:
-        1. ? 1
-           > 67108864001
-           ? 1
-           > 67108864001
-           ? 11
-           > 22407395739679346948952902572503159771566152330325298756997544942898194297396703768017371136
-           > 0
-           > 3999999992000000003
-        
-		2. ? 100
-           > 67108864100
-           ? 100
-           > 67108864100
-           ? 1
-           > 2037035976334486086268445688409378161051468393665936250636140449354381299763336706183397376
-           > 0
-           > 3999999992000000003
-]
 DECLARE
-	a, b, i
+	ma(1:100), mb(1:100), mc(1:100), n, s, idx, idx_a, idx_b
 BEGIN
-    
-    READ i;
-	WHILE i <= 10 DO
-  		i := i + 1;
-	ENDWHILE
-
-    b := 20;
-	FOR ii FROM 20 DOWNTO 10 DO
-        WRITE ii;
-	ENDFOR
+	READ n; [ ### wczyatywanie rozmiaru macierzy]
+	IF n > 10 THEN [ ### czy nie wykraczamy poza zakres - max. macierz 10x10 ]
+		WRITE 0;
+	ELSE
+		[ ### wczytywanie macierzy ma i mb -> jednocześnie, wierszami ]
+		FOR row FROM 1 TO n DO
+			FOR col FROM 1 TO n DO 
+				[ ### idx = (row-1)*n + col]
+				idx := row - 1;
+				idx := idx * n;
+				idx := idx + col; 
+				READ ma(idx);
+				READ mb(idx);
+			ENDFOR
+		ENDFOR
+		[ ### mc = ma*mb - mnożenie macierzy ]
+		FOR i FROM 1 TO n DO
+			FOR j FROM 1 TO n DO
+				[ ### idx = (i-1)*n + j]
+				idx := i - 1;
+				idx := idx * n; 
+				idx := idx + j;
+				mc(idx) := 0; 
+				FOR k FROM 1 TO n DO [ ### mc(i,j) = \sum_{k=1}^{n} ma(i,k)*mb(k,j) ]
+					[ ### idx_a := (i-1)*n + k]
+					idx_a := i - 1;
+					idx_a := idx_a * n;
+					idx_a := idx_a + k;			
+					[ ### idx_b := (k-1)*n + j]
+					idx_b := k - 1;
+					idx_b := idx_b * n;
+					idx_b := idx_b + j;
+					s := ma(idx_a) * mb(idx_b);
+					mc(idx) := mc(idx) + s;
+				ENDFOR
+			ENDFOR
+		ENDFOR
+		[ ### wypisywanie macierzy mc (wierszami, wiersze oddzielone 111111111) ]
+		FOR row FROM 1 TO n DO
+			WRITE 111111111;
+			FOR col FROM 1 TO n DO 
+				[ ### idx = (row-1)*n + col]
+				idx := row - 1;
+				idx := idx * n;
+				idx := idx + col; 
+				WRITE mc(idx);
+			ENDFOR
+		ENDFOR
+	ENDIF
 END
 

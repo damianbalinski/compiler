@@ -138,29 +138,7 @@ void reg_print() {
 }
 
 /* Umieszcza stala w rejestrze. */
-void reg_const(int x, input_type val) {
-    DBG_REGISTERS_BEGIN("reg_const");
-    reg_const_cln(x, val);
-    // CHECK_VAL(val);
-    
-    // reset(x);
-    // if (val == 0)
-    //     return;
-    
-    // inc(x);
-    // if (val == 1)
-    //     return;
-    
-    // input_type n = (input_type)log2(val) - 1;    
-    // for(input_type mask = (1 << n); mask > 0; mask >>= 1) {
-    //     shl(x);
-    //     if (mask & val) inc(x);
-    // }
-    DBG_REGISTERS_END("reg_const");
-}
-
-/* Umieszcza stala w rejestrze. */
-void reg_const_cln(int x, cln::cl_I& val) {
+void reg_const(int x, cln::cl_I val) {
     DBG_REGISTERS_BEGIN("reg_const_cln");
     CHECK_VAL_CLN(val);
 
