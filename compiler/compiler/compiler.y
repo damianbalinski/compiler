@@ -152,7 +152,7 @@ int main( int argc, char** argv )
     DBG_PARSER_END();
     DBG_REGISTER_PRINT();
 
-    commands->print();
+    // commands->print();
     commands->code();
     
     if ((output = fopen(argv[2], "w")) == NULL) {

@@ -21,6 +21,3 @@ typedef struct {
     input_type jump_end;
 
 } cond_type;
-
-cond_type* cond_alloc();
-void cond_free(cond_type* cond);

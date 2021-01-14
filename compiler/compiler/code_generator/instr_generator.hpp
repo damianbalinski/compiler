@@ -20,14 +20,14 @@ void add_array(char* id, data_type begin, data_type end);
 void remove_iterator(char* id);
 symbol* add_iterator(char* id);
 
-unit_type* for_init(cond_type* cond, unit_type* begin, unit_type* end, bool type);
-void for_step(cond_type* cond, unit_type* condition, bool type);
+unit_type* for_init(symbol* iter, unit_type* begin, unit_type* end, bool type);
+void for_step(cond_type* cond, symbol* iter, unit_type* condition, bool type);
 void for_free(cond_type* cond, unit_type* condition);
 
 void jump_true_false(cond_type* cond, unit_type* condition, bool type);
 void jump_end(cond_type* cond, unit_type* condition, bool type);
 void jump_cond(cond_type* cond, unit_type* condition, bool type);
-void jump_else(cond_type* cond, bool else_type, bool type);
+void jump_else(cond_type* cond, unit_type* condition, bool type);
 void jumps_free(cond_type* cond, unit_type* condition);
 
 unit_type* get_const(input_type val, bool type);

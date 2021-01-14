@@ -68,13 +68,13 @@ void jump_cond(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_END("jump_cond");
 }
 
-void jump_else(cond_type* cond, bool else_type, bool type) {
+void jump_else(cond_type* cond, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("jump_else");
-    if (type == INIT && else_type == IF_THEN_ELSE) {
+    if (type == INIT) {
         // JUMP ELSE - INIT
         cond->jump_else = jump(0);
     }
-    else if (type == FINISH && else_type == IF_THEN_ELSE) {
+    else if (type == FINISH) {
         // JUMP ELSE - FINISH
         code_modif(cond->jump_else, cond->label_else - cond->jump_else);
     }
@@ -85,7 +85,6 @@ void jump_else(cond_type* cond, bool else_type, bool type) {
 void jumps_free(cond_type* cond, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("jumps_free");
     // ZWALNIANIE
-    cond_free(cond);
     unit_free(condition);
     DBG_INSTRUCTION_END("jumps_free");
 }
@@ -303,6 +302,7 @@ void add_variable(char* id) {
         sym->type = VARIABLE;
         sym->is_init = false;
         sym->is_const = false;
+        sym->is_visible = true;
         sym->offset = variable_allocate();
     }
 
@@ -332,6 +332,7 @@ void add_array(char* id, data_type begin, data_type end) {
         sym->offset = array_allocate(end-begin+1);
         sym->begin = begin;
         sym->end = end;
+        sym->is_visible = true;
     }
 
     DBG_INSTRUCTION_END("add_table");
@@ -946,6 +947,7 @@ symbol* add_iterator(char* id) {
     sym->type = VARIABLE;
     sym->is_init = false;
     sym->is_const = true;
+    sym->is_visible = false;
     sym->offset = array_allocate(2);
 
     DBG_INSTRUCTION_END("add_iterator");
@@ -953,14 +955,14 @@ symbol* add_iterator(char* id) {
     return sym;
 }
 
-unit_type* for_init(cond_type* cond, unit_type* begin, unit_type* end, bool type) {
+unit_type* for_init(symbol* iter, unit_type* begin, unit_type* end, bool type) {
     DBG_INSTRUCTION_BEGIN("for_init");
     reg_check(begin);
     reg_check(end);
-
+    
     // VALUE
-    cond->iter->is_init = true;
-    reg_const(SUPER_REGISTER, cond->iter->offset);
+    iter->is_init = true;
+    reg_const(SUPER_REGISTER, iter->offset);
     store(begin->reg, SUPER_REGISTER);
 
     if (type == FOR_TO) {
@@ -989,13 +991,13 @@ unit_type* for_init(cond_type* cond, unit_type* begin, unit_type* end, bool type
     }
 }
 
-void for_step(cond_type* cond, unit_type* condition, bool type) {
+void for_step(cond_type* cond, symbol* iter, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");
     condition->reg = condition->reg_prev;
     int x = condition->reg;
 
     // VALUE
-    reg_const(SUPER_REGISTER, cond->iter->offset);
+    reg_const(SUPER_REGISTER, iter->offset);
     load(x, SUPER_REGISTER);
     type == FOR_TO ? inc(x) : dec(x);
     store(x, SUPER_REGISTER);
@@ -1013,7 +1015,6 @@ void for_step(cond_type* cond, unit_type* condition, bool type) {
 void for_free(cond_type* cond, unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("for_free");
     // ZWALNIANIE
-    cond_free(cond);
     reg_free(condition->reg);
     DBG_INSTRUCTION_END("for_free");
 }

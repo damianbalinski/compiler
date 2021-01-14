@@ -36,7 +36,7 @@ symbol* sym_get(char*id) {
     DBG_SYMBOL_GET(id);
     symbol *ptr;
     for (ptr = sym_table; ptr != NULL; ptr = ptr->next)
-        if (strcmp(ptr->id, id) == 0)
+        if (strcmp(ptr->id, id) == 0 && ptr->is_visible)
             return ptr;
     return NULL;
 }

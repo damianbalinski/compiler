@@ -11,6 +11,7 @@ typedef struct symbol
     bool type;              /* zmianna/tablica           */
     bool is_init;           /* czy zainicjalizowana      */
     bool is_const;          /* czy stala                 */
+    bool is_visible;        /* czy widoczna              */
     input_type offset;      /* lokalizacja w pamieci     */
     input_type begin;       /* indeks poczatkowy tablicy */
     input_type end;         /* indeks poczatkowy tablicy */

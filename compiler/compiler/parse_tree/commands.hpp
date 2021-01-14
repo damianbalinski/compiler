@@ -4,14 +4,13 @@
 #include "values.hpp"
 #include "expressions.hpp"
 #include "conditions.hpp"
-
-using std::string;
+#include "../symbol_table/symbol_table.hpp"
 
 // POJEDYNCZA KOMENDA
 class AbstractCommand {
 public:
     virtual void print() = 0;
-    virtual void code() { cout << "code not yet implemented"; };
+    virtual void code() = 0;
 };
 
 // WEKTOR KOMEND
@@ -31,9 +30,20 @@ public:
     cond_type* labels;
     unit_type* cond_unit;
     ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true) :
-        cond(cond), cmd_true(cmd_true) {};
+        cond(cond), cmd_true(cmd_true), labels(new cond_type) {};
     ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true, CommandVector* cmd_false) :
-        cond(cond), cmd_true(cmd_true), cmd_false(cmd_false) {};
+        cond(cond), cmd_true(cmd_true), cmd_false(cmd_false), labels(new cond_type) {};
+};
+
+// PETLA FOR
+class ForCommand : public AbstractCommand {
+public:
+    char* iter_id;
+    symbol* iter;
+    CommandVector* cmd_true;
+    cond_type* labels;
+    ForCommand(char* iter_id, CommandVector* cmd_true) :
+        iter_id(iter_id), cmd_true(cmd_true), iter(add_iterator(iter_id)), labels(new cond_type) {};
 };
 
 // HALT
@@ -73,27 +83,22 @@ public:
     void code();
 };
 
-// IF ELSE COMMAND
-class CIfThen : public AbstractCommand {
+// IF THEN
+class CIfThen : public ConditionalCommand {
 public:
-    AbstractCondition* con;
-    CommandVector* cmd_true;
-    CIfThen(AbstractCondition* con, CommandVector* cmd_true) :
-        con(con), cmd_true(cmd_true) {};
+    CIfThen(AbstractCondition* cond, CommandVector* cmd_true) :
+        ConditionalCommand(cond, cmd_true) {};
     void print();
-    using AbstractCommand::code;
+    void code();
 };
 
-// IF THEN ELSE COMMAND
-class CIfThenElse : public AbstractCommand {
+// IF THEN ELSE
+class CIfThenElse : public ConditionalCommand {
 public:
-    AbstractCondition* con;
-    CommandVector* cmd_true;
-    CommandVector* cmd_false;
-    CIfThenElse(AbstractCondition* con, CommandVector* cmd_true, CommandVector* cmd_false) :
-        con(con), cmd_true(cmd_true), cmd_false(cmd_false) {};
+    CIfThenElse(AbstractCondition* cond, CommandVector* cmd_true, CommandVector* cmd_false) :
+        ConditionalCommand(cond, cmd_true, cmd_false) {};
     void print();
-    using AbstractCommand::code;
+    void code();
 };
 
 // WHILE
@@ -114,28 +119,26 @@ public:
     void code();
 };
 
-// FOR_TO COMMAND
-class CForTo : public AbstractCommand {
+// FOR TO
+class CForTo : public ForCommand {
 public:
-    const char* iter;
-    AbstractValue* val1;
-    AbstractValue* val2;
-    CommandVector* cmd_true;
-    CForTo(const char* iter, AbstractValue* val1, AbstractValue* val2, CommandVector* cmd_true) :
-        iter(iter), val1(val1), val2(val2), cmd_true(cmd_true) {};
+    AbstractCondition* cond;
+    unit_type* cond_unit;
+    CForTo(char* iter_id, AbstractValue* val1, AbstractValue* val2, CommandVector* cmd_true) :
+        ForCommand(iter_id, cmd_true), 
+       cond(new ConditionForTo(val1, val2, iter)) {};
     void print();
-    using AbstractCommand::code;
+    void code();
 };
 
-// FOR_DOWNTO COMMAND
-class CForDownto : public AbstractCommand {
+// FOR DOWNTO
+class CForDownto : public ForCommand {
 public:
-    const char* iter;
-    AbstractValue* val1;
-    AbstractValue* val2;
-    CommandVector* cmd_true;
-    CForDownto(const char* iter, AbstractValue* val1, AbstractValue* val2, CommandVector* cmd_true) :
-        iter(iter), val1(val1), val2(val2), cmd_true(cmd_true) {};
+    AbstractCondition* cond;
+    unit_type* cond_unit;
+    CForDownto(char* iter_id, AbstractValue* val1, AbstractValue* val2, CommandVector* cmd_true) :
+        ForCommand(iter_id, cmd_true), 
+       cond(new ConditionForDownto(val1, val2, iter)) {};
     void print();
-    using AbstractCommand::code;
+    void code();
 };
