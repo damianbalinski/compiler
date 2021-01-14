@@ -1,7 +1,6 @@
 #include <iostream>
 #include "commands.hpp"
 #include "parse_tree.hpp"
-#include "../code_generator/instr_generator.hpp"
 #include "../code_generator/code_generator.hpp"
 #include "../code_generator/registers_machine.hpp"
 #include "../debugger/debugger.hpp"
@@ -124,7 +123,7 @@ void CIfThen::code() {
     jump_true_false(labels, cond_unit, FINISH);
     jump_end(labels, cond_unit, FINISH);
     DBG_JUMPS(labels);
-    jumps_free(labels, cond_unit); 
+    finish();                   /* koniec */
 }
 
 // IF THEN ELSE
@@ -165,7 +164,7 @@ void CIfThenElse::code() {
     jump_end(labels, cond_unit, FINISH);
     jump_else(labels, cond_unit, FINISH);
     DBG_JUMPS(labels);
-    jumps_free(labels, cond_unit); 
+    finish();                   /* koniec */
 }
 
 // WHILE
@@ -198,7 +197,7 @@ void CWhile::code() {
     jump_end(labels, cond_unit, FINISH);
     jump_cond(labels, cond_unit, FINISH);
     DBG_JUMPS(labels);
-    jumps_free(labels, cond_unit);
+    finish();                   /* koniec */
 }
 
 // REPEAT
@@ -228,7 +227,7 @@ void CRepeat::code() {
     jump_true_false(labels, cond_unit, FINISH);
     jump_end(labels, cond_unit, FINISH);
     DBG_JUMPS(labels);
-    jumps_free(labels, cond_unit);   
+    finish();                       /* koniec */ 
 }
 
 // FOR TO
@@ -259,14 +258,33 @@ void CForTo::code() {
     cmd_true->code();                       /* komendy */
     iter->is_visible = false;
     
-    for_step(iter, cond_unit, FOR_TO);
+    step();                                 /* krok */
     jump_cond(labels, cond_unit, INIT);
     labels->label_end = code_get_label();
     jump_true_false(labels, cond_unit, FINISH);
     jump_end(labels, cond_unit, FINISH);
     jump_cond(labels, cond_unit, FINISH);
-    for_free(cond_unit);
-    // remove_iterator(iter_id);
+    finish();                               /* koniec */
+}
+
+void CForTo::step() {
+    DBG_INSTRUCTION_BEGIN("for_step");
+    cond_unit->reg = cond_unit->reg_prev;
+    int x = cond_unit->reg;
+
+    // VALUE
+    reg_const(SUPER_REGISTER, iter->offset);
+    load(x, SUPER_REGISTER);
+    inc(x);
+    store(x, SUPER_REGISTER);
+
+    // CONDITION
+    inc(SUPER_REGISTER);
+    load(x, SUPER_REGISTER);
+    dec(x);
+    store(x, SUPER_REGISTER);
+
+    DBG_INSTRUCTION_END("for_step");
 }
 
 // FOR DOWNTO
@@ -297,12 +315,31 @@ void CForDownto::code() {
     cmd_true->code();                       /* komendy */
     iter->is_visible = false;
 
-    for_step(iter, cond_unit, FOR_DOWNTO);
+    step();                                 /* krok */
     jump_cond(labels, cond_unit, INIT);
     labels->label_end = code_get_label();
     jump_true_false(labels, cond_unit, FINISH);
     jump_end(labels, cond_unit, FINISH);
     jump_cond(labels, cond_unit, FINISH);
-    for_free(cond_unit);
-    // remove_iterator(iter_id);
+    finish();                               /* koniec */
+}
+
+void CForDownto::step() {
+    DBG_INSTRUCTION_BEGIN("for_downto_step");
+    cond_unit->reg = cond_unit->reg_prev;
+    int x = cond_unit->reg;
+
+    // VALUE
+    reg_const(SUPER_REGISTER, iter->offset);
+    load(x, SUPER_REGISTER);
+    dec(x);
+    store(x, SUPER_REGISTER);
+
+    // CONDITION
+    inc(SUPER_REGISTER);
+    load(x, SUPER_REGISTER);
+    dec(x);
+    store(x, SUPER_REGISTER);
+
+    DBG_INSTRUCTION_END("for_downto_step");
 }

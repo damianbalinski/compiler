@@ -7,7 +7,6 @@
 #define FINISH false
 
 typedef struct {
-
     input_type label_cmd;
     input_type label_cond;
     input_type label_else;
@@ -21,8 +20,7 @@ typedef struct {
 
 } labels_type;
 
-void jump_true_false(labels_type* cond, unit_type* condition, bool type);
-void jump_end(labels_type* cond, unit_type* condition, bool type);
-void jump_cond(labels_type* cond, unit_type* condition, bool type);
-void jump_else(labels_type* cond, unit_type* condition, bool type);
-void jumps_free(labels_type* cond, unit_type* condition);
+void jump_true_false(labels_type* labels, unit_type* condition, bool type);
+void jump_end(labels_type* labels, unit_type* condition, bool type);
+void jump_cond(labels_type* labels, unit_type* condition, bool type);
+void jump_else(labels_type* labels, unit_type* condition, bool type);

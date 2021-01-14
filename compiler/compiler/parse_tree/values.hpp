@@ -1,12 +1,26 @@
 #pragma once
-#include <cln/integer.h>
 #include <iostream>
 #include <cln/cln.h>
 #include "../others/types.hpp"
 #include "../others/unit.hpp"
-#include "../code_generator/instr_generator.hpp"
+#include "../symbol_table/symbol_table.hpp"
 
 using std::cout;
+
+#define VALUE true
+#define LOCATION false
+
+#define INIT true
+#define NOINIT false
+
+void add_variable(char* id);
+void add_array(char* id, data_type begin, data_type end);
+symbol* add_iterator(char* id);
+
+unit_type* get_const(input_type val, bool type);
+unit_type* get_variable(char* id, bool type, bool init);
+unit_type* get_array_num(char* id, input_type num, bool type, bool init);
+unit_type* get_array_var(char* id, char* id_var, bool type, bool init);
 
 class AbstractValue {
 public:

@@ -1,10 +1,17 @@
 #pragma once
 #include <iostream>
 #include "values.hpp"
-#include "../code_generator/instr_generator.hpp"
 #include "../symbol_table/symbol_table.hpp"
 
+#define FOR_TO true
+#define FOR_DOWNTO false
+
 using std::cout;
+
+unit_type* eq_ne(unit_type* unit1, unit_type* unit2, bool type);
+unit_type* lt_ge(unit_type* unit1, unit_type* unit2, bool type);
+unit_type* gt_le(unit_type* unit1, unit_type* unit2, bool type);
+unit_type* for_init(symbol* iter, unit_type* begin, unit_type* end, bool type);
 
 class AbstractCondition {
 public:

@@ -2,9 +2,14 @@
 #include <iostream>
 #include "values.hpp"
 #include "../others/unit.hpp"
-#include "../code_generator/instr_generator.hpp"
 
 using std::cout;
+
+unit_type* sum(unit_type* unit1, unit_type* unit2);
+unit_type* dif(unit_type* unit1, unit_type* unit2);
+unit_type* mul(unit_type* unit1, unit_type* unit2);
+unit_type* divs(unit_type* unit1, unit_type* unit2);
+unit_type* mod(unit_type* unit1, unit_type* unit2);
 
 // WYRAZENIE
 class AbstractExpression {

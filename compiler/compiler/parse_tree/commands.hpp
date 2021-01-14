@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "../symbol_table/symbol_table.hpp"
+#include "../code_generator/registers_machine.hpp"
 #include "values.hpp"
 #include "expressions.hpp"
 #include "conditions.hpp"
-#include "../symbol_table/symbol_table.hpp"
 #include "jumps.hpp"
 
 // POJEDYNCZA KOMENDA
@@ -34,6 +35,7 @@ public:
         cond(cond), cmd_true(cmd_true), labels(new labels_type) {};
     ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true, CommandVector* cmd_false) :
         cond(cond), cmd_true(cmd_true), cmd_false(cmd_false), labels(new labels_type) {};
+    void finish() { unit_free(cond_unit); }
 };
 
 // PETLA FOR
@@ -43,8 +45,11 @@ public:
     symbol* iter;
     CommandVector* cmd_true;
     labels_type* labels;
+    unit_type* cond_unit;
     ForCommand(char* iter_id, CommandVector* cmd_true) :
         iter_id(iter_id), cmd_true(cmd_true), iter(add_iterator(iter_id)), labels(new labels_type) {};
+    virtual void finish() { reg_free(cond_unit->reg), unit_free(cond_unit); };
+    virtual void step() = 0;
 };
 
 // HALT
@@ -124,10 +129,10 @@ public:
 class CForTo : public ForCommand {
 public:
     AbstractCondition* cond;
-    unit_type* cond_unit;
     CForTo(char* iter_id, AbstractValue* val1, AbstractValue* val2, CommandVector* cmd_true) :
         ForCommand(iter_id, cmd_true), 
        cond(new ConditionForTo(val1, val2, iter)) {};
+    void step();
     void print();
     void code();
 };
@@ -136,10 +141,10 @@ public:
 class CForDownto : public ForCommand {
 public:
     AbstractCondition* cond;
-    unit_type* cond_unit;
     CForDownto(char* iter_id, AbstractValue* val1, AbstractValue* val2, CommandVector* cmd_true) :
         ForCommand(iter_id, cmd_true), 
        cond(new ConditionForDownto(val1, val2, iter)) {};
+    void step();
     void print();
     void code();
 };

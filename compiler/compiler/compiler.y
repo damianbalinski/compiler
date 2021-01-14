@@ -5,11 +5,11 @@
     #include <cstdlib>
     #include "debugger/debugger.hpp"
     #include "debugger/errors.hpp"
-    #include "code_generator/instr_generator.hpp"
     #include "code_generator/code_generator.hpp"
     #include "code_generator/registers_machine.hpp"
     #include "parse_tree/commands.hpp"
-
+    #include "parse_tree/values.hpp"
+    
     extern int yylineno;
     extern char* yytext;
     extern int yylex(void);
@@ -24,6 +24,7 @@
     #include "parse_tree/values.hpp"
     #include "parse_tree/conditions.hpp"
     #include "parse_tree/expressions.hpp"
+    #include "parse_tree/values.hpp"
 }
 
 %union{
