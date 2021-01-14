@@ -3,6 +3,7 @@
 #include "parse_tree.hpp"
 #include "../code_generator/instr_generator.hpp"
 #include "../code_generator/code_generator.hpp"
+#include "../code_generator/registers_machine.hpp"
 #include "../debugger/debugger.hpp"
 
 using std::cout;
@@ -28,8 +29,20 @@ void CWrite::print() {
     cout << ";" << endl;
 }
 
+/* Drukuje dane na wyjsciu. */
 void CWrite::code() {
-    write(val->unit()); 
+    unit_type* unit = val->unit();
+    DBG_INSTRUCTION_BEGIN("write");
+    
+    // INSTRUKCJE
+    reg_check(unit);        // adres zmiennej
+    put(unit->reg);         // zapis na wyjscie
+
+    // ZWALNIANIE
+    reg_free(unit->reg);
+    unit_free(unit); 
+
+    DBG_INSTRUCTION_END("write");
 }
 
 // READ
@@ -40,8 +53,20 @@ void CRead::print() {
     cout << ";" << endl;
 }
 
+/* Pobiera dane z wejscia. */
 void CRead::code() {
-    read(val->unit()); 
+    unit_type* unit = val->unit();
+    DBG_INSTRUCTION_BEGIN("read");
+
+    // INSTRUKCJE
+    reg_check(unit);        // adres zmiennej
+    get(unit->reg);         // pobranie wejscia
+
+    // ZWALNIANIE
+    reg_free(unit->reg);
+    unit_free(unit);
+
+    DBG_INSTRUCTION_END("read");
 }
 
 // ASSIGN
@@ -53,8 +78,24 @@ void CAssign::print() {
     cout << ";" << endl;
 }
 
+/* Przypisuje wartosc do zmiennej. */
 void CAssign::code() {
-    assign(val->unit(), exp->unit());
+    unit_type* unit1 = val->unit();
+    unit_type* unit2 = exp->unit();
+    DBG_INSTRUCTION_BEGIN("assign");
+
+    // INSTRUKCJE
+    reg_check(unit1);
+    reg_check(unit2);
+    store(unit2->reg, unit1->reg);
+    
+    // ZWALNIANIE
+    reg_free(unit1->reg);
+    reg_free(unit2->reg);
+    unit_free(unit1); 
+    unit_free(unit2);
+
+    DBG_INSTRUCTION_END("assign");
 }
 
 // IF THEN
@@ -218,13 +259,13 @@ void CForTo::code() {
     cmd_true->code();                       /* komendy */
     iter->is_visible = false;
     
-    for_step(labels, iter, cond_unit, FOR_TO);
+    for_step(iter, cond_unit, FOR_TO);
     jump_cond(labels, cond_unit, INIT);
     labels->label_end = code_get_label();
     jump_true_false(labels, cond_unit, FINISH);
     jump_end(labels, cond_unit, FINISH);
     jump_cond(labels, cond_unit, FINISH);
-    for_free(labels, cond_unit);
+    for_free(cond_unit);
     // remove_iterator(iter_id);
 }
 
@@ -256,12 +297,12 @@ void CForDownto::code() {
     cmd_true->code();                       /* komendy */
     iter->is_visible = false;
 
-    for_step(labels, iter, cond_unit, FOR_DOWNTO);
+    for_step(iter, cond_unit, FOR_DOWNTO);
     jump_cond(labels, cond_unit, INIT);
     labels->label_end = code_get_label();
     jump_true_false(labels, cond_unit, FINISH);
     jump_end(labels, cond_unit, FINISH);
     jump_cond(labels, cond_unit, FINISH);
-    for_free(labels, cond_unit);
+    for_free(cond_unit);
     // remove_iterator(iter_id);
 }

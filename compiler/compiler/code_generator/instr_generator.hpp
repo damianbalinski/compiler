@@ -1,7 +1,7 @@
 # pragma once
 #include "../others/types.hpp"
 #include "../others/unit.hpp"
-#include "../others/cond.hpp"
+#include "../symbol_table/symbol_table.hpp"
 
 #define VALUE true
 #define LOCATION false
@@ -21,23 +21,13 @@ void remove_iterator(char* id);
 symbol* add_iterator(char* id);
 
 unit_type* for_init(symbol* iter, unit_type* begin, unit_type* end, bool type);
-void for_step(cond_type* cond, symbol* iter, unit_type* condition, bool type);
-void for_free(cond_type* cond, unit_type* condition);
-
-void jump_true_false(cond_type* cond, unit_type* condition, bool type);
-void jump_end(cond_type* cond, unit_type* condition, bool type);
-void jump_cond(cond_type* cond, unit_type* condition, bool type);
-void jump_else(cond_type* cond, unit_type* condition, bool type);
-void jumps_free(cond_type* cond, unit_type* condition);
+void for_step(symbol* iter, unit_type* condition, bool type);
+void for_free(unit_type* condition);
 
 unit_type* get_const(input_type val, bool type);
 unit_type* get_variable(char* id, bool type, bool init);
 unit_type* get_array_num(char* id, input_type num, bool type, bool init);
 unit_type* get_array_var(char* id, char* id_var, bool type, bool init);
-
-void assign(unit_type* unit1, unit_type* unit2);
-void write(unit_type* unit);
-void read(unit_type* unit);
 
 unit_type* sum(unit_type* unit1, unit_type* unit2);
 unit_type* dif(unit_type* unit1, unit_type* unit2);

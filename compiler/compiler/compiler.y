@@ -20,7 +20,6 @@
 %code requires {
     #include "others/types.hpp"
     #include "others/unit.hpp"
-    #include "others/cond.hpp"
     #include "parse_tree/commands.hpp"
     #include "parse_tree/values.hpp"
     #include "parse_tree/conditions.hpp"

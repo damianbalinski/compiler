@@ -16,79 +16,6 @@ extern int yylineno;
 extern char* yytext;
 extern register_type registers[6];
 
-void jump_true_false(cond_type* cond, unit_type* condition, bool type) {
-    DBG_INSTRUCTION_BEGIN("jump_true_false");
-    if (type == INIT) {
-        // JUMP TRUE_FALSE - INIT
-        reg_check(condition);
-        cond->jump_true_false = jzero(condition->reg, 0);
-        reg_disconnect(condition, condition->reg);
-    }
-    else if (condition->type) {
-        // JUMP TRUE - FINISH
-        code_modif(cond->jump_true_false, cond->label_cmd - cond->jump_true_false);
-    }
-    else {
-        // JUMP FALSE - FINISH
-        code_modif(cond->jump_true_false, cond->label_end - cond->jump_true_false);
-    }
-
-    DBG_INSTRUCTION_END("jump_true_false");
-}
-
-void jump_end(cond_type* cond, unit_type* condition, bool type) {
-    DBG_INSTRUCTION_BEGIN("jump_end");
-    if (type == INIT && condition->type) {
-        // JUMP END - INIT
-         cond->jump_end = jump(0);
-    }
-    else if (type == INIT) {
-        // NOTHING
-    }
-    else if (condition->type) {
-        // JUMP END - FINISH
-        code_modif(cond->jump_end, cond->label_end - cond->jump_end);
-    }
-    else {
-        // NOTHING
-    }
-    DBG_INSTRUCTION_END("jump_end");
-}
-
-void jump_cond(cond_type* cond, unit_type* condition, bool type) {
-    DBG_INSTRUCTION_BEGIN("jump_cond");
-    if (type == INIT) {
-        // JUMP_COND - INIT
-        cond->jump_cond = jump(0);
-    }
-    else {
-        // JUMP_COND - FINISH
-        code_modif(cond->jump_cond, cond->label_cond - cond->jump_cond);
-    }
-    DBG_INSTRUCTION_END("jump_cond");
-}
-
-void jump_else(cond_type* cond, unit_type* condition, bool type) {
-    DBG_INSTRUCTION_BEGIN("jump_else");
-    if (type == INIT) {
-        // JUMP ELSE - INIT
-        cond->jump_else = jump(0);
-    }
-    else if (type == FINISH) {
-        // JUMP ELSE - FINISH
-        code_modif(cond->jump_else, cond->label_else - cond->jump_else);
-    }
-    DBG_INSTRUCTION_END("jump_else");
-}
-
-/* Zwalnianie pamieci po skokach. */
-void jumps_free(cond_type* cond, unit_type* condition) {
-    DBG_INSTRUCTION_BEGIN("jumps_free");
-    // ZWALNIANIE
-    unit_free(condition);
-    DBG_INSTRUCTION_END("jumps_free");
-}
-
 /* Pobiera stala. Przechowuje ja w rejestrze. */
 unit_type* get_const(input_type val, bool type) {
     DBG_INSTRUCTION_BEGIN("get_const");
@@ -337,51 +264,6 @@ void add_array(char* id, data_type begin, data_type end) {
 
     DBG_INSTRUCTION_END("add_table");
     DBG_SYMBOL_PRINT();
-}
-
-/* Przypisuje wartosc do zmiennej. */
-void assign(unit_type* unit1, unit_type* unit2) {
-    DBG_INSTRUCTION_BEGIN("assign");
-    // INSTRUKCJE
-    reg_check(unit1);
-    reg_check(unit2);
-    store(unit2->reg, unit1->reg);
-    
-    // ZWALNIANIE
-    reg_free(unit1->reg);
-    reg_free(unit2->reg);
-    unit_free(unit1); 
-    unit_free(unit2);
-
-    DBG_INSTRUCTION_END("assign");
-}
-
-/* Drukuje dane na wyjsciu. */
-void write(unit_type* unit) {
-    DBG_INSTRUCTION_BEGIN("write");
-    // INSTRUKCJE
-    reg_check(unit);        // adres zmiennej
-    put(unit->reg);         // zapis na wyjscie
-
-    // ZWALNIANIE
-    reg_free(unit->reg);
-    unit_free(unit); 
-
-    DBG_INSTRUCTION_END("write");
-}
-
-/* Pobiera dane z wejscia. */
-void read(unit_type* unit) {
-    DBG_INSTRUCTION_BEGIN("read");
-    // INSTRUKCJE
-    reg_check(unit);        // adres zmiennej
-    get(unit->reg);         // pobranie wejscia
-
-    // ZWALNIANIE
-    reg_free(unit->reg);
-    unit_free(unit); 
-
-    DBG_INSTRUCTION_END("read");
 }
 
 /* Suma. 
@@ -991,7 +873,7 @@ unit_type* for_init(symbol* iter, unit_type* begin, unit_type* end, bool type) {
     }
 }
 
-void for_step(cond_type* cond, symbol* iter, unit_type* condition, bool type) {
+void for_step(symbol* iter, unit_type* condition, bool type) {
     DBG_INSTRUCTION_BEGIN("for_step");
     condition->reg = condition->reg_prev;
     int x = condition->reg;
@@ -1012,7 +894,7 @@ void for_step(cond_type* cond, symbol* iter, unit_type* condition, bool type) {
 }
 
 /* Zwalnianie pamieci po petli for. */
-void for_free(cond_type* cond, unit_type* condition) {
+void for_free(unit_type* condition) {
     DBG_INSTRUCTION_BEGIN("for_free");
     // ZWALNIANIE
     reg_free(condition->reg);

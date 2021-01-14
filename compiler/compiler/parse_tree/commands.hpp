@@ -5,6 +5,7 @@
 #include "expressions.hpp"
 #include "conditions.hpp"
 #include "../symbol_table/symbol_table.hpp"
+#include "jumps.hpp"
 
 // POJEDYNCZA KOMENDA
 class AbstractCommand {
@@ -27,12 +28,12 @@ public:
     AbstractCondition* cond;
     CommandVector* cmd_true;
     CommandVector* cmd_false;
-    cond_type* labels;
+    labels_type* labels;
     unit_type* cond_unit;
     ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true) :
-        cond(cond), cmd_true(cmd_true), labels(new cond_type) {};
+        cond(cond), cmd_true(cmd_true), labels(new labels_type) {};
     ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true, CommandVector* cmd_false) :
-        cond(cond), cmd_true(cmd_true), cmd_false(cmd_false), labels(new cond_type) {};
+        cond(cond), cmd_true(cmd_true), cmd_false(cmd_false), labels(new labels_type) {};
 };
 
 // PETLA FOR
@@ -41,9 +42,9 @@ public:
     char* iter_id;
     symbol* iter;
     CommandVector* cmd_true;
-    cond_type* labels;
+    labels_type* labels;
     ForCommand(char* iter_id, CommandVector* cmd_true) :
-        iter_id(iter_id), cmd_true(cmd_true), iter(add_iterator(iter_id)), labels(new cond_type) {};
+        iter_id(iter_id), cmd_true(cmd_true), iter(add_iterator(iter_id)), labels(new labels_type) {};
 };
 
 // HALT
