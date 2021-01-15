@@ -13,9 +13,9 @@ extern char* yytext;
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest zmienna
  */
-void VVar::flow() {
+void VVar::init() {
+    DBG_INIT_BEGIN(var_id);
     var = sym_get(var_id);
-
     if (var == NULL) {
         ERR_ID_UNDECLARED(var_id);
         ERR_ADD();
@@ -24,6 +24,8 @@ void VVar::flow() {
         ERR_ID_NOT_VARIABLE(var_id);
         ERR_ADD();
     }
+
+    DBG_INIT_END(var_id);
 }
 
 /* Tablica indeksowana liczba
@@ -31,7 +33,8 @@ void VVar::flow() {
  * ERR2 - id nie jest tablica
  * ERR3 - num jest poza zakresem tablicy
  */
-void VArrNum::flow() {
+void VArrNum::init() {
+    DBG_INIT_BEGIN(arr_id);
     arr = sym_get(arr_id);
 
     if (arr == NULL) {
@@ -46,6 +49,38 @@ void VArrNum::flow() {
         ERR_ARRAY_INDEX_RANGE(arr_id, val);
         ERR_ADD();
     }
+
+    DBG_INIT_END(arr_id);
+}
+
+/* Tablica indeksowana zmienna
+ * ERR1 - id nie zostal zadeklarowany
+ * ERR2 - id nie jest tablica
+ * ERR3 - id_var nie zostal zadeklarowany
+ * ERR4 - id_var nie jest zmienna
+ */
+void VArrVar::init() {
+    DBG_INIT_END2(arr_id, var_id);
+    arr = sym_get(arr_id);
+    var = sym_get(var_id);
+    
+    if (arr == NULL) {
+        ERR_ID_UNDECLARED(arr_id);
+        ERR_ADD();
+    }
+    else if (arr->type != ARRAY) {
+        ERR_ID_NOT_ARRAY(arr_id);
+        ERR_ADD();
+    }
+    else if (var == NULL) {
+        ERR_ID_UNDECLARED(var_id);
+        ERR_ADD();
+    }
+    else if (var->type != VARIABLE) {
+        ERR_ID_NOT_VARIABLE(var_id);
+        ERR_ADD();
+    }
+    DBG_INIT_END2(arr_id, var_id);
 }
 
 /* Pobiera stala. Przechowuje ja w rejestrze. */
@@ -149,37 +184,14 @@ unit_type* get_array_num(symbol* sym, input_type num, bool type, bool init) {
 /*
  * Pobiera lokalizacje/wartosc komorki tablicy indeksowanej 
  * przez zmienna.
- * ERR1 - id nie zostal zadeklarowany
- * ERR2 - id nie jest tablica
- * ERR3 - id_var nie zostal zadeklarowany
- * ERR4 - id_var nie jest zmienna
- * ERR5 - id_var nie zostal zainicjalizowany
+ * ERR1 - sym_var nie zostal zainicjalizowany
  */
-unit_type* get_array_var(char* id, char* id_var, bool type, bool init) {
+unit_type* get_array_var(symbol* sym, symbol* sym_var, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_array_var");
-    symbol* sym = sym_get(id);
-    symbol* sym_var = sym_get(id_var);
     unit_type* unit = unit_alloc();
 
-    if (sym == NULL) {
-        ERR_ID_UNDECLARED(id);
-        ERR_ADD();
-    }
-    else if (sym->type != ARRAY) {
-        
-        ERR_ID_NOT_ARRAY(id);
-        ERR_ADD();
-    }
-    else if (sym_var == NULL) {
-        ERR_ID_UNDECLARED(id_var);
-        ERR_ADD();
-    }
-    else if (sym_var->type != VARIABLE) {
-        ERR_ID_NOT_VARIABLE(id_var);
-        ERR_ADD();
-    }
-    else if (sym_var->is_init == false) {
-        ERR_ID_NOT_INIT(id_var);
+    if (sym_var->is_init == false) {
+        ERR_ID_NOT_INIT(sym_var->id);
         ERR_ADD();
     }
     else if (type == VALUE) {

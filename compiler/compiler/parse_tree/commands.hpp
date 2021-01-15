@@ -14,7 +14,7 @@ class AbstractCommand {
 public:
     virtual void print() = 0;
     virtual void code() = 0;
-    virtual void flow() {};
+    virtual void init() = 0;
 };
 
 // WEKTOR KOMEND
@@ -23,7 +23,7 @@ public:
     CommandVector() : std::vector<AbstractCommand*>() {};
     void print() { for (AbstractCommand* com: *this) com->print(); };
     void code()  { for (AbstractCommand* com: *this) com->code();  };
-    void flow()  { for (AbstractCommand* com: *this) com->flow(); };
+    void init()  { for (AbstractCommand* com: *this) com->init(); };
 };
 
 // KOMENDA ZLOZONA
@@ -39,7 +39,7 @@ public:
     ConditionalCommand(AbstractCondition* cond, CommandVector* cmd_true, CommandVector* cmd_false) :
         cond(cond), cmd_true(cmd_true), cmd_false(cmd_false), labels(new labels_type) {};
     void finish() { unit_free(cond_unit); }
-    void flow() { cmd_true->flow(); };
+    void init() { cond->init(); cmd_true->init(); };
 };
 
 // PETLA FOR
@@ -55,7 +55,6 @@ public:
             iter->is_visible = false; DBG_SYMBOL_PRINT(); };
     virtual void finish() { reg_free(cond_unit->reg), unit_free(cond_unit); };
     virtual void step() = 0;
-    void flow() { iter->is_visible = true; cmd_true->flow(); iter->is_visible = false; };
 };
 
 // HALT
@@ -64,7 +63,7 @@ public:
     CHalt() {};
     void print();
     void code();
-    void flow() {};
+    void init() {};
 };
 
 // WRITE
@@ -74,7 +73,7 @@ public:
     CWrite(AbstractValue* val) : val(val) {};
     void print();
     void code();
-    void flow() { val->flow(); };
+    void init() { val->init(); };
 };
 
 // READ
@@ -84,7 +83,7 @@ public:
     CRead(AbstractValue* val) : val(val) {};
     void print();
     void code();
-    void flow() { val->flow(); };
+    void init() { val->init(); };
 };
 
 // ASSIGN
@@ -96,7 +95,7 @@ public:
         val(val), exp(exp) {};
     void print();
     void code();
-    void flow() { val->flow(); exp->flow(); };
+    void init() { val->init(); exp->init(); };
 };
 
 // IF THEN
@@ -115,7 +114,7 @@ public:
         ConditionalCommand(cond, cmd_true, cmd_false) {};
     void print();
     void code();
-    void flow() { cmd_true->flow(); cmd_false->flow(); };
+    void init() { cond->init(); cmd_true->init(); cmd_false->init(); };
 };
 
 // WHILE
@@ -146,6 +145,7 @@ public:
     void step();
     void print();
     void code();
+    void init() { cond->init(); iter->is_visible = true; cmd_true->init(); iter->is_visible = false; };
 };
 
 // FOR DOWNTO
@@ -158,4 +158,5 @@ public:
     void step();
     void print();
     void code();
+    void init() { cond->init(); iter->is_visible = true; cmd_true->init(); iter->is_visible = false; };
 };

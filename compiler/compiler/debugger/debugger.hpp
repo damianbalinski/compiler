@@ -20,6 +20,7 @@ using std::endl;
     // #define DEBUG_COND
     // #define DEBUG_JUMPS
     // #define DEBUG_OPTIMIZER
+    // #define DEBUG_INIT
 #endif
 
 // TOKENS
@@ -132,4 +133,17 @@ using std::endl;
     #define DBG_OPTIMIZER_VAL_TO_REG(X, Y)
     #define DBG_OPTIMIZER_OFFSET_TO_REG(X, Y)
     #define DBG_OPTIMIZER_BEGIN(X)
+#endif
+
+// INIT
+#ifdef DEBUG_INIT
+    #define DBG_INIT_BEGIN(X)        cout << GREEN "init [ begin " <<X<< " ]" DEF << endl
+    #define DBG_INIT_BEGIN2(X, Y)    cout << GREEN "init [ begin " <<X<< " " <<Y<< " ]" DEF << endl
+    #define DBG_INIT_END(X)          cout << GREEN "init [ end " <<X<< " ]" DEF << endl
+    #define DBG_INIT_END2(X, Y)      cout << GREEN "init [ end " <<X<< " " <<Y<< " ]" DEF << endl
+#else
+    #define DBG_INIT_BEGIN(X)
+    #define DBG_INIT_BEGIN2(X, Y)
+    #define DBG_INIT_END(X)
+    #define DBG_INIT_END2(X, Y)
 #endif
