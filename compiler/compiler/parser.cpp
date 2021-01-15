@@ -536,11 +536,11 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    68,    68,    69,    72,    73,    74,    75,    78,    79,
-      83,    84,    85,    86,    87,    88,    89,    90,    91,    94,
-      95,    96,    97,    98,    99,   102,   103,   104,   105,   106,
-     107,   110,   111,   114,   115,   116,   117,   120,   121,   122,
-     125,   126,   127
+       0,    64,    64,    65,    68,    69,    70,    71,    74,    75,
+      79,    80,    81,    82,    83,    84,    85,    86,    87,    90,
+      91,    92,    93,    94,    95,    98,    99,   100,   101,   102,
+     103,   106,   107,   110,   111,   112,   113,   116,   117,   118,
+     121,   122,   123
 };
 #endif
 
@@ -1197,248 +1197,248 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: DECLARE declarations T_BEGIN commands END  */
-#line 68 "compiler.y"
+#line 64 "compiler.y"
                                                    { commands = (yyvsp[-1].vec); commands->push_back(new CHalt()); YYACCEPT; }
 #line 1203 "parser.cpp"
     break;
 
   case 3: /* program: T_BEGIN commands END  */
-#line 69 "compiler.y"
+#line 65 "compiler.y"
                                                    { commands = (yyvsp[-1].vec); commands->push_back(new CHalt()); YYACCEPT; }
 #line 1209 "parser.cpp"
     break;
 
   case 4: /* declarations: declarations ',' ID  */
-#line 72 "compiler.y"
+#line 68 "compiler.y"
                                                    { add_variable((yyvsp[0].id));      }
 #line 1215 "parser.cpp"
     break;
 
   case 5: /* declarations: declarations ',' ID '(' NUMBER ':' NUMBER ')'  */
-#line 73 "compiler.y"
+#line 69 "compiler.y"
                                                    { add_array((yyvsp[-5].id), (yyvsp[-3].input), (yyvsp[-1].input)); }
 #line 1221 "parser.cpp"
     break;
 
   case 6: /* declarations: ID  */
-#line 74 "compiler.y"
+#line 70 "compiler.y"
                                                    { add_variable((yyvsp[0].id));      }
 #line 1227 "parser.cpp"
     break;
 
   case 7: /* declarations: ID '(' NUMBER ':' NUMBER ')'  */
-#line 75 "compiler.y"
+#line 71 "compiler.y"
                                                    { add_array((yyvsp[-5].id), (yyvsp[-3].input), (yyvsp[-1].input)); }
 #line 1233 "parser.cpp"
     break;
 
   case 8: /* commands: commands command  */
-#line 78 "compiler.y"
+#line 74 "compiler.y"
                                                    { (yyvsp[-1].vec)->push_back((yyvsp[0].cmd));  (yyval.vec) = (yyvsp[-1].vec);           }
 #line 1239 "parser.cpp"
     break;
 
   case 9: /* commands: command  */
-#line 79 "compiler.y"
+#line 75 "compiler.y"
                                                    { (yyval.vec) = new CommandVector();
                                                      (yyval.vec)->push_back((yyvsp[0].cmd));                     }
 #line 1246 "parser.cpp"
     break;
 
   case 10: /* command: lidentifier ASSIGN expression ';'  */
-#line 83 "compiler.y"
+#line 79 "compiler.y"
                                                      { (yyval.cmd) = new CAssign((yyvsp[-3].val), (yyvsp[-1].exp));            }
 #line 1252 "parser.cpp"
     break;
 
   case 11: /* command: IF condition THEN commands ELSE commands ENDIF  */
-#line 84 "compiler.y"
+#line 80 "compiler.y"
                                                      { (yyval.cmd) = new CIfThenElse((yyvsp[-5].con), (yyvsp[-3].vec), (yyvsp[-1].vec));    }
 #line 1258 "parser.cpp"
     break;
 
   case 12: /* command: IF condition THEN commands ENDIF  */
-#line 85 "compiler.y"
+#line 81 "compiler.y"
                                                      { (yyval.cmd) = new CIfThen((yyvsp[-3].con), (yyvsp[-1].vec));            }
 #line 1264 "parser.cpp"
     break;
 
   case 13: /* command: WHILE condition DO commands ENDWHILE  */
-#line 86 "compiler.y"
+#line 82 "compiler.y"
                                                      { (yyval.cmd) = new CWhile((yyvsp[-3].con), (yyvsp[-1].vec));             }
 #line 1270 "parser.cpp"
     break;
 
   case 14: /* command: REPEAT commands UNTIL condition ';'  */
-#line 87 "compiler.y"
+#line 83 "compiler.y"
                                                      { (yyval.cmd) = new CRepeat((yyvsp[-1].con), (yyvsp[-3].vec));            }
 #line 1276 "parser.cpp"
     break;
 
   case 15: /* command: FOR ID FROM value TO value DO commands ENDFOR  */
-#line 88 "compiler.y"
+#line 84 "compiler.y"
                                                      { (yyval.cmd) = new CForTo((yyvsp[-7].id), (yyvsp[-5].val), (yyvsp[-3].val), (yyvsp[-1].vec));     }
 #line 1282 "parser.cpp"
     break;
 
   case 16: /* command: FOR ID FROM value DOWNTO value DO commands ENDFOR  */
-#line 89 "compiler.y"
+#line 85 "compiler.y"
                                                      { (yyval.cmd) = new CForDownto((yyvsp[-7].id), (yyvsp[-5].val), (yyvsp[-3].val), (yyvsp[-1].vec)); }
 #line 1288 "parser.cpp"
     break;
 
   case 17: /* command: READ lidentifier ';'  */
-#line 90 "compiler.y"
+#line 86 "compiler.y"
                                                      { (yyval.cmd) = new CRead((yyvsp[-1].val));                  }
 #line 1294 "parser.cpp"
     break;
 
   case 18: /* command: WRITE valueloc ';'  */
-#line 91 "compiler.y"
+#line 87 "compiler.y"
                                                      { (yyval.cmd) = new CWrite((yyvsp[-1].val));                 }
 #line 1300 "parser.cpp"
     break;
 
   case 19: /* expression: value  */
-#line 94 "compiler.y"
+#line 90 "compiler.y"
                                { (yyval.exp) = new ExpressionBas((yyvsp[0].val));     }
 #line 1306 "parser.cpp"
     break;
 
   case 20: /* expression: value '+' value  */
-#line 95 "compiler.y"
+#line 91 "compiler.y"
                                { (yyval.exp) = new ExpressionSum((yyvsp[-2].val), (yyvsp[0].val)); }
 #line 1312 "parser.cpp"
     break;
 
   case 21: /* expression: value '-' value  */
-#line 96 "compiler.y"
+#line 92 "compiler.y"
                                { (yyval.exp) = new ExpressionDif((yyvsp[-2].val), (yyvsp[0].val)); }
 #line 1318 "parser.cpp"
     break;
 
   case 22: /* expression: value '*' value  */
-#line 97 "compiler.y"
+#line 93 "compiler.y"
                                { (yyval.exp) = new ExpressionMul((yyvsp[-2].val), (yyvsp[0].val)); }
 #line 1324 "parser.cpp"
     break;
 
   case 23: /* expression: value '/' value  */
-#line 98 "compiler.y"
+#line 94 "compiler.y"
                                { (yyval.exp) = new ExpressionDiv((yyvsp[-2].val), (yyvsp[0].val)); }
 #line 1330 "parser.cpp"
     break;
 
   case 24: /* expression: value '%' value  */
-#line 99 "compiler.y"
+#line 95 "compiler.y"
                                { (yyval.exp) = new ExpressionMod((yyvsp[-2].val), (yyvsp[0].val)); }
 #line 1336 "parser.cpp"
     break;
 
   case 25: /* condition: value EQ value  */
-#line 102 "compiler.y"
+#line 98 "compiler.y"
                                { (yyval.con) = new ConditionEQ((yyvsp[-2].val), (yyvsp[0].val));   }
 #line 1342 "parser.cpp"
     break;
 
   case 26: /* condition: value NE value  */
-#line 103 "compiler.y"
+#line 99 "compiler.y"
                                { (yyval.con) = new ConditionNE((yyvsp[-2].val), (yyvsp[0].val));   }
 #line 1348 "parser.cpp"
     break;
 
   case 27: /* condition: value LT value  */
-#line 104 "compiler.y"
+#line 100 "compiler.y"
                                { (yyval.con) = new ConditionLT((yyvsp[-2].val), (yyvsp[0].val));   }
 #line 1354 "parser.cpp"
     break;
 
   case 28: /* condition: value GT value  */
-#line 105 "compiler.y"
+#line 101 "compiler.y"
                                { (yyval.con) = new ConditionGT((yyvsp[-2].val), (yyvsp[0].val));   }
 #line 1360 "parser.cpp"
     break;
 
   case 29: /* condition: value LE value  */
-#line 106 "compiler.y"
+#line 102 "compiler.y"
                                { (yyval.con) = new ConditionLE((yyvsp[-2].val), (yyvsp[0].val));   }
 #line 1366 "parser.cpp"
     break;
 
   case 30: /* condition: value GE value  */
-#line 107 "compiler.y"
+#line 103 "compiler.y"
                                { (yyval.con) = new ConditionGE((yyvsp[-2].val), (yyvsp[0].val));   }
 #line 1372 "parser.cpp"
     break;
 
   case 31: /* value: NUMBER  */
-#line 110 "compiler.y"
-                               { (yyval.val) = new VNum((yyvsp[0].input), VALUE);                     }
+#line 106 "compiler.y"
+                               { (yyval.val) = new VNum((yyvsp[0].input), strdup(yytext), VALUE);     }
 #line 1378 "parser.cpp"
     break;
 
   case 32: /* value: ridentifier  */
-#line 111 "compiler.y"
+#line 107 "compiler.y"
                                { (yyval.val) = (yyvsp[0].val);                                      }
 #line 1384 "parser.cpp"
     break;
 
   case 33: /* valueloc: NUMBER  */
-#line 114 "compiler.y"
-                               { (yyval.val) = new VNum((yyvsp[0].input), LOCATION);                  }
+#line 110 "compiler.y"
+                               { (yyval.val) = new VNum((yyvsp[0].input), strdup(yytext), LOCATION);  }
 #line 1390 "parser.cpp"
     break;
 
   case 34: /* valueloc: ID  */
-#line 115 "compiler.y"
+#line 111 "compiler.y"
                                { (yyval.val) = new VVar((yyvsp[0].id), LOCATION, INIT);            }
 #line 1396 "parser.cpp"
     break;
 
   case 35: /* valueloc: ID '(' ID ')'  */
-#line 116 "compiler.y"
+#line 112 "compiler.y"
                                { (yyval.val) = new VArrVar((yyvsp[-3].id), (yyvsp[-1].id), LOCATION, INIT);     }
 #line 1402 "parser.cpp"
     break;
 
   case 36: /* valueloc: ID '(' NUMBER ')'  */
-#line 117 "compiler.y"
+#line 113 "compiler.y"
                                { (yyval.val) = new VArrNum((yyvsp[-3].id), (yyvsp[-1].input), LOCATION, INIT);     }
 #line 1408 "parser.cpp"
     break;
 
   case 37: /* ridentifier: ID  */
-#line 120 "compiler.y"
+#line 116 "compiler.y"
                                { (yyval.val) = new VVar((yyvsp[0].id), VALUE, INIT);               }
 #line 1414 "parser.cpp"
     break;
 
   case 38: /* ridentifier: ID '(' ID ')'  */
-#line 121 "compiler.y"
+#line 117 "compiler.y"
                                { (yyval.val) = new VArrVar((yyvsp[-3].id), (yyvsp[-1].id), VALUE, INIT);        }
 #line 1420 "parser.cpp"
     break;
 
   case 39: /* ridentifier: ID '(' NUMBER ')'  */
-#line 122 "compiler.y"
+#line 118 "compiler.y"
                                { (yyval.val) = new VArrNum((yyvsp[-3].id), (yyvsp[-1].input), VALUE, INIT);        }
 #line 1426 "parser.cpp"
     break;
 
   case 40: /* lidentifier: ID  */
-#line 125 "compiler.y"
+#line 121 "compiler.y"
                                { (yyval.val) = new VVar((yyvsp[0].id), LOCATION, NOINIT);          }
 #line 1432 "parser.cpp"
     break;
 
   case 41: /* lidentifier: ID '(' ID ')'  */
-#line 126 "compiler.y"
+#line 122 "compiler.y"
                                { (yyval.val) = new VArrVar((yyvsp[-3].id), (yyvsp[-1].id), LOCATION, NOINIT);   }
 #line 1438 "parser.cpp"
     break;
 
   case 42: /* lidentifier: ID '(' NUMBER ')'  */
-#line 127 "compiler.y"
+#line 123 "compiler.y"
                                { (yyval.val) = new VArrNum((yyvsp[-3].id), (yyvsp[-1].input), LOCATION, NOINIT);   }
 #line 1444 "parser.cpp"
     break;
@@ -1638,7 +1638,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 128 "compiler.y"
+#line 124 "compiler.y"
 
 
 /* Metoda startowa.
@@ -1660,14 +1660,27 @@ int main( int argc, char** argv )
         ERR_ADD();
     }
 
-    DBG_PARSER_BEGIN();
+    /* FAZA 1
+     * inicjalizacja maszyny rejestrowej
+     * tworzenie drzewa parsowania */
     reg_init();
     yyparse();
-    DBG_PARSER_END();
     DBG_REGISTER_PRINT();
 
-    commands->print();
+    // commands->print();
+
+    /* FAZA 2
+     * inicjalizacja symboli */
     commands->init();
+    DBG_SYMBOL_PRINT();
+
+    /* FAZA 3
+     * tworzenie grafu przeplywu */
+    commands->flow(new DependencyList());
+    DBG_DEPENDENCIES_PRINT();
+
+    /* FAZA 3
+     * generowanie kodu */
     commands->code();
     
     if ((output = fopen(argv[2], "w")) == NULL) {
@@ -1675,6 +1688,8 @@ int main( int argc, char** argv )
         ERR_ADD();
     }
 
+    /* FAZA 4
+     * zapisywanie kodu */
     code_print_all(output);
     return 0;
 }

@@ -17,6 +17,8 @@ public:
     virtual void print() = 0;
     virtual unit_type* unit() = 0;
     virtual void init() = 0;
+    virtual void flow_push(DependencyList* dep_list) = 0;
+    virtual void flow_pop(DependencyList* dep_list) = 0;
 };
 
 // WYRAZENIE BINARNE
@@ -27,6 +29,8 @@ public:
     BinaryExpression(AbstractValue* val_left, AbstractValue* val_right) : 
         val_left(val_left), val_right(val_right) {};
     void init() { val_left->init(); val_right->init(); }
+    void flow_push(DependencyList* dep_list) { val_left->flow_push(dep_list); val_right->flow_push(dep_list); };
+    void flow_pop(DependencyList* dep_list)  { val_right->flow_pop(dep_list); val_left->flow_pop(dep_list);   };
 };
 
 // WYRAZENIE UNARNE
@@ -35,6 +39,8 @@ public:
     AbstractValue* val;
     UnaryExpression(AbstractValue* val) : val(val) {};
     void init() { val->init(); }
+    void flow_push(DependencyList* dep_list) { val->flow_push(dep_list); };
+    void flow_pop(DependencyList* dep_list)  { val->flow_pop(dep_list);  };
 };
 
 // DODAWANIE

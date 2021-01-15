@@ -6,12 +6,15 @@
 #include "../symbol_table/symbol_table.hpp"
 
 using std::cout;
+using std::endl;
 
 #define VALUE true
 #define LOCATION false
 
 #define INIT true
 #define NOINIT false
+
+#define max(X, Y) ((X) >= (Y)) ? (X) : (Y)
 
 void add_variable(char* id);
 void add_array(char* id, data_type begin, data_type end);
@@ -30,18 +33,26 @@ public:
         type(type), is_init(is_init) {};
     virtual void print() = 0;
     virtual unit_type* unit() = 0;
-    virtual void init() {};
+    virtual void init() = 0;
+    virtual void flow_push(DependencyList* dep_list) = 0;
+    virtual void flow_pop(DependencyList* dep_list) = 0;
+    virtual void flow_add(int prior, DependencyList* dep_list) = 0;
 };
 
 // LICZBA
 class VNum : public AbstractValue {
 public:
     cln::cl_I val;
-    VNum(data_type val, bool type) :
-        AbstractValue(type, true), val(val) {};
-    void print() { cout << val; };
+    char* val_id;
+    symbol* val_sym;
+    VNum(data_type val, char* val_id, bool type) :
+        AbstractValue(type, true), val(val), val_id(val_id) {};
+    void print() { cout << val_id; };
     unit_type* unit() { return get_const(val, type); }
-    void init() {};
+    void init();
+    void flow_push(DependencyList* dep_list) { dep_list->push_back(val_sym); };
+    void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();         };
+    void flow_add(int prior, DependencyList* dep_list)  { val_sym->prior = max(val_sym->prior, prior); val_sym->deps->add(dep_list); };
 };
 
 // ZMIENNA
@@ -54,6 +65,9 @@ public:
     void print() { cout << var_id; }
     unit_type* unit() { return get_variable(var, type, is_init); }
     void init();
+    void flow_push(DependencyList* dep_list) { dep_list->push_back(var); };
+    void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();     };
+    void flow_add(int prior, DependencyList* dep_list)  { var->prior = max(var->prior, prior); var->deps->add(dep_list); };
 };
 
 // TABLICA INDEKSOWANA LICZBA
@@ -67,6 +81,9 @@ public:
     void print() { cout << arr_id << "[" << val << "]"; }
     unit_type* unit() { return get_array_num(arr, val, type, is_init); }
     void init();
+    void flow_push(DependencyList* dep_list) { dep_list->push_back(arr); };
+    void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();     };
+    void flow_add(int prior, DependencyList* dep_list)  { arr->prior = max(arr->prior, prior); arr->deps->add(dep_list); };
 };
 
 // TABLICA INDEKSOWANA ZMIENNA
@@ -81,4 +98,8 @@ public:
     void print() { cout << arr_id << "[" << var_id << "]"; }
     unit_type* unit() { return get_array_var(arr, var, type, is_init); }
     void init();
+    void flow_push(DependencyList* dep_list) { dep_list->push_back(arr); dep_list->push_back(var); arr->deps->add(var); };
+    void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();     dep_list->pop_back();     };
+    void flow_add(int prior, DependencyList* dep_list)  { arr->prior = max(arr->prior, prior); var->prior = max(var->prior, prior);  
+    arr->deps->add(dep_list); arr->deps->add(var); };
 };

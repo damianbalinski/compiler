@@ -22,6 +22,8 @@ public:
     virtual void print() {};
     virtual unit_type* unit() = 0;
     virtual void init() { val_left->init(); val_right->init(); };
+    virtual void flow_push(DependencyList* dep_list) { val_left->flow_push(dep_list); val_right->flow_push(dep_list); };
+    virtual void flow_pop(DependencyList* dep_list)  { val_right->flow_pop(dep_list); val_left->flow_pop(dep_list);   };
 };
 
 class ConditionLT : public AbstractCondition {

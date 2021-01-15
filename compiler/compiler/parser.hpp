@@ -48,14 +48,12 @@ extern int yydebug;
 #line 20 "compiler.y"
 
     #include "others/types.hpp"
-    #include "others/unit.hpp"
     #include "parse_tree/commands.hpp"
-    #include "parse_tree/values.hpp"
     #include "parse_tree/conditions.hpp"
     #include "parse_tree/expressions.hpp"
     #include "parse_tree/values.hpp"
 
-#line 59 "parser.hpp"
+#line 57 "parser.hpp"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -102,12 +100,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 30 "compiler.y"
+#line 28 "compiler.y"
 
     data_type input;         /* wartosc          */
-    unit_type* unit;         /* pamiec i rejestr */
     char *id;                /* identyfikator    */
-    bool type;               /* wartosc logiczna */
     AbstractCommand* cmd;    /* komenda          */
     CommandVector* vec;      /* wektor komend    */
     AbstractValue* val;      /* wartosc          */
@@ -115,7 +111,7 @@ union YYSTYPE
     AbstractCondition* con;  /* warunek          */
     
 
-#line 119 "parser.hpp"
+#line 115 "parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

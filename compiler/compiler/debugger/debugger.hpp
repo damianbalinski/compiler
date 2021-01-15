@@ -12,6 +12,8 @@ using std::endl;
     // #define DEBUG_TOKENS
     // #define DEBUG_PARSER
     // #define DEBUG_SYMBOL_TABLE
+    // #define DEBUG_SYMBOL_TABLE_PRINT
+    #define DEBUG_DEPENDENCIES
     // #define DEBUG_REGISTERS
     // #define DEBUG_CODES
     // #define DEBUG_INSTRUCTIONS
@@ -44,11 +46,16 @@ using std::endl;
     #define DBG_SYMBOL_PUT(X)     printf(GREEN "symbol table [ new symbol %s]\n" DEF, X)
     #define DBG_SYMBOL_GET(X)     printf(GREEN "symbol table [ get symbol %s]\n" DEF, X)
     #define DBG_SYMBOL_REMOVE(X)  printf(GREEN "symbol table [ remove symbol %s]\n" DEF, X)
-    #define DBG_SYMBOL_PRINT()    sym_print()
 #else
     #define DBG_SYMBOL_PUT(X)
     #define DBG_SYMBOL_GET(X)
     #define DBG_SYMBOL_REMOVE(X)
+#endif
+
+// SYMBOL TABLE PRINT
+#ifdef DEBUG_SYMBOL_TABLE_PRINT
+    #define DBG_SYMBOL_PRINT()    sym_print()
+#else 
     #define DBG_SYMBOL_PRINT()
 #endif
 
@@ -146,4 +153,11 @@ using std::endl;
     #define DBG_INIT_BEGIN2(X, Y)
     #define DBG_INIT_END(X)
     #define DBG_INIT_END2(X, Y)
+#endif
+
+// DEPENDENCIES
+#ifdef DEBUG_DEPENDENCIES
+    #define DBG_DEPENDENCIES_PRINT() deps_print()
+#else
+    #define DBG_DEPENDENCIES_PRINT()
 #endif

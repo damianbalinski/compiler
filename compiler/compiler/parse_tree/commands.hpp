@@ -15,6 +15,7 @@ public:
     virtual void print() = 0;
     virtual void code() = 0;
     virtual void init() = 0;
+    virtual void flow(DependencyList* dep_list) = 0;
 };
 
 // WEKTOR KOMEND
@@ -24,6 +25,7 @@ public:
     void print() { for (AbstractCommand* com: *this) com->print(); };
     void code()  { for (AbstractCommand* com: *this) com->code();  };
     void init()  { for (AbstractCommand* com: *this) com->init(); };
+    void flow(DependencyList* dep_list) { for (AbstractCommand* com: *this) com->flow(dep_list); }
 };
 
 // KOMENDA ZLOZONA
@@ -40,6 +42,7 @@ public:
         cond(cond), cmd_true(cmd_true), cmd_false(cmd_false), labels(new labels_type) {};
     void finish() { unit_free(cond_unit); }
     void init() { cond->init(); cmd_true->init(); };
+    void flow(DependencyList* dep_list) { cond->flow_push(dep_list); cmd_true->flow(dep_list); cond->flow_pop(dep_list); }
 };
 
 // PETLA FOR
@@ -64,6 +67,7 @@ public:
     void print();
     void code();
     void init() {};
+    void flow(DependencyList* dep_list) {};
 };
 
 // WRITE
@@ -74,6 +78,7 @@ public:
     void print();
     void code();
     void init() { val->init(); };
+    void flow(DependencyList* dep_list) { val->flow_add(PBLACK, dep_list); }
 };
 
 // READ
@@ -84,6 +89,7 @@ public:
     void print();
     void code();
     void init() { val->init(); };
+    void flow(DependencyList* dep_list) { val->flow_add(PWHITE, dep_list); }
 };
 
 // ASSIGN
@@ -96,6 +102,7 @@ public:
     void print();
     void code();
     void init() { val->init(); exp->init(); };
+    void flow(DependencyList* dep_list) { exp->flow_push(dep_list); val->flow_add(PWHITE, dep_list); exp->flow_pop(dep_list); }
 };
 
 // IF THEN
@@ -115,6 +122,8 @@ public:
     void print();
     void code();
     void init() { cond->init(); cmd_true->init(); cmd_false->init(); };
+    void flow(DependencyList* dep_list) { cond->flow_push(dep_list); cmd_true->flow(dep_list);
+    cmd_false->flow(dep_list); cond->flow_pop(dep_list); };
 };
 
 // WHILE
@@ -146,6 +155,8 @@ public:
     void print();
     void code();
     void init() { cond->init(); iter->is_visible = true; cmd_true->init(); iter->is_visible = false; };
+    void flow(DependencyList* dep_list) { cond->flow_push(dep_list); iter->deps->add(dep_list); 
+    cmd_true->flow(dep_list); cond->flow_pop(dep_list); };
 };
 
 // FOR DOWNTO
@@ -159,4 +170,6 @@ public:
     void print();
     void code();
     void init() { cond->init(); iter->is_visible = true; cmd_true->init(); iter->is_visible = false; };
+    void flow(DependencyList* dep_list) { cond->flow_push(dep_list); iter->deps->add(dep_list); 
+    cmd_true->flow(dep_list); cond->flow_pop(dep_list); };
 };

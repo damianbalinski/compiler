@@ -19,9 +19,7 @@
 
 %code requires {
     #include "others/types.hpp"
-    #include "others/unit.hpp"
     #include "parse_tree/commands.hpp"
-    #include "parse_tree/values.hpp"
     #include "parse_tree/conditions.hpp"
     #include "parse_tree/expressions.hpp"
     #include "parse_tree/values.hpp"
@@ -29,9 +27,7 @@
 
 %union{
     data_type input;         /* wartosc          */
-    unit_type* unit;         /* pamiec i rejestr */
     char *id;                /* identyfikator    */
-    bool type;               /* wartosc logiczna */
     AbstractCommand* cmd;    /* komenda          */
     CommandVector* vec;      /* wektor komend    */
     AbstractValue* val;      /* wartosc          */
@@ -52,7 +48,7 @@
 %token <input> NUMBER
 %token <id> ID
 %token DECLARE T_BEGIN END
-%token <cond> IF WHILE REPEAT FOR
+%token IF WHILE REPEAT FOR
 %token THEN ELSE ENDIF
 %token DO
 %token ENDWHILE
@@ -107,11 +103,11 @@ condition: value EQ value      { $$ = new ConditionEQ($1, $3);   }
 |  value GE value              { $$ = new ConditionGE($1, $3);   }
 ;
 
-value: NUMBER                  { $$ = new VNum($1, VALUE);                     }
+value: NUMBER                  { $$ = new VNum($1, strdup(yytext), VALUE);     }
 |  ridentifier                 { $$ = $1;                                      }
 ;
 
-valueloc: NUMBER               { $$ = new VNum($1, LOCATION);                  }
+valueloc: NUMBER               { $$ = new VNum($1, strdup(yytext), LOCATION);  }
 |  ID                          { $$ = new VVar($1, LOCATION, INIT);            }
 |  ID '(' ID ')'               { $$ = new VArrVar($1, $3, LOCATION, INIT);     }
 |  ID '(' NUMBER ')'           { $$ = new VArrNum($1, $3, LOCATION, INIT);     }
@@ -146,14 +142,27 @@ int main( int argc, char** argv )
         ERR_ADD();
     }
 
-    DBG_PARSER_BEGIN();
+    /* FAZA 1
+     * inicjalizacja maszyny rejestrowej
+     * tworzenie drzewa parsowania */
     reg_init();
     yyparse();
-    DBG_PARSER_END();
     DBG_REGISTER_PRINT();
 
-    commands->print();
+    // commands->print();
+
+    /* FAZA 2
+     * inicjalizacja symboli */
     commands->init();
+    DBG_SYMBOL_PRINT();
+
+    /* FAZA 3
+     * tworzenie grafu przeplywu */
+    commands->flow(new DependencyList());
+    DBG_DEPENDENCIES_PRINT();
+
+    /* FAZA 3
+     * generowanie kodu */
     commands->code();
     
     if ((output = fopen(argv[2], "w")) == NULL) {
@@ -161,6 +170,8 @@ int main( int argc, char** argv )
         ERR_ADD();
     }
 
+    /* FAZA 4
+     * zapisywanie kodu */
     code_print_all(output);
     return 0;
 }

@@ -17,7 +17,8 @@ symbol* sym_put(char *id) {
     ptr = new symbol;
     ptr->id = strdup(id);
     ptr->next = sym_table;
-    ptr->deps = new vector<symbol*>();
+    ptr->prior = PWHITE;
+    ptr->deps = new DependencyList(ptr);
     sym_table = ptr;
     return ptr;
 }
@@ -42,6 +43,18 @@ void sym_print() {
         printf("%6s %d %d %d %6ld %6ld %6ld\n", 
         head->id, head->type, head->is_init, head->is_visible, 
         CLN_CAST(head->offset), CLN_CAST(head->begin), CLN_CAST(head->end));
+        head = head->next;
+    }
+}
+
+/* Drukuje liste zaleznosci */
+void deps_print() {
+    using namespace std;
+    symbol* head = sym_table;
+    printf("      name (-) -> deps\n");
+    while(head != NULL) {
+        printf("%10s (%d) -> ", head->id, head->prior);
+        head->deps->print();
         head = head->next;
     }
 }

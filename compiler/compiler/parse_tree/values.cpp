@@ -9,6 +9,17 @@
 extern int yylineno;
 extern char* yytext;
 
+/* Wartosc */
+void VNum::init() {
+    DBG_INIT_BEGIN(val_id);
+    val_sym = sym_put(val_id);
+    val_sym->is_init = true;
+    val_sym->is_visible = false;
+    val_sym->is_const = true;
+    DBG_INIT_END(val_id);
+}
+
+
 /* Zmienna
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest zmienna
