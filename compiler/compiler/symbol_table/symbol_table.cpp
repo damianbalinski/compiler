@@ -18,6 +18,7 @@ symbol* sym_put(char *id) {
     ptr->id = strdup(id);
     ptr->next = sym_table;
     ptr->prior = PWHITE;
+    ptr->is_visited = false;
     ptr->deps = new DependencyList(ptr);
     sym_table = ptr;
     return ptr;
@@ -56,5 +57,29 @@ void deps_print() {
         printf("%10s (%d) -> ", head->id, head->prior);
         head->deps->print();
         head = head->next;
+    }
+}
+
+/* Przechodzi po symbolach w tablicy symboli */
+void deps_traversal() {
+    symbol* head = sym_table;
+    while(head != NULL) {
+        deps_dfs(head, head->prior);
+        head = head->next;
+    }
+}
+
+/* Przechodzi po symbolach w liscie zaleznosci */
+void deps_dfs(symbol* sym, int prior) {
+    if (sym->is_visited && sym->prior >= prior) {
+        // NOTHING
+    }
+    else {
+        // TRAVERS
+        int new_prior = maxi(sym->prior, prior);
+        sym->is_visited = true;
+        sym->prior = new_prior;
+        for(symbol* sym: *(sym->deps))
+            deps_dfs(sym, new_prior);
     }
 }

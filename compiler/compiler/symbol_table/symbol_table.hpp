@@ -9,8 +9,9 @@
 #define ARRAY false
 
 #define PWHITE 0
-#define PRED 1
-#define PBLACK 2
+#define PBLACK 1
+
+#define maxi(X, Y) ((X) >= (Y)) ? (X) : (Y)
 
 using std::vector;
 using std::cout;
@@ -25,6 +26,7 @@ typedef struct symbol
     bool is_init;           /* czy zainicjalizowana      */
     bool is_const;          /* czy stala                 */
     bool is_visible;        /* czy widoczna              */
+    bool is_visited;        /* czy odwiedzony            */
     input_type offset;      /* lokalizacja w pamieci     */
     input_type begin;       /* indeks poczatkowy tablicy */
     input_type end;         /* indeks poczatkowy tablicy */
@@ -48,3 +50,5 @@ symbol* sym_put(char *id);
 symbol* sym_get(char*id);
 void sym_print();
 void deps_print();
+void deps_traversal();
+void deps_dfs(symbol* sym, int prior);

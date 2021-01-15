@@ -16,6 +16,7 @@ public:
     virtual void code() = 0;
     virtual void init() = 0;
     virtual void flow(DependencyList* dep_list) = 0;
+    virtual bool clean() { return false; };
 };
 
 // WEKTOR KOMEND
@@ -26,6 +27,11 @@ public:
     void code()  { for (AbstractCommand* com: *this) com->code();  };
     void init()  { for (AbstractCommand* com: *this) com->init(); };
     void flow(DependencyList* dep_list) { for (AbstractCommand* com: *this) com->flow(dep_list); }
+    bool clean() { 
+        for (auto com = this->begin(); com != this->end(); com++) 
+            if ((*com)->clean()) 
+                this->erase(com--); 
+        return this->empty(); };
 };
 
 // KOMENDA ZLOZONA
@@ -43,6 +49,7 @@ public:
     void finish() { unit_free(cond_unit); }
     void init() { cond->init(); cmd_true->init(); };
     void flow(DependencyList* dep_list) { cond->flow_push(dep_list); cmd_true->flow(dep_list); cond->flow_pop(dep_list); }
+    bool clean() { cmd_true->clean(); return cmd_true->empty(); };
 };
 
 // PETLA FOR
@@ -58,6 +65,7 @@ public:
             iter->is_visible = false; DBG_SYMBOL_PRINT(); };
     virtual void finish() { reg_free(cond_unit->reg), unit_free(cond_unit); };
     virtual void step() = 0;
+    bool clean() { cmd_true->clean(); return cmd_true->empty(); };
 };
 
 // HALT
@@ -103,6 +111,7 @@ public:
     void code();
     void init() { val->init(); exp->init(); };
     void flow(DependencyList* dep_list) { exp->flow_push(dep_list); val->flow_add(PWHITE, dep_list); exp->flow_pop(dep_list); }
+    bool clean() { return val->clean(); };
 };
 
 // IF THEN
@@ -124,6 +133,7 @@ public:
     void init() { cond->init(); cmd_true->init(); cmd_false->init(); };
     void flow(DependencyList* dep_list) { cond->flow_push(dep_list); cmd_true->flow(dep_list);
     cmd_false->flow(dep_list); cond->flow_pop(dep_list); };
+    bool clean() { cmd_true->clean(); cmd_false->clean(); return cmd_true->empty() && cmd_false->empty(); };
 };
 
 // WHILE

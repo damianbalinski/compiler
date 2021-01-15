@@ -13,7 +13,7 @@ using std::endl;
     // #define DEBUG_PARSER
     // #define DEBUG_SYMBOL_TABLE
     // #define DEBUG_SYMBOL_TABLE_PRINT
-    #define DEBUG_DEPENDENCIES
+    // #define DEBUG_DEPENDENCIES
     // #define DEBUG_REGISTERS
     // #define DEBUG_CODES
     // #define DEBUG_INSTRUCTIONS

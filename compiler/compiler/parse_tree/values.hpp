@@ -14,8 +14,6 @@ using std::endl;
 #define INIT true
 #define NOINIT false
 
-#define max(X, Y) ((X) >= (Y)) ? (X) : (Y)
-
 void add_variable(char* id);
 void add_array(char* id, data_type begin, data_type end);
 symbol* add_iterator(char* id);
@@ -37,6 +35,7 @@ public:
     virtual void flow_push(DependencyList* dep_list) = 0;
     virtual void flow_pop(DependencyList* dep_list) = 0;
     virtual void flow_add(int prior, DependencyList* dep_list) = 0;
+    virtual bool clean() = 0;
 };
 
 // LICZBA
@@ -52,7 +51,8 @@ public:
     void init();
     void flow_push(DependencyList* dep_list) { dep_list->push_back(val_sym); };
     void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();         };
-    void flow_add(int prior, DependencyList* dep_list)  { val_sym->prior = max(val_sym->prior, prior); val_sym->deps->add(dep_list); };
+    void flow_add(int prior, DependencyList* dep_list)  { val_sym->prior = maxi(val_sym->prior, prior); val_sym->deps->add(dep_list); };
+    bool clean() { return false; };
 };
 
 // ZMIENNA
@@ -67,7 +67,8 @@ public:
     void init();
     void flow_push(DependencyList* dep_list) { dep_list->push_back(var); };
     void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();     };
-    void flow_add(int prior, DependencyList* dep_list)  { var->prior = max(var->prior, prior); var->deps->add(dep_list); };
+    void flow_add(int prior, DependencyList* dep_list)  { var->prior = maxi(var->prior, prior); var->deps->add(dep_list); };
+    bool clean() { return (var->prior == PWHITE) ? true : false; };
 };
 
 // TABLICA INDEKSOWANA LICZBA
@@ -83,7 +84,8 @@ public:
     void init();
     void flow_push(DependencyList* dep_list) { dep_list->push_back(arr); };
     void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();     };
-    void flow_add(int prior, DependencyList* dep_list)  { arr->prior = max(arr->prior, prior); arr->deps->add(dep_list); };
+    void flow_add(int prior, DependencyList* dep_list)  { arr->prior = maxi(arr->prior, prior); arr->deps->add(dep_list); };
+    bool clean() { return (arr->prior == PWHITE) ? true : false; };
 };
 
 // TABLICA INDEKSOWANA ZMIENNA
@@ -100,6 +102,7 @@ public:
     void init();
     void flow_push(DependencyList* dep_list) { dep_list->push_back(arr); dep_list->push_back(var); arr->deps->add(var); };
     void flow_pop(DependencyList* dep_list)  { dep_list->pop_back();     dep_list->pop_back();     };
-    void flow_add(int prior, DependencyList* dep_list)  { arr->prior = max(arr->prior, prior); var->prior = max(var->prior, prior);  
+    void flow_add(int prior, DependencyList* dep_list)  { arr->prior = maxi(arr->prior, prior); var->prior = maxi(var->prior, prior);  
     arr->deps->add(dep_list); arr->deps->add(var); };
+    bool clean() { return (arr->prior == PWHITE) ? true : false; };
 };

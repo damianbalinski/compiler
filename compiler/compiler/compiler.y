@@ -149,8 +149,6 @@ int main( int argc, char** argv )
     yyparse();
     DBG_REGISTER_PRINT();
 
-    // commands->print();
-
     /* FAZA 2
      * inicjalizacja symboli */
     commands->init();
@@ -159,6 +157,12 @@ int main( int argc, char** argv )
     /* FAZA 3
      * tworzenie grafu przeplywu */
     commands->flow(new DependencyList());
+    deps_traversal();
+    cout << "------------------------------------" << endl;
+    commands->print();
+    commands->clean();
+    cout << "------------------------------------" << endl;
+    commands->print();
     DBG_DEPENDENCIES_PRINT();
 
     /* FAZA 3
