@@ -1,6 +1,5 @@
 CC=g++
 FLAGS=-lm -lcln
-FLAGS2=-Wall -Wpedantic
 
 main: parser.o lexer.o symbol_table.o registers_machine.o code_generator.o unit.o jumps.o data_manager.o commands.o values.o expressions.o conditions.o
 	${CC} -o temp parser.o lexer.o symbol_table.o registers_machine.o code_generator.o unit.o jumps.o data_manager.o commands.o values.o expressions.o conditions.o ${FLAGS}
@@ -39,7 +38,7 @@ lexer.o: lexer.cpp
 	${CC} -c lexer.cpp
 
 parser.o: parser.cpp
-	${CC} -c parser.cpp
+	${CC} -c parser.cpp -Wno-write-strings
 
 parser.cpp: parser.y
 	bison -o parser.cpp -d parser.y

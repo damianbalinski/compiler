@@ -2,8 +2,8 @@
 
 /* 
  * TODO
- * tablica jednoelementowa przy indeksowaniu zachowuje sie jak zwykla zmienna
- * 
+ * tablica jednoelementowa przy indeksowaniu 
+ * zachowuje sie jak zwykla zmienna
  */
 
 #ifdef OPTIMIZER_ON
