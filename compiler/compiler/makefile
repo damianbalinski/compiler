@@ -41,11 +41,11 @@ lexer.o: lexer.cpp
 parser.o: parser.cpp
 	${CC} -c parser.cpp
 
-parser.cpp: compiler.y
-	bison -o parser.cpp -d compiler.y
+parser.cpp: parser.y
+	bison -o parser.cpp -d parser.y
 
-lexer.cpp: compiler.l
-	flex -o lexer.cpp compiler.l
+lexer.cpp: lexer.l
+	flex -o lexer.cpp lexer.l
 
 clean:
 	rm *.o

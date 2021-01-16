@@ -9,6 +9,7 @@
     #include "code_generator/registers_machine.hpp"
     #include "parse_tree/commands.hpp"
     #include "parse_tree/values.hpp"
+    #include "optimizer/optimizer.hpp"
     
     extern int yylineno;
     extern char* yytext;
@@ -141,42 +142,49 @@ int main( int argc, char** argv )
         ERR_BAD_FILENAME(argv[1]);
         ERR_ADD();
     }
-
-    /* FAZA 1
-     * inicjalizacja maszyny rejestrowej
-     * tworzenie drzewa parsowania */
-    reg_init();
-    yyparse();
-    DBG_REGISTER_PRINT();
-
-    /* FAZA 2
-     * inicjalizacja symboli */
-    commands->init();
-    DBG_SYMBOL_PRINT();
-
-    /* FAZA 3
-     * tworzenie grafu przeplywu */
-    commands->flow(new DependencyList());
-    deps_traversal();
-    cout << "------------------------------------" << endl;
-    commands->print();
-    commands->clean();
-    cout << "------------------------------------" << endl;
-    commands->print();
-    DBG_DEPENDENCIES_PRINT();
-
-    /* FAZA 3
-     * generowanie kodu */
-    commands->code();
-    
     if ((output = fopen(argv[2], "w")) == NULL) {
         ERR_BAD_FILENAME(argv[2]);
         ERR_ADD();
     }
 
-    /* FAZA 4
-     * zapisywanie kodu */
+
+    /************** FAZA 1 **************
+     * inicjalizacja maszyny rejestrowej
+     * tworzenie drzewa parsowania
+     /***********************************/
+    reg_init();
+    yyparse();
+    DBG_REGISTER_PRINT();
+
+
+    /************** FAZA 2 **************
+     * inicjalizacja symboli
+    /***********************************/
+    commands->init();
+    DBG_SYMBOL_PRINT();
+
+
+    /************** FAZA 3 **************
+     * tworzenie grafu przeplywu
+     * usuwanie niepotrzebnych komend
+    /***********************************/
+    #ifdef OPTIMIZE_FLOW
+        commands->flow(new DependencyList());
+        deps_traversal();
+        commands->clean();
+    #endif
+    DBG_COMMANDS_PRINT();
+    DBG_DEPENDENCIES_PRINT();
+
+
+    /************** FAZA 4 **************
+     * generowanie kodu
+     * zapisywanie kodu do pliku
+     /***********************************/
+    commands->code();
     code_print_all(output);
+
+
     return 0;
 }
 

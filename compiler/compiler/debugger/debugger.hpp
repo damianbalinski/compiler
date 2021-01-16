@@ -6,23 +6,24 @@
 using std::cout;
 using std::endl;
 
-#define DEBUG_MODE
+// #define DEBUG_MODE
 
 #ifdef DEBUG_MODE
-    // #define DEBUG_TOKENS
-    // #define DEBUG_PARSER
-    // #define DEBUG_SYMBOL_TABLE
-    // #define DEBUG_SYMBOL_TABLE_PRINT
-    // #define DEBUG_DEPENDENCIES
-    // #define DEBUG_REGISTERS
-    // #define DEBUG_CODES
-    // #define DEBUG_INSTRUCTIONS
-    // #define DEBUG_DATA_MANAGER
-    // #define DEBUG_UNIT
-    // #define DEBUG_COND
-    // #define DEBUG_JUMPS
-    // #define DEBUG_OPTIMIZER
-    // #define DEBUG_INIT
+    #define DEBUG_TOKENS
+    #define DEBUG_PARSER
+    #define DEBUG_SYMBOL_TABLE
+    #define DEBUG_REGISTERS
+    #define DEBUG_CODES
+    #define DEBUG_INSTRUCTIONS
+    #define DEBUG_DATA_MANAGER
+    #define DEBUG_UNIT
+    #define DEBUG_COND
+    #define DEBUG_JUMPS
+    #define DEBUG_OPTIMIZER
+    #define DEBUG_INIT
+    #define DEBUG_COMMANDS_PRINT
+    #define DEBUG_SYMBOL_PRINT
+    #define DEBUG_DEPENDENCIES_PRINT
 #endif
 
 // TOKENS
@@ -50,13 +51,6 @@ using std::endl;
     #define DBG_SYMBOL_PUT(X)
     #define DBG_SYMBOL_GET(X)
     #define DBG_SYMBOL_REMOVE(X)
-#endif
-
-// SYMBOL TABLE PRINT
-#ifdef DEBUG_SYMBOL_TABLE_PRINT
-    #define DBG_SYMBOL_PRINT()    sym_print()
-#else 
-    #define DBG_SYMBOL_PRINT()
 #endif
 
 // CODES
@@ -155,9 +149,23 @@ using std::endl;
     #define DBG_INIT_END2(X, Y)
 #endif
 
-// DEPENDENCIES
-#ifdef DEBUG_DEPENDENCIES
-    #define DBG_DEPENDENCIES_PRINT() deps_print()
+// DEPENDENCIES PRINT
+#ifdef DEBUG_DEPENDENCIES_PRINT
+    #define DBG_DEPENDENCIES_PRINT()    deps_print()
 #else
     #define DBG_DEPENDENCIES_PRINT()
+#endif
+
+// SYMBOL TABLE PRINT
+#ifdef DEBUG_SYMBOL_PRINT
+    #define DBG_SYMBOL_PRINT()          sym_print()
+#else 
+    #define DBG_SYMBOL_PRINT()
+#endif
+
+// COMMANDS PRINT
+#ifdef DEBUG_COMMANDS_PRINT
+    #define DBG_COMMANDS_PRINT()        commands->print();
+#else
+    #define DBG_COMMANDS_PRINT()
 #endif
