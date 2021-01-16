@@ -13,9 +13,9 @@ extern char* yytext;
 void VNum::init() {
     DBG_INIT_BEGIN(val_id);
     val_sym = sym_put(val_id);
-    val_sym->is_init = true;
     val_sym->is_visible = false;
     val_sym->is_const = true;
+    val_sym->is_init = true;
     DBG_INIT_END(val_id);
 }
 
@@ -23,6 +23,8 @@ void VNum::init() {
 /* Zmienna
  * ERR1 - id nie zostal zadeklarowany
  * ERR2 - id nie jest zmienna
+ * ERR3 - (INIT) id nie zostal zainicjalizowany
+ * ERR4 - (NOINIT) id jest stala
  */
 void VVar::init() {
     DBG_INIT_BEGIN(var_id);
@@ -34,6 +36,17 @@ void VVar::init() {
     else if (var->type != VARIABLE) {
         ERR_ID_NOT_VARIABLE(var_id);
         ERR_ADD();
+    }
+    else if (is_init == INIT && var->is_init == false) {
+        ERR_ID_NOT_INIT(var->id);
+        ERR_ADD();
+    }
+    else if (is_init == NOINIT && var->is_const) {
+        ERR_ID_CONST(var->id);
+        ERR_ADD();
+    }
+    if (type == LOCATION) {
+        var->is_init = true;
     }
 
     DBG_INIT_END(var_id);
@@ -60,15 +73,15 @@ void VArrNum::init() {
         ERR_ARRAY_INDEX_RANGE(arr_id, val);
         ERR_ADD();
     }
-
     DBG_INIT_END(arr_id);
 }
 
 /* Tablica indeksowana zmienna
- * ERR1 - id nie zostal zadeklarowany
- * ERR2 - id nie jest tablica
- * ERR3 - id_var nie zostal zadeklarowany
- * ERR4 - id_var nie jest zmienna
+ * ERR1 - arr nie zostal zadeklarowany
+ * ERR2 - arr nie jest tablica
+ * ERR3 - var nie zostal zadeklarowany
+ * ERR4 - var nie jest zmienna
+ * ERR5 - var nie zostal zainicjalizowany
  */
 void VArrVar::init() {
     DBG_INIT_END2(arr_id, var_id);
@@ -89,6 +102,10 @@ void VArrVar::init() {
     }
     else if (var->type != VARIABLE) {
         ERR_ID_NOT_VARIABLE(var_id);
+        ERR_ADD();
+    }
+    else if (var->is_init == false) {
+        ERR_ID_NOT_INIT(var->id);
         ERR_ADD();
     }
     DBG_INIT_END2(arr_id, var_id);
@@ -125,22 +142,12 @@ unit_type* get_const(input_type val, bool type) {
 
 /* Pobiera lokalizacje/wartosc zmiennej. Ustawia zmienna
  * jako zainicjalizowana.
- * ERR1 - (INIT) id nie zostal zainicjalizowany
- * ERR1 - (NOINIT) id jest stala
  */
 unit_type* get_variable(symbol* sym, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_variable");
     unit_type* unit = unit_alloc();
 
-    if (init == INIT && sym->is_init == false) {
-        ERR_ID_NOT_INIT(sym->id);
-        ERR_ADD();
-    }
-    else if (init == NOINIT && sym->is_const) {
-        ERR_ID_CONST(sym->id);
-        ERR_ADD();
-    }
-    else if (type == VALUE) {
+    if (type == VALUE) {
         // VALUE
         #ifdef OPTIMIZE_VAR_POSTPONE
             unit->offset = sym->offset;
@@ -155,7 +162,6 @@ unit_type* get_variable(symbol* sym, bool type, bool init) {
         // LOCATION
         int x = reg_get_free();     // wolny rejestr
         reg_const(x, sym->offset);  // stala do rejestru
-        sym->is_init = true;
         reg_connect(unit, x);
     }
 
@@ -195,17 +201,12 @@ unit_type* get_array_num(symbol* sym, input_type num, bool type, bool init) {
 /*
  * Pobiera lokalizacje/wartosc komorki tablicy indeksowanej 
  * przez zmienna.
- * ERR1 - sym_var nie zostal zainicjalizowany
  */
 unit_type* get_array_var(symbol* sym, symbol* sym_var, bool type, bool init) {
     DBG_INSTRUCTION_BEGIN("get_array_var");
     unit_type* unit = unit_alloc();
 
-    if (sym_var->is_init == false) {
-        ERR_ID_NOT_INIT(sym_var->id);
-        ERR_ADD();
-    }
-    else if (type == VALUE) {
+    if (type == VALUE) {
         // VALUE
         int x = reg_get_free();                         // wolny rejestr
         reg_const(x, sym_var->offset);                  // stala do rejestru

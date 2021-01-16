@@ -158,11 +158,11 @@ int main( int argc, char** argv )
      * tworzenie grafu przeplywu */
     commands->flow(new DependencyList());
     deps_traversal();
-    //cout << "------------------------------------" << endl;
-    //commands->print();
+    cout << "------------------------------------" << endl;
+    commands->print();
     commands->clean();
-    //cout << "------------------------------------" << endl;
-    //commands->print();
+    cout << "------------------------------------" << endl;
+    commands->print();
     DBG_DEPENDENCIES_PRINT();
 
     /* FAZA 3

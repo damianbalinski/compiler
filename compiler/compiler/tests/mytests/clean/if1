@@ -1,0 +1,20 @@
+DECLARE
+    a, b
+BEGIN
+    a := 20;
+    b := 40;
+
+    IF 10 > 20 THEN
+        a := 20;
+    ENDIF
+
+    IF 10 > 20 THEN
+        b := 20;
+    ENDIF
+
+    IF 10 > 20 THEN
+        a := 20;
+    ENDIF
+
+    WRITE b;
+END

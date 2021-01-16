@@ -62,7 +62,7 @@ public:
     unit_type* cond_unit;
     ForCommand(char* iter_id, CommandVector* cmd_true) :
         iter_id(iter_id), iter(add_iterator(iter_id)), cmd_true(cmd_true), labels(new labels_type) { 
-            iter->is_visible = false; DBG_SYMBOL_PRINT(); };
+            iter->is_visible = false; iter->is_init = true; DBG_SYMBOL_PRINT(); };
     virtual void finish() { reg_free(cond_unit->reg), unit_free(cond_unit); };
     virtual void step() = 0;
     bool clean() { cmd_true->clean(); return cmd_true->empty(); };

@@ -7,7 +7,7 @@ dest=$2
 if (( $? == 0 )) ; then
     # compilation ok
     maszyna-wirtualna-cln $dest
-    rm $dest
+    # rm $dest
 else
     # compilation error
     echo "Compilation error"

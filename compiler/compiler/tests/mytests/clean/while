@@ -1,0 +1,10 @@
+DECLARE
+    a, b
+BEGIN
+    WHILE a > 3 DO
+        b := b + 1;
+        a := a + 1;
+    ENDWHILE
+
+    WRITE a;
+END

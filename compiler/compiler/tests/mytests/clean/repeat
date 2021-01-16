@@ -1,0 +1,15 @@
+DECLARE
+    a, b, c
+BEGIN
+    a := 20;
+    c := 300;
+
+    REPEAT
+        b := 400;
+        a := a + 1;
+        c := 3000;
+    UNTIL a > 30;
+
+    c := 123123;
+    WRITE b;
+END

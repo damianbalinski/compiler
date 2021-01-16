@@ -1,0 +1,10 @@
+DECLARE
+    a, b
+BEGIN
+    a := 20;
+    a := 40;
+    a := 60;
+    b := a;
+    b := 40;
+    b := 90;
+END

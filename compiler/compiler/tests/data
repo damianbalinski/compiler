@@ -1,0 +1,8 @@
+RESET a
+GET a
+RESET a
+INC a
+GET a
+RESET a
+PUT a
+HALT

@@ -1,0 +1,7 @@
+DECLARE
+    a
+BEGIN
+    a := 20;
+    a := 40;
+    a := 60;
+END
