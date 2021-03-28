@@ -2,7 +2,7 @@
 
 src=$1
 dest=$2
-./temp $src $dest
+./compiler $src $dest
 
 if (( $? == 0 )) ; then
     # compilation ok

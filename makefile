@@ -4,7 +4,7 @@ DBG=debugger/debugger.hpp
 OPT=optimizer/optimizer.hpp
 
 main: parser.o lexer.o symbol_table.o registers_machine.o code_generator.o unit.o jumps.o data_manager.o commands.o values.o expressions.o conditions.o ${DBG} ${OPT}
-	${CC} -o temp parser.o lexer.o symbol_table.o registers_machine.o code_generator.o unit.o jumps.o data_manager.o commands.o values.o expressions.o conditions.o ${FLAGS} ${FLG}
+	${CC} -o compiler parser.o lexer.o symbol_table.o registers_machine.o code_generator.o unit.o jumps.o data_manager.o commands.o values.o expressions.o conditions.o ${FLAGS} ${FLG}
 
 symbol_table.o: symbol_table/symbol_table.cpp ${DBG} ${OPT}
 	${CC} -c symbol_table/symbol_table.cpp ${FLG}
