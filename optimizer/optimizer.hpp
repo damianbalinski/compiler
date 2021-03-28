@@ -1,10 +1,6 @@
-#define OPTIMIZER_ON
-
-/* 
- * TODO
- * tablica jednoelementowa przy indeksowaniu 
- * zachowuje sie jak zwykla zmienna
- */
+#ifndef OPTIMIZER_OFF
+    #define OPTIMIZER_ON
+#endif
 
 #ifdef OPTIMIZER_ON
     #define OPTIMIZE_POSTPONE

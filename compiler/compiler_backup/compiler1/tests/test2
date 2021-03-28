@@ -1,8 +1,0 @@
-let
-    integer n.
-in
-    n := 10;
-    n := 20;
-    p := 20;
-    write n;
-end

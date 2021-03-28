@@ -1,4 +1,0 @@
-- dopracowac algorytm zwracania wolnego rejestru, zwracac rejestr, ktory byc
-  najdawniej uzywany
-
-- przerzucic pamiec z powrotem po zwolnieniu rejestru
