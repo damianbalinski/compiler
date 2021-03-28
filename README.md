@@ -1,15 +1,13 @@
 <center> <h1>Compiler | 2020</h1> </center>
 
 ## Table of Contents
-- [](#)
-  - [Table of Contents](#table-of-contents)
-  - [About The Project](#about-the-project)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Debugger](#debugger)
-  - [Optimizer](#optimizer)
-  - [Errors](#errors)
-  - [Tests](#tests)
+- [About The Project](#about-the-project)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Debugger](#debugger)
+- [Optimizer](#optimizer)
+- [Errors](#errors)
+- [Tests](#tests)
 
 
 ## About The Project
