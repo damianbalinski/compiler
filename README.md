@@ -11,7 +11,7 @@
 
 
 ## About The Project
-Compiler is a implementation of simple imperative-language compiler. Program uses flex and bison frameworks to generate lexer and parser. Compiler takes full advantages of OOP paradigm of C++ to generate parsing tree, perform arithmetic and logical optimizations and report lexical errors. Program has built-in debugger that can be configured by user. You can read more about it below. Numeric value can be a natural number of any precision, stored in variable or array. Array indices are user-specified and can be negative.  
+Compiler is an implementation of simple imperative-language compiler. Program uses flex and bison frameworks to generate lexer and parser. Compiler takes full advantages of OOP paradigm of C++ to generate parsing tree, perform arithmetic and logical optimizations and report lexical errors. Program has built-in debugger that can be configured by user. You can read more about it below. Numeric value can be a natural number of any precision, stored in variable or array. Array indices are user-specified and can be negative.  
 **Warning!** Program compiles source file into assembler representation. To run assembler code, make sure to compile virtual machine during installation step. You can find language documentation and examples of source files [here](/documentation.pdf).
 
 ## Prerequisites
